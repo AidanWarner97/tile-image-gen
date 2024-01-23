@@ -31,7 +31,10 @@
             border:1px solid #ced4da;
             border-radius:.25rem;
         }
-        select option:disabled {
+        #layoutType option:disabled {
+            font-style: italic;
+        }
+        #groutColor option:disabled {
             font-weight:bold;
         }
     </style>
@@ -67,6 +70,7 @@
                         <option value="stacked">Horizontal Block</option>
                         <option value="brickBond">Horizontal 1/2 Block</option>
                         <option value="basketWeave">Basket Weave</option>
+                        <option value="herringbone">Herringbone (2:1)</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6">
