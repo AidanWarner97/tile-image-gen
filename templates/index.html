@@ -69,6 +69,21 @@
         .txt p{
             color:#1D2D35;
         }
+        .cookieNotice {
+            display:none;
+            position: absolute;
+            top: 0;
+            margin: 20px 25% 20px 25%;
+            width: 50vw;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .cookieClose {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            font-size: xx-large;
+        }
     </style>
 </head>
 <body>
@@ -190,11 +205,47 @@
     <section class="cookie" id="cookieBanner">
         <div class="txt">
             <p>
-                We use cookies, fyi.
+                We use cookies, read more <a href="#" onclick="showCookies()">here</a>.
             </p>
         </div>
         <div>
             <button onclick="acceptCookies()" class="btn btn-primary accept">Okay!</button>
+        </div>
+    </section>
+
+    <section class="cookieNotice alert-primary" id="cookieNotice">
+        <div class="cookieClose">
+            <p><a href="#" onclick="hideCookies()">X</a></p>
+        </div>
+        <div class="cookieInfo">
+            <h2>Cookie Policy for Tile Image Generator</h2>
+            <h4>Last Updates: 31/01/2024</h4>
+            <p>This is the Cookie Policy for Tile Image Generator, accessible from https://tileimagegen.uk</p>
+            <hr>
+            <h3>What Are Cookies</h3>
+            <p>As is common practice with almost all professional websites, this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it, and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored; however, this may downgrade or 'break' certain elements of the site's functionality.
+            </p>
+            <p>For more general information on cookies, please read <a href="https://cookiesandyou.com" target="_blank">What Are Cookies</a>.</p>
+            <h3>How We Use Cookies</h3>
+            <p>We use cookies for a variety of reasons detailed below. Unfortunately, in most cases, there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site. It is recommended that you leave on all cookies if you are not sure whether you need them or not, in case they are used to provide a service that you use.</p>
+            <hr>
+            <h3>Disabling Cookies</h3>
+            <p>You can prevent the setting of cookies by adjusting the settings on your browser (see your browser Help for how to do this). Be aware that disabling cookies will affect the functionality of this and many other websites that you visit. Disabling cookies will usually result in also disabling certain functionality and features of this site. Therefore, it is recommended that you do not disable cookies.</p>
+            <h2>The Cookies We Set</h2>
+            <h3>Essential Cookies</h3>
+            <p>These cookies are essential for you to browse the website and use its features, such as accessing secure areas of the site. Without these cookies, certain services you have asked for cannot be provided.</p>
+            <h3>Performance and Analytics Cookies</h3>
+            <p>These cookies are used to collect information about how visitors use our website. We use the information to compile reports and to help us improve the website. The cookies collect information in an anonymous form, including the number of visitors to the website, where visitors have come to the website from, and the pages they visited.</p>
+            <h3>Third Party Cookies</h3>
+            <p>In some special cases, we also use cookies provided by trusted third parties. The following section details which third-party cookies you might encounter through this site.</p>
+            <ul>
+                <li>Cloudflare</li>
+                <li>OpenWebAnalytics</li>
+            </ul>
+            <h3>More Informaion</h3>
+            <p>If you are still looking for more information, you can contact us via our email address: <a href="mailto:support@tileimagegen.uk" target="_blank">support@tileimagegen.uk</a></a></p>
+            <h3>Changes to Our Cookie Policy</h3>
+            <p>We may update our Cookie Policy from time to time. We will notify you of any changes by posting the new Cookie Policy on this page.</p>
         </div>
     </section>
 
@@ -239,6 +290,14 @@
         function acceptCookies() {
             setCookie('acceptedCookies', 'true', 30);
             document.getElementById('cookieBanner').style.display = 'none';
+        }
+
+        function showCookies() {
+            document.getElementById('cookieNotice').style.display = 'block';
+        }
+
+        function hideCookies() {
+            document.getElementById('cookieNotice').style.display = 'none';
         }
 
         window.onload = function () {
