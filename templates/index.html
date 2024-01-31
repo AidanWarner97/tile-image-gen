@@ -37,6 +37,16 @@
         #groutColor option:disabled {
             font-weight:bold;
         }
+        .alert {
+            margin-top:24px;
+        }
+        .alert span {
+            font-weight:bold;
+            margin-right:5px;
+            padding-right:5px;
+            border-right:1px solid #2e6db1;
+            color:#2e6db1;
+        }
     </style>
 </head>
 <body>
@@ -129,8 +139,22 @@
 
             <button type="submit" class="btn btn-primary">Generate</button>
             <button type="reset" class="btn btn-secondary">Reset</button>
+
+            <!-- Updates bar -->
+            <div class="alert alert-primary form-group" role="alert">
+                <h4 class="alert-heading">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M13 7.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-3 3.75a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v4.25h.75a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5h.75V12h-.75a.75.75 0 0 1-.75-.75Z" fill="#004085"></path>
+                            <path d="M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1ZM2.5 12a9.5 9.5 0 0 0 9.5 9.5 9.5 9.5 0 0 0 9.5-9.5A9.5 9.5 0 0 0 12 2.5 9.5 9.5 0 0 0 2.5 12Z" fill="#004085"></path>
+                        </svg>
+                    </i>Updates:</h4>
+                <hr>
+                <p><span>31/01</span>All future updates will be provided here, so please do check here regularly for any changes big or small.</p>
+            </div>
         </form>
     </div>
+
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
