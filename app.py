@@ -114,9 +114,9 @@ def generate():
         if layout_type == 'brickBond':
             draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_color) # Top-left Vertical
             draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, height], fill=grout_color) # Top-right Vertical
-            draw.rectangle([vertical_midpoint - grout_size // 2, height, vertical_midpoint + grout_size // 2, height * 2 + grout_size], fill=grout_color) # Bottom Middle
+            draw.rectangle([vertical_midpoint - grout_size // 2, height + grout_size, vertical_midpoint + grout_size // 2, height * 2 + grout_size], fill=grout_color) # Bottom Middle
             draw.rectangle([0, 0 + height + grout_size, 0 + grout_size // 2, 0 + height * 2 + grout_size], fill=grout_color) # Bottom Left
-            draw.rectangle([width * 2 + grout_size, 0 + height + grout_size, 0 + width * 2 + grout_size // 2, 0 + height * 2 + grout_size], fill=grout_color) # Bottom Right
+            draw.rectangle([width * 2 + grout_size, height + grout_size // 2, width * 2 + grout_size // 2, 0 + height * 2 + grout_size], fill=grout_color) # Bottom Right
         elif layout_type == 'herringbone':
             draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_color)
             draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, width], fill=grout_color)
