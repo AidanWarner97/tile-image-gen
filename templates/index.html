@@ -53,6 +53,10 @@
         .alert {
             margin-top:24px;
         }
+        #updates {
+            max-height:300px;
+            overflow:hidden;
+        }
         .alert span {
             font-weight:bold;
             margin-right:5px;
@@ -98,7 +102,23 @@
         @media (pointer:none), (pointer:coarse) {
             .cookieNotice {
                 width:100vw !important;
+                margin:0 !important;
             }
+            .cookieClose {
+                z-index:99999;
+            }
+        }
+        #readless {
+            display:none;
+        }
+        #readmore {
+            display:block;
+        }
+        #readmore, #readless {
+            position:absolute;
+            bottom: 5px;
+            right: 5px;
+            z-index:9999;
         }
     </style>
 </head>
@@ -193,9 +213,9 @@
 
             <button type="submit" class="btn btn-primary">Generate</button>
             <button type="reset" class="btn btn-secondary">Reset</button>
-
+        </form>
             <!-- Updates bar -->
-            <div class="alert alert-primary form-group" role="alert">
+            <div class="alert alert-primary form-group" role="alert" id="updates">
                 <h4 class="alert-heading">
                     <i>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -208,6 +228,8 @@
                 <p class="old"><span>31/01</span>We've updated our cookie policy.  If you'd like to take a look and this, please click <a href="#" onclick="showCookies()">here</a>.</p>
                 <p class="old"><span>31/01</span>We now have an email address!  Please see below for our email address.  Any issues, please get in touch.</p>
                 <p class="old"><span>31/01</span>All future updates will be provided here, so please do check here regularly for any changes big or small.</p>
+                <!-- <button href="#" class="btn btn-primary" id="readmore">See More</button>
+                <button href="#" class="btn btn-primary" id="readless">See Less</button> -->
             </div>
             <div class="alert alert-secondary form-group" role="alert">
                 <h5>
@@ -218,7 +240,7 @@
                     </i>Need Help?</h5>
                 <p>If you need any help, or if something isn't working, please get in touch via our email: <a href="mailto:support@tileimagegen.uk" target="_blank">support@tileimagegen.uk</a></p>
             </div>
-        </form>
+        
     </div>
 
     <section class="cookie" id="cookieBanner">
@@ -329,5 +351,20 @@
         };
     </script>
     <!-- End Cookie Info -->
+    <script>
+        document.querySelector('#readmore').addEventListener('click', function() {
+            document.querySelector('#updates').style.maxHeight='fit-content';
+            document.querySelector('#readless').style.removeProperty('display');
+            document.querySelector('#readless').style.display='block';
+            this.style.display='none';
+        })
+        document.querySelector('#readless').addEventListener('click', function() {
+            document.querySelector('#updates').style.maxHeight='300px';
+            document.querySelector('#updates').style.overflow='hidden';
+            document.querySelector('#readmore').style.removeProperty('display');
+            document.querySelector('#readmore').style.display-'block';
+            this.style.display='none';
+        })
+    </script>
 </body>
 </html>
