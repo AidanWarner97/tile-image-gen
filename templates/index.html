@@ -119,6 +119,15 @@
             right: 5px;
             z-index:9999;
         }
+        #bottomAlert {
+            position:absolute;
+            width:100%;
+            height:150px;
+            bottom:0;
+            left:0;
+            background-image: linear-gradient(transparent,#cce5ff);
+            opacity:1;
+        }
     </style>
 </head>
 <body>
@@ -221,6 +230,7 @@
                 <p class="old"><span>31/01</span>We've updated our cookie policy.  If you'd like to take a look and this, please click <a href="#" onclick="showCookies()">here</a>.</p>
                 <p class="old"><span>31/01</span>We now have an email address!  Please see below for our email address.  Any issues, please get in touch.</p>
                 <p class="old"><span>31/01</span>All future updates will be provided here, so please do check here regularly for any changes big or small.</p>
+                <div id="bottomAlert"></div>
                 <button href="#" class="btn btn-primary" id="readmore">See More</button>
                 <button href="#" class="btn btn-primary" id="readless">See Less</button>
             </div>
@@ -349,6 +359,7 @@
             document.querySelector('#updates').style.maxHeight='fit-content';
             document.querySelector('#readless').style.removeProperty('display');
             document.querySelector('#readless').style.display='block';
+            document.querySelector('#bottomAlert').style.opacity='0';
             this.style.display='none';
         })
         document.querySelector('#readless').addEventListener('click', function() {
@@ -356,6 +367,7 @@
             document.querySelector('#updates').style.overflow='hidden';
             document.querySelector('#readmore').style.removeProperty('display');
             document.querySelector('#readmore').style.display-'block';
+            document.querySelector('#bottomAlert').style.removeProperty('opacity');
             this.style.display='none';
         })
     </script>
