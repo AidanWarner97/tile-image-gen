@@ -133,7 +133,7 @@ def generate():
         vertical_midpoint_right = ((width * 2 + grout_size) * 0.75)
 
         # Draw the grout lines required
-        if layout_type == 'brickBond':
+        if layout_type == 'brickBond' or layout_type == 'vertBrick':
             draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_color) # Top-left Vertical
             draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, height], fill=grout_color) # Top-right Vertical
             draw.rectangle([vertical_midpoint - grout_size // 2, height + grout_size, vertical_midpoint + grout_size // 2, height * 2 + grout_size], fill=grout_color) # Bottom Middle
@@ -164,7 +164,7 @@ def generate():
             elif ratio == 2:
                 draw.rectangle([grout_size // 2, height * 3 + grout_size // 2, width, height * 3 + grout_size], fill=grout_color) # Bottom-left Horizontal
                 draw.rectangle([grout_size // 2 + height * 3, width + grout_size, height * 3, height * 3 + width + grout_size // 2], fill=grout_color) # Bottom-right Vertical
-        elif layout_type == 'third':
+        elif layout_type == 'third' or layout_type == 'vertThird':
             draw.rectangle([0, height + grout_size - grout_size // 2, width, height + grout_size + grout_size // 2], fill=grout_color)
             draw.rectangle([0, height * 2 + grout_size - grout_size // 2, width * 2 + grout_size, height * 2 + grout_size + grout_size // 2], fill=grout_color)
             draw.rectangle([half + quarter + grout_size - grout_size // 2, 0, half + quarter + grout_size + grout_size // 2, height + grout_size // 2], fill=grout_color)
@@ -206,7 +206,9 @@ def generate():
             draw.rectangle([width * 2, 0, width * 2 + grout_size, height * 2 + grout_size // 2],fill=grout_color) # Right
 
         # Orientation
-        orientation = request.form.get('orientation','horizontal')
+        if layout_type == 'vertStacked' or layout_type == 'vertBrick' or layout_type == 'vertThird':
+            orientation = "vertical"
+        
         if layout_type == 'basketWeave':
             if ratio == 3:
                 result_image = result_image.resize((int(tile_size_width * 2 + grout_size), int(tile_size_height * 6 + grout_size)), Image.ANTIALIAS)
@@ -214,8 +216,12 @@ def generate():
                 result_image = result_image.resize((int(tile_size_width * 2 + grout_size), int(tile_size_height * 4 + grout_size)), Image.ANTIALIAS)
         elif layout_type == 'herringbone':
             result_image = result_image.resize((int(tile_size_width * 2 + grout_size * 2), int(tile_size_height * 4 + grout_size * 2)), Image.ANTIALIAS)
+            if orientation == 'vertical':
+                result_image = result_image.rotate(90, expand=True)
         elif layout_type == 'third':
             result_image = result_image.resize((int(tile_size_width + grout_size * 2), int(height * 3 + grout_size * 2)), Image.ANTIALIAS)
+            if layout_type == 'vertical':
+                result_image = result_image.rotate(90, expand=True)
         elif orientation.lower() == 'vertical':
             result_image = result_image.rotate(90, expand=True)
             result_image = result_image.resize((int(tile_size_height * 2 + grout_size), int(tile_size_width * 2 + grout_size)), Image.ANTIALIAS)

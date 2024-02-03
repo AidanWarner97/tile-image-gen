@@ -23,7 +23,7 @@
         .selectors {
             width:100%;
             display:inline-grid;
-            grid-template-columns: 50% 50%;
+            grid-template-columns: auto;
         }
 
         .selectors .form-group {
@@ -31,9 +31,8 @@
             margin:auto;
             padding:0;
             width:100%;
-            text-align:center;
         }
-        .selectors .form-group select,#groutColor {
+        #layoutType, #groutColor {
             width:100%;
             height: calc(1.5em + .75rem + 2px);
             padding: .375rem .75rem;
@@ -146,26 +145,19 @@
                 </div>
             </div>
 
-            <div class="form-group selectors">
-                <div class="form-group col-md-6">
-                    <label for="layoutType">Layout Type</label>
-                    <select id="layoutType" name="layoutType" required>
-                        <option value="stacked">Horizontal Block</option>
-                        <option value="brickBond">Horizontal 1/2 Block</option>
-                        <option value="third">Horizontal 1/4 Block</option>
-                        <option value="basketWeave">Basket Weave</option>
-                        <option value="herringbone">Herringbone (2:1)</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="orientation">Orientation</label>
-                    <select name="orientation" id="orientation">
-                        <option value="horizontal">Horizontal</option>
-                        <option value="vertical">Vertical</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="layoutType">Layout Type</label>
+                <select id="layoutType" name="layoutType" required>
+                    <option value="stacked">Horizontal Block</option>
+                    <option value="brickBond">Horizontal 1/2 Block</option>
+                    <option value="third">Horizontal 1/4 Block</option>
+                    <option value="vertStacked">Vertical Block</option>
+                    <option value="vertBrick">Vertical 1/2 Block</option>
+                    <option value="vertThird">Vertial 1/4 Block</option>
+                    <option value="basketWeave">Basket Weave</option>
+                    <option value="herringbone">Herringbone (2:1)</option>
+                </select>
             </div>
-
 
             <div class="form-group">
                 <label for="groutSize">Grout Size (mm)</label>
@@ -224,12 +216,13 @@
                         </svg>
                     </i>Updates:</h4>
                 <hr>
-                <p><span>01/02</span>New layout!  Known as 'Horizontal 1/4 Block', this layout is for those using wooden planks where Horizontal Block is too much of a grid, and Horizontal 1/2 Block isn't enough variation.</p>
+                <p><span>03/02</span>We've simplified the layout selection options.  Horizontal and Vertical each have their own options, rather than selecting a horizontal layout, and then selecting the orientation.  All Horizontal layouts, have an equivalent Vertical layout.</p>
+                <p class="old"><span>01/02</span>New layout!  Known as 'Horizontal 1/4 Block', this layout is for those using wooden planks where Horizontal Block is too much of a grid, and Horizontal 1/2 Block isn't enough variation.</p>
                 <p class="old"><span>31/01</span>We've updated our cookie policy.  If you'd like to take a look and this, please click <a href="#" onclick="showCookies()">here</a>.</p>
                 <p class="old"><span>31/01</span>We now have an email address!  Please see below for our email address.  Any issues, please get in touch.</p>
                 <p class="old"><span>31/01</span>All future updates will be provided here, so please do check here regularly for any changes big or small.</p>
-                <!-- <button href="#" class="btn btn-primary" id="readmore">See More</button>
-                <button href="#" class="btn btn-primary" id="readless">See Less</button> -->
+                <button href="#" class="btn btn-primary" id="readmore">See More</button>
+                <button href="#" class="btn btn-primary" id="readless">See Less</button>
             </div>
             <div class="alert alert-secondary form-group" role="alert">
                 <h5>
