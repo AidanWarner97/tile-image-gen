@@ -11,6 +11,7 @@ def index():
 @app.route('/generate', methods=['POST'])
 def generate():
     try:
+        '''
         if 'checked' in request.form.getlist('groutEnabled'):
             grout_size_str = request.form.get('groutSize', '')
             if grout_size_str.isdigit():
@@ -19,6 +20,8 @@ def generate():
                 grout_size = 0
         else:
             grout_size = 0
+        '''
+        grout_size = int(request.form.get('groutSize', 0))
         tile_size_width = int(request.form.get('tileWidth', 0))
         tile_size_height = int(request.form.get('tileHeight', 0))
         grout_color = request.form.get('groutColor', '#000000')
@@ -161,12 +164,12 @@ def generate():
             elif ratio == 2:
                 draw.rectangle([grout_size // 2, height * 3 + grout_size // 2, width, height * 3 + grout_size], fill=grout_color) # Bottom-left Horizontal
                 draw.rectangle([grout_size // 2 + height * 3, width + grout_size, height * 3, height * 3 + width + grout_size // 2], fill=grout_color) # Bottom-right Vertical
-            elif layout_type == 'third':
-                draw.rectangle([0, height + grout_size - grout_size // 2, width, height + grout_size + grout_size // 2], fill=grout_color)
-                draw.rectangle([0, height * 2 + grout_size - grout_size // 2, width * 2 + grout_size, height * 2 + grout_size + grout_size // 2], fill=grout_color)
-                draw.rectangle([half + quarter + grout_size - grout_size // 2, 0, half + quarter + grout_size + grout_size // 2, height + grout_size // 2], fill=grout_color)
-                draw.rectangle([half - grout_size // 2, height + grout_size, half + grout_size // 2, height * 2], fill=grout_color)
-                draw.rectangle([quarter + grout_size - grout_size // 2, height * 2 + grout_size, quarter + grout_size + grout_size // 2, height * 3 + grout_size], fill=grout_color)
+        elif layout_type == 'third':
+            draw.rectangle([0, height + grout_size - grout_size // 2, width, height + grout_size + grout_size // 2], fill=grout_color)
+            draw.rectangle([0, height * 2 + grout_size - grout_size // 2, width * 2 + grout_size, height * 2 + grout_size + grout_size // 2], fill=grout_color)
+            draw.rectangle([half + quarter + grout_size - grout_size // 2, 0, half + quarter + grout_size + grout_size // 2, height + grout_size // 2], fill=grout_color)
+            draw.rectangle([half - grout_size // 2, height + grout_size, half + grout_size // 2, height * 2], fill=grout_color)
+            draw.rectangle([quarter + grout_size - grout_size // 2, height * 2 + grout_size, quarter + grout_size + grout_size // 2, height * 3 + grout_size], fill=grout_color)
         else:
             draw.rectangle([vertical_midpoint - grout_size // 2, 0, vertical_midpoint + grout_size // 2, height * 2], fill=grout_color)
 
