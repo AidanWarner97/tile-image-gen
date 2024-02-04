@@ -19,17 +19,17 @@
 
 ##  Quick Links
 
-> - [ Overview](#-overview)
-> - [ Features](#-features)
-> - [ Repository Structure](#-repository-structure)
-> - [ Modules](#-modules)
-> - [ Getting Started](#-getting-started)
->   - [ Installation](#-installation)
->   - [ Running tile-image-gen](#-running-tile-image-gen)
->   - [ Tests](#-tests)
-> - [ Project Roadmap](#-project-roadmap)
-> - [ Contributing](#-contributing)
-> - [ License](#-license)
+> - [ Overview](#overview)
+> - [ Features](#features)
+> - [ Repository Structure](#repository-structure)
+> - [ Modules](#modules)
+> - [ Getting Started](#getting-started)
+>   - [ Installation](#installation)
+>   - [ Running tile-image-gen](#running-tile-image-gen)
+>   - [ Tests](#tests)
+> - [ Project Roadmap](#project-roadmap)
+> - [ Contributing](#contributing)
+> - [ License](#license)
 
 ---
 
@@ -169,6 +169,6 @@ Once your PR is reviewed and approved, it will be merged into the main branch.
 
 This project is protected under the [AGPL](https://choosealicense.com/licenses/agpl-3.0/) License. For more details, refer to the [LICENSE](LICENSE) file.
 
-[**Return**](#-quick-links)
+[**Return**](#quick-links)
 
 ---
