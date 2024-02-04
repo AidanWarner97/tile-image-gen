@@ -126,7 +126,7 @@
             bottom:0;
             left:0;
             background-image: linear-gradient(transparent,#cce5ff);
-            opacity:1;
+            display:block;
         }
     </style>
 </head>
@@ -162,7 +162,7 @@
                     <option value="third">Horizontal 1/4 Block</option>
                     <option value="vertStacked">Vertical Block</option>
                     <option value="vertBrick">Vertical 1/2 Block</option>
-                    <option value="vertThird">Vertial 1/4 Block</option>
+                    <option value="vertThird">Vertical 1/4 Block</option>
                     <option value="basketWeave">Basket Weave</option>
                     <option value="herringbone">Herringbone (2:1)</option>
                 </select>
@@ -359,7 +359,7 @@
             document.querySelector('#updates').style.maxHeight='fit-content';
             document.querySelector('#readless').style.removeProperty('display');
             document.querySelector('#readless').style.display='block';
-            document.querySelector('#bottomAlert').style.opacity='0';
+            document.querySelector('#bottomAlert').style.display='none';
             this.style.display='none';
         })
         document.querySelector('#readless').addEventListener('click', function() {
@@ -367,7 +367,7 @@
             document.querySelector('#updates').style.overflow='hidden';
             document.querySelector('#readmore').style.removeProperty('display');
             document.querySelector('#readmore').style.display-'block';
-            document.querySelector('#bottomAlert').style.removeProperty('opacity');
+            document.querySelector('#bottomAlert').style.removeProperty('display');
             this.style.display='none';
         })
     </script>
