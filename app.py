@@ -4,6 +4,7 @@ import io
 
 app = Flask(__name__)
 
+@app.route('/favicon.ico')
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
