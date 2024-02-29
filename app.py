@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, send_file, send_from_directory
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageColor
 import io
 
 app = Flask(__name__)
@@ -31,6 +31,7 @@ def generate():
         tile_size_width = int(request.form.get('tileWidth', 0))
         tile_size_height = int(request.form.get('tileHeight', 0))
         grout_color = request.form.get('groutColor', '#000000')
+        rgb = ImageColor.getcolor(grout_color, "RGB")
         tile_name = request.form.get('tileName', 'tile_image_result')
 
         images = request.files.getlist('images')
@@ -53,31 +54,35 @@ def generate():
         if grout_size == 1:
             if layout_type == 'basketWeave':
                 if ratio == 3:
-                    result_image = Image.new('RGBA', (width * 2 + grout_size // 2, height * 6 + grout_size // 2), (0, 0, 0, 0))
+                    result_image = Image.new('RGBA', (width * 2 + grout_size // 2, height * 6 + grout_size // 2), rgb)
                 elif ratio == 2:
-                    result_image = Image.new('RGBA', (width * 2 + grout_size // 2, height * 4 + grout_size // 2), (0, 0, 0, 0))
+                    result_image = Image.new('RGBA', (width * 2 + grout_size // 2, height * 4 + grout_size // 2), rgb)
             elif layout_type == 'herringbone':
-                result_image = Image.new('RGBA', (width * 2 + grout_size, width * 2 + grout_size), (0, 0, 0, 0))
+                if ratio == 2:
+                    result_image = Image.new('RGBA', (width * 2 + grout_size, width * 2 + grout_size), rgb)
+                elif ratio == 3:
+                    result_image = Image.new('RGBA', (width * 2 + grout_size * 2, width * 2 + grout_size * 2), rgb)
             elif layout_type == 'third' or layout_type == 'vertThird':
-                result_image = Image.new('RGBA', (width + grout_size // 2, height * 3 + grout_size * 2), (0, 0, 0, 0))
+                result_image = Image.new('RGBA', (width + grout_size // 2, height * 3 + grout_size * 2), rgb)
             else:
-                result_image = Image.new('RGBA', (width * 2 + grout_size // 2, height * 2 + grout_size // 2), (0, 0, 0, 0))
+                result_image = Image.new('RGBA', (width * 2 + grout_size // 2, height * 2 + grout_size // 2), rgb)
         else:
             if layout_type == 'basketWeave':
                 if ratio == 3:
-                    result_image = Image.new('RGBA', (width * 2 + grout_size, height * 6 + grout_size), (0, 0, 0, 0))
+                    result_image = Image.new('RGBA', (width * 2 + grout_size, height * 6 + grout_size), rgb)
                 elif ratio == 2:
-                    result_image = Image.new('RGBA', (width * 2 + grout_size, height * 4 + grout_size), (0, 0, 0, 0))
+                    result_image = Image.new('RGBA', (width * 2 + grout_size, height * 4 + grout_size), rgb)
             elif layout_type == 'herringbone':
-                result_image = Image.new('RGBA', (width * 2 + grout_size * 2, width * 2 + grout_size * 2), (0, 0, 0, 0))
+                result_image = Image.new('RGBA', (width * 2 + grout_size * 2, width * 2 + grout_size * 2), rgb)
             elif layout_type == 'third' or layout_type == 'vertThird':
-                result_image = Image.new('RGBA', (width + grout_size, height * 3 + grout_size * 3), (0, 0, 0, 0))
+                result_image = Image.new('RGBA', (width + grout_size, height * 3 + grout_size * 3), rgb)
             else:
-                result_image = Image.new('RGBA', (width * 2 + grout_size, height * 2 + grout_size), (0, 0, 0, 0))
+                result_image = Image.new('RGB', (width * 2 + grout_size, height * 2 + grout_size), rgb)
 
         quarter = width // 4
         half = width // 2
-        
+        third = width // 3
+        twothird = third * 2
 
         # Paste images onto the result image with the layout offset
         if layout_type == 'brickBond' or layout_type == 'vertBrick':
@@ -87,16 +92,34 @@ def generate():
             result_image.paste(images_resized[2], (0, height + grout_size))
             result_image.paste(images_resized[3], (width + grout_size, height + grout_size))
         elif layout_type == 'herringbone':
-            result_image.paste(images_resized[0].rotate(90, expand=True), (grout_size // 2, 0 - height + grout_size // 2))
-            result_image.paste(images_resized[1], (height + grout_size // 2, 0 + grout_size // 2))
-            result_image.paste(images_resized[0].rotate(90, expand=True), (width + height + grout_size, grout_size // 2))
-            result_image.paste(images_resized[1], (grout_size // 2, height + grout_size // 2))
-            result_image.paste(images_resized[0].rotate(90, expand=True), (width + grout_size // 2, height + grout_size // 2))
-            result_image.paste(images_resized[1], (0 - height + grout_size // 2, width + grout_size // 2))
-            result_image.paste(images_resized[0].rotate(90, expand=True), (height + grout_size // 2, width + grout_size))
-            result_image.paste(images_resized[1], (height * 3 + grout_size // 2, width + grout_size // 2))
-            result_image.paste(images_resized[0].rotate(90, expand=True), (grout_size // 2, width + height + grout_size // 2))
-            result_image.paste(images_resized[1], (width + grout_size, height * 3 + grout_size))
+            if ratio == 2:
+                result_image.paste(images_resized[0].rotate(90, expand=True), (grout_size // 2, 0 - height + grout_size // 2))
+                result_image.paste(images_resized[1], (height + grout_size // 2, 0 + grout_size // 2))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (width + height + grout_size, grout_size // 2))
+                result_image.paste(images_resized[1], (grout_size // 2, height + grout_size // 2))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (width + grout_size // 2, height + grout_size // 2))
+                result_image.paste(images_resized[1], (0 - height + grout_size // 2, width + grout_size // 2))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (height + grout_size // 2, width + grout_size))
+                result_image.paste(images_resized[1], (height * 3 + grout_size // 2, width + grout_size // 2))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (grout_size // 2, width + height + grout_size // 2))
+                result_image.paste(images_resized[1], (width + grout_size, height * 3 + grout_size))
+            elif ratio == 3:
+                result_image.paste(images_resized[0].rotate(90, expand=True), (grout_size // 2, 0 - width + height + grout_size // 2))
+                result_image.paste(images_resized[1], (height + grout_size, grout_size // 2))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (height + width + grout_size + grout_size // 2, grout_size // 2))
+                result_image.paste(images_resized[1].rotate(90, expand=True), (width + height * 2 + grout_size * 2, 0 - height))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (width + grout_size, height + grout_size))
+                result_image.paste(images_resized[1], (grout_size // 2, height + grout_size))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (height * 2 + grout_size // 2, height * 2 + grout_size + grout_size // 2))
+                result_image.paste(images_resized[1], (0 - height, height * 2 + grout_size + grout_size // 2))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (height, width + grout_size * 2))
+                result_image.paste(images_resized[1], (0 - twothird - grout_size // 2, width + grout_size * 2))
+                result_image.paste(images_resized[0].rotate(90, expand=True), (0 - grout_size // 2, width + height + grout_size * 2 + grout_size // 2))
+                result_image.paste(images_resized[1], (width + height * 2 + grout_size * 2, twothird + grout_size // 2))
+                result_image.paste(images_resized[0], (width + height + grout_size + grout_size // 2, width + grout_size))
+                result_image.paste(images_resized[1], (width + grout_size, width + height + grout_size + grout_size // 2))
+                result_image.paste(images_resized[0], (twothird + grout_size // 2, width + twothird + grout_size * 2))
+                result_image.paste(images_resized[1].rotate(90, expand=True), (width + twothird + grout_size, width + twothird + grout_size * 2))
         elif layout_type == 'basketWeave':
             result_image.paste(images_resized[0].rotate(90, expand=True), (grout_size // 2, grout_size))
             result_image.paste(images_resized[1].rotate(90, expand=True), (height + grout_size // 2, grout_size))
@@ -158,16 +181,19 @@ def generate():
                 draw.rectangle([vertical_midpoint, height + grout_size, vertical_midpoint + grout_size // 2, height * 2 + grout_size], fill=grout_color)
                 draw.rectangle([0, height + grout_size, 0, height * 2 + grout_size], fill=grout_color)
             elif layout_type == 'herringbone':
-                draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_color)
-                draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, width], fill=grout_color)
-                draw.rectangle([0, height - grout_size // 2, height * 3 + grout_size // 2, height + grout_size // 2], fill=grout_color)
-                draw.rectangle([height * 3, width, width * 2 + grout_size, width + grout_size // 2], fill=grout_color)
-                draw.rectangle([0, width, width,  width + grout_size // 2], fill=grout_color)
-                draw.rectangle([width - grout_size // 2, height, width + grout_size // 2, width * 2 + grout_size], fill=grout_color)
-                draw.rectangle([height - grout_size // 2, width + grout_size, height + grout_size // 2, width * 2 + grout_size * 2], fill=grout_color)
-                draw.rectangle([0, height + width - grout_size // 2, height + grout_size // 2, height + width + grout_size // 2], fill=grout_color)
-                draw.rectangle([width + grout_size, height * 3 - grout_size // 2, width * 2 + grout_size * 2, height * 3 + grout_size // 2], fill=grout_color)
-                draw.rectangle([height * 3, width + grout_size, height * 3 + grout_size // 2, width + height + grout_size // 2], fill=grout_color)
+                if ratio == 2:
+                    draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_color)
+                    draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, width], fill=grout_color)
+                    draw.rectangle([0, height - grout_size // 2, height * 3 + grout_size // 2, height + grout_size // 2], fill=grout_color)
+                    draw.rectangle([height * 3, width, width * 2 + grout_size, width + grout_size // 2], fill=grout_color)
+                    draw.rectangle([0, width, width,  width + grout_size // 2], fill=grout_color)
+                    draw.rectangle([width - grout_size // 2, height, width + grout_size // 2, width * 2 + grout_size], fill=grout_color)
+                    draw.rectangle([height - grout_size // 2, width + grout_size, height + grout_size // 2, width * 2 + grout_size * 2], fill=grout_color)
+                    draw.rectangle([0, height + width - grout_size // 2, height + grout_size // 2, height + width + grout_size // 2], fill=grout_color)
+                    draw.rectangle([width + grout_size, height * 3 - grout_size // 2, width * 2 + grout_size * 2, height * 3 + grout_size // 2], fill=grout_color)
+                    draw.rectangle([height * 3, width + grout_size, height * 3 + grout_size // 2, width + height + grout_size // 2], fill=grout_color)
+                #elif ratio == 3:
+                    #draw.rectangle([0, 0, height, height], fill=grout_color)
             elif layout_type == 'basketWeave':
                 draw.rectangle([grout_size // 2 + height, grout_size, grout_size // 2 + height, width + grout_size], fill=grout_color) # Top-left Vertical
                 draw.rectangle([grout_size // 2 + width, grout_size, grout_size // 2 + height * ratio, width * 2 + grout_size // 2], fill=grout_color) # Vertical
@@ -198,16 +224,19 @@ def generate():
                 draw.rectangle([0, 0 + height + grout_size, 0 + grout_size // 2, 0 + height * 2 + grout_size], fill=grout_color) # Bottom Left
                 draw.rectangle([width * 2 + grout_size, height + grout_size // 2, width * 2 + grout_size // 2, 0 + height * 2 + grout_size], fill=grout_color) # Bottom Right
             elif layout_type == 'herringbone':
-                draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_color)
-                draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, width], fill=grout_color)
-                draw.rectangle([0, height - grout_size // 2, height * 3 + grout_size // 2, height + grout_size // 2], fill=grout_color)
-                draw.rectangle([height * 3, width, width * 2 + grout_size, width + grout_size], fill=grout_color)
-                draw.rectangle([0, width, width,  width + grout_size], fill=grout_color)
-                draw.rectangle([width - grout_size // 2, height, width + grout_size // 2, width * 2 + grout_size], fill=grout_color)
-                draw.rectangle([height - grout_size // 2, width + grout_size, height + grout_size // 2, width * 2 + grout_size * 2], fill=grout_color)
-                draw.rectangle([0, height + width - grout_size // 2, height + grout_size // 2, height + width + grout_size // 2], fill=grout_color)
-                draw.rectangle([width + grout_size, height * 3 - grout_size // 2, width * 2 + grout_size * 2, height * 3 + grout_size // 2], fill=grout_color)
-                draw.rectangle([height * 3, width + grout_size, height * 3 + grout_size, width + height + grout_size // 2], fill=grout_color)
+                if ratio == 2:
+                    draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_color)
+                    draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, width], fill=grout_color)
+                    draw.rectangle([0, height - grout_size // 2, height * 3 + grout_size // 2, height + grout_size // 2], fill=grout_color)
+                    draw.rectangle([height * 3, width, width * 2 + grout_size, width + grout_size], fill=grout_color)
+                    draw.rectangle([0, width, width,  width + grout_size], fill=grout_color)
+                    draw.rectangle([width - grout_size // 2, height, width + grout_size // 2, width * 2 + grout_size], fill=grout_color)
+                    draw.rectangle([height - grout_size // 2, width + grout_size, height + grout_size // 2, width * 2 + grout_size * 2], fill=grout_color)
+                    draw.rectangle([0, height + width - grout_size // 2, height + grout_size // 2, height + width + grout_size // 2], fill=grout_color)
+                    draw.rectangle([width + grout_size, height * 3 - grout_size // 2, width * 2 + grout_size * 2, height * 3 + grout_size // 2], fill=grout_color)
+                    draw.rectangle([height * 3, width + grout_size, height * 3 + grout_size, width + height + grout_size // 2], fill=grout_color)
+                #elif ratio == 3:
+                    #draw.rectangle([0, 0, height, height], fill=grout_color)
             elif layout_type == 'basketWeave':
                 draw.rectangle([grout_size // 2 + height, grout_size, grout_size + height, width + grout_size], fill=grout_color) # Top-left Vertical
                 draw.rectangle([grout_size // 2 + width, grout_size, grout_size + height * ratio, width * 2 + grout_size // 2], fill=grout_color) # Vertical
@@ -251,7 +280,7 @@ def generate():
                 draw.rectangle([0, 0, width * 2 + grout_size // 2, border_thickness], fill=grout_color) # Top
             else:
                 draw.rectangle([0, 0, width * 2 + grout_size, grout_size // 2],fill=grout_color) # Top
-                draw.rectangle([0, 0, grout_size // 2, height * 2 + grout_size * 2],fill=grout_color) # Left
+                draw.rectangle([0, 0, grout_size // 2, height * 2 + grout_size // 2],fill=grout_color) # Left
         else:
             if layout_type == 'brickBond' or layout_type == 'vertBrick':
                 draw.rectangle([0, 0, width * 2 + grout_size // 2, border_thickness], fill=grout_color) # Top
@@ -291,7 +320,10 @@ def generate():
             else:
                 result_image = result_image.resize((int(tile_size_width * 2 + grout_size), int(tile_size_height * 4 + grout_size)), Image.ANTIALIAS)
         elif layout_type == 'herringbone':
-            result_image = result_image.resize((int(tile_size_width * 2 + grout_size * 2), int(tile_size_height * 4 + grout_size * 2)), Image.ANTIALIAS)
+            if ratio == 2:    
+                result_image = result_image.resize((int(tile_size_width * 2 + grout_size * 2), int(tile_size_height * 4 + grout_size * 2)), Image.ANTIALIAS)
+            elif ratio == 3:
+                result_image = result_image.resize((int(tile_size_width * 2 + grout_size * 2), int(tile_size_height * 6 + grout_size * 2)), Image.ANTIALIAS)
         elif layout_type == 'third':
             result_image = result_image.resize((int(tile_size_width + grout_size * 2), int(height * 3 + grout_size * 2)), Image.ANTIALIAS)
             if layout_type == 'vertThird':
