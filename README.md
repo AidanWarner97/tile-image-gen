@@ -121,12 +121,21 @@ Use the following command to run tile-image-gen:
 > python app.py
 ```
 
+Alternatively, we've created a basic systemctl service file.  You'll need to make sure to edit the Exec line to have where you've cloned the repo in order for it to work properly
+
+```sh
+> cp tile-image-gen.service /etc/systemd/system/
+> systemctl daemon-reload
+> systemctl enable --now tile-image-gen.service
+```
+
 ---
 
 ##  Project Roadmap
 
 - [ ] ` Add option for no grout-lines`
 - [ ] ` Upgrade codebase to Python3`
+- [ ] ` Enable docker support`
 
 ---
 

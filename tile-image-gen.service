@@ -1,0 +1,11 @@
+[Unit]
+Description=Tile Image Generator Service
+After=cloudflared.service
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=python3 /root/tile-image-gen/wsgi.py
+
+[Install]
+WantedBy=multi-user.target
