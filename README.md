@@ -143,8 +143,8 @@ Docker support is here, with the repo being hosted [here](https://hub.docker.com
 <details closed><summary>Standard Docker</summary>
 ```sh
 docker run \
-  -p 5000:5000
-  -p restart=on-failure
+  -p 5000:5000 \
+  -p restart=on-failure \
   mraidanlw97/tile-image-gen:python2
 ```
 </details>
