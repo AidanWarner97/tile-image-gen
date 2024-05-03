@@ -55,9 +55,14 @@ Create tile layouts from 1 or 4 variants using multiple layouts and various colo
 └── tile-image-gen/
     ├── LICENSE
     ├── app.py
+    ├── wsgi.py
+    ├── tile-image-gen.service
+    ├── Dockerfile
     ├── static
     │   ├── favicon.ico
     │   ├── robots.txt
+    │   ├── info.svg
+    │   ├── logo.png
     │   └── sitemap.xml
     └── templates
         └── index.html
@@ -131,11 +136,36 @@ Alternatively, we've created a basic systemctl service file.  You'll need to mak
 
 ---
 
+## Docker
+
+Docker support is here, with the repo being hosted [here](https://hub.docker.com/r/mraidanlw97/tile-image-gen)
+
+<details closed><summary>Standard Docker</summary>
+```sh
+docker run \
+  -p 5000:5000
+  -p restart=on-failure
+  mraidanlw97/tile-image-gen:python2
+```
+</details>
+
+<details closed><summary>Docker Compose</summary>
+```sh
+services:
+  tile-image-gen:
+    image: mraidanlw97/tile-image-gen:python2
+    ports:
+      - "5000:5000"
+```
+</details>
+
+---
+
 ##  Project Roadmap
 
 - [ ] ` Add option for no grout-lines`
 - [ ] ` Upgrade codebase to Python3`
-- [ ] ` Enable docker support`
+- [x] ` Enable docker support`
 
 ---
 
