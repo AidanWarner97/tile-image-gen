@@ -140,16 +140,16 @@ Alternatively, we've created a basic systemctl service file.  You'll need to mak
 
 Docker support is here, with the repo being hosted [here](https://hub.docker.com/r/mraidanlw97/tile-image-gen)
 
-<details closed><summary>Standard Docker</summary>
 ```sh
 docker run \
   -p 5000:5000 \
   -p restart=on-failure \
   mraidanlw97/tile-image-gen:python2
 ```
-</details>
 
-<details closed><summary>Docker Compose</summary>
+
+### Docker Compose
+
 ```sh
 services:
   tile-image-gen:
@@ -157,7 +157,6 @@ services:
     ports:
       - "5000:5000"
 ```
-</details>
 
 ---
 
