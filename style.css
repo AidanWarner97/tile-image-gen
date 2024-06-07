@@ -1,0 +1,40 @@
+body {
+    text-align:center;
+}
+
+#row {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height:60vh;
+}
+
+.row {
+    justify-content: center;
+}
+
+.row img {
+    width:50% !important;
+    margin-bottom:50px;
+    filter:opacity(0.5);
+    filter:saturate(0.5);
+    transition: all 0.2s;
+}
+
+.row:hover > img {
+    filter:none;
+}
+
+p:hover > img {
+    filter:none;
+}
+
+p, button {
+    width:175px;
+    margin-bottom:15px;
+}
+
+button:disabled {
+    cursor:not-allowed;
+
+}
