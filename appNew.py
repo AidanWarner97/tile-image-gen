@@ -67,7 +67,7 @@ def generate():
         elif layout_type == 'herringbone':
             if ratio == 2:
                 result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size, 0 - height + grout_size))
-                result.paste(tile[randrange(4)], (height + grout_colour, grout_size))
+                result.paste(tile[randrange(4)], (height + grout_size, grout_size))
                 result.paste(tile[randrange(4)].rotate(90, expand=True), (width + height + grout_size, grout_size))
                 result.paste(tile[randrange(4)], (grout_size, height + grout_size))
                 result.paste(tile[randrange(4)].rotate(90, expand=True), (width + grout_size, height + grout_size))
