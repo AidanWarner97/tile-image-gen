@@ -40,9 +40,12 @@ def generate():
             if ratio == 3:
                 result = Image.new('RGB', (width * 2 + grout_size * 4, height * 6 + grout_size), rgb)
             elif ratio == 2:
-                result = Image.new('RGB', (width*2 + grout_size*4, width*2 + grout_size*4), rgb)
+                result = Image.new('RGB', (width*2 + grout_size*3, width*2 + grout_size*3), rgb)
         elif layout_type == 'herringbone':
-            result = Image.new('RGB', (width * 2 + grout_size * 2, width * 2 + grout_size * 2), rgb)
+            if ratio == 3:
+                result = Image.new('RGB', (width*2 + grout_size*3, width*2 + grout_size*3), rgb)
+            else:
+                result = Image.new('RGB', (width*2 + grout_size, width*2 + grout_size), rgb)
         elif layout_type in ['third', 'vertThird']:
             result = Image.new('RGB', (width + grout_size, height * 3 + grout_size * 3), rgb)
         else:
