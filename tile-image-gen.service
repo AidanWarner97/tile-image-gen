@@ -1,11 +1,13 @@
 [Unit]
 Description=Tile Image Generator Service
-After=cloudflared.service
+After=network.service
 
 [Service]
 Type=simple
+WorkingDirectory=/opt/tile-image-gen
+ExecStart=/opt/tile-image-gen/venv/bin/python /opt/tile-image-gen/wsgi.py
 Restart=always
-ExecStart=python2 /root/tile-image-gen/wsgi.py
+User=root
 
 [Install]
 WantedBy=multi-user.target

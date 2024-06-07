@@ -1,5 +1,5 @@
 # Use Python 2.7.18 slim
-FROM python:2.7.18-slim
+FROM python:3.11-slim
 
 # Set working dir
 WORKDIR /app

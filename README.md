@@ -96,7 +96,7 @@ Create tile layouts from 1 or 4 variants using multiple layouts and various colo
 
 Ensure you have the following dependencies installed on your system:
 
-* **Python**: `version 2.7`
+* **Python**: `version 3.11`
 
 ###  Installation
 
@@ -162,8 +162,8 @@ services:
 
 ##  Project Roadmap
 
-- [ ] ` Add option for no grout-lines`
-- [ ] ` Upgrade codebase to Python3`
+- [x] ` Add option for no grout-lines`
+- [x] ` Upgrade codebase to Python3`
 - [x] ` Enable docker support`
 
 ---
