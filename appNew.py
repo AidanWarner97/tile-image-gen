@@ -120,10 +120,10 @@ def generate():
                 pass
         elif layout_type in ['third', 'vertThird']:
             result.paste(tile[randrange(4)], (0 - third, grout_size)) #1
-            result.paste(tile[randrange(4)], (twothird + grout_size, grout_size)) #2
+            result.paste(tile[randrange(4)], (third*2 + grout_size, grout_size)) #2
             result.paste(tile[randrange(4)], (0 - half, grout_size + height + grout_size)) #3
             result.paste(tile[randrange(4)], (half + grout_size, grout_size + height + grout_size)) #4
-            result.paste(tile[randrange(4)], (0 - twothird, grout_size + height + grout_size + height + grout_size)) #5
+            result.paste(tile[randrange(4)], (0 - third*2, grout_size + height + grout_size + height + grout_size)) #5
             result.paste(tile[randrange(4)], (third + grout_size, grout_size + height + grout_size + height + grout_size)) #6
             pass
         else:
