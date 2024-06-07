@@ -132,6 +132,32 @@ def generate():
             result.paste(tile[randrange(4)], (grout_size, grout_size + height + grout_size)) #3
             result.paste(tile[randrange(4)], (grout_size + width + grout_size, grout_size + height + grout_size)) #4
 
+        draw = ImageDraw.Draw(result)
+
+        # Set standard mid point grout line
+        vertical_midpoint = (width * 2 + grout_size) // 2
+        
+        # Work out the vertical grout lines for Brick Bond
+        vertical_midpoint_left = (width * 2 + grout_size) // 4
+        vertical_midpoint_right = ((width * 2 + grout_size) * 0.75)
+
+        if layout_type == 'herringbone':
+            if ratio == 2:
+                draw.rectangle([vertical_midpoint_left - grout_size // 2, 0, vertical_midpoint_left + grout_size // 2, height], fill=grout_colour)
+                draw.rectangle([vertical_midpoint_right - grout_size // 2, 0, vertical_midpoint_right + grout_size // 2, width], fill=grout_colour)
+                draw.rectangle([0, height - grout_size // 2, height * 3 + grout_size // 2, height + grout_size // 2], fill=grout_colour)
+                draw.rectangle([height * 3, width, width * 2 + grout_size, width + grout_size // 2], fill=grout_colour)
+                draw.rectangle([0, width, width,  width + grout_size // 2], fill=grout_colour)
+                draw.rectangle([width - grout_size // 2, height, width + grout_size // 2, width * 2 + grout_size], fill=grout_colour)
+                draw.rectangle([height - grout_size // 2, width + grout_size, height + grout_size // 2, width * 2 + grout_size * 2], fill=grout_colour)
+                draw.rectangle([0, height + width - grout_size // 2, height + grout_size // 2, height + width + grout_size // 2], fill=grout_colour)
+                draw.rectangle([width + grout_size, height * 3 - grout_size // 2, width * 2 + grout_size * 2, height * 3 + grout_size // 2], fill=grout_colour)
+                draw.rectangle([height * 3, width + grout_size, height * 3 + grout_size // 2, width + height + grout_size // 2], fill=grout_colour)
+
+        if layout_type in ['vertStacked', 'vertBrick', 'vertThird']:
+            result = result.rotate(90, expand=True)
+            result = result.transpose(Image.FLIP_TOP_BOTTOM)
+
         img_byte_arr = io.BytesIO()
         result.save(img_byte_arr, format='PNG')
         img_byte_arr.seek(0)
