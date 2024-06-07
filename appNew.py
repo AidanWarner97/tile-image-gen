@@ -1,9 +1,20 @@
 from flask import Flask, render_template, request, send_file, send_from_directory
 from PIL import Image, ImageDraw, ImageColor
 from random import randrange
+import logging
+from logging import StreamHandler
 import io
 
 app = Flask(__name__)
+
+console_handler = StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+console_handler.setFormatter(logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+))
+
+app.logger.addHandler(console_handler)
+app.logger.setLevel(logging.DEBUG)
 
 @app.route('/favicon.ico')
 @app.route('/robots.txt')
