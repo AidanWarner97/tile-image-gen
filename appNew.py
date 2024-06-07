@@ -97,21 +97,26 @@ def generate():
         elif layout_type == 'basketWeave':
             if ratio == 2:
                 result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size, grout_size)) #1
-                #result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size + height + grout_size, grout_size)) #2
-                #result.paste(tile[randrange(4)], (grout_size + height + grout_size + height + grout_size, grout_size)) #3
-                #result.paste(tile[randrange(4)], (grout_size + height + grout_size + height + grout_size, grout_size + height + grout_size)) #4
-                #result.paste(tile[randrange(4)], (grout_size, grout_size + width + grout_size)) #5
-                #result.paste(tile[randrange(4)], (grout_size, grout_size + width + grout_size + height + grout_size)) #6
-                #result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size + height + grout_size + height + grout_size, grout_size + height + grout_size + height + grout_size)) #7
-                #result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size + height + grout_size + height + grout_size, grout_size + height + grout_size + height + grout_size + height + grout_size)) #8
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size + height + grout_size, grout_size)) #2
+                result.paste(tile[randrange(4)], (grout_size + height + grout_size + height + grout_size, grout_size)) #3
+                result.paste(tile[randrange(4)], (grout_size + height + grout_size + height + grout_size, grout_size + height + grout_size)) #4
+                result.paste(tile[randrange(4)], (grout_size, grout_size + width + grout_size)) #5
+                result.paste(tile[randrange(4)], (grout_size, grout_size + width + grout_size + height + grout_size)) #6
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size + height + grout_size + height, grout_size + height + grout_size + height + grout_size)) #7
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size + height + grout_size + height + grout_size + height, grout_size + height + grout_size + height + grout_size)) #8
             elif ratio == 3:
-                result.paste(tile[randrange(4)].rotate(90, expand=True), (height * 2 + grout_size // 2, grout_size // 2))
-                result.paste(tile[randrange(4)], (width + grout_size // 2, height * 2 + grout_size))
-                result.paste(tile[randrange(4)], (grout_size // 2, height * 3 + grout_size))
-                result.paste(tile[randrange(4)], (grout_size // 2, height * 4 + grout_size))
-                result.paste(tile[randrange(4)], (grout_size // 2, height * 5 + grout_size))
-                result.paste(tile[randrange(4)].rotate(90, expand=True), (height * 4 + grout_size // 2, height * 3 + grout_size // 2))
-                result.paste(tile[randrange(4)].rotate(90, expand=True), (height * 5 + grout_size // 2, height * 3 + grout_size // 2))
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (grout_size, grout_size))
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (height + grout_size*2, grout_size))
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (height*2 + grout_size*3, grout_size))
+                result.paste(tile[randrange(4)], (height*3 + grout_size*4, grout_size))
+                result.paste(tile[randrange(4)], (height*3 + grout_size*4, height + grout_size*2))
+                result.paste(tile[randrange(4)], (height*3 + grout_size*4, height*2 + grout_size*3))
+                result.paste(tile[randrange(4)], (grout_size, height*3 + grout_size*2))
+                result.paste(tile[randrange(4)], (grout_size, height*4 + grout_size*3))
+                result.paste(tile[randrange(4)], (grout_size, height*5 + grout_size*4))
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (height*3 + grout_size*2, height*3 + grout_size*4))
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (height*4 + grout_size*3, height*3 + grout_size*4))
+                result.paste(tile[randrange(4)].rotate(90, expand=True), (height*5 + grout_size*4, height*3 + grout_size*4))
                 pass
         elif layout_type in ['third', 'vertThird']:
             result.paste(tile[randrange(4)], (0 - third, grout_size)) #1
