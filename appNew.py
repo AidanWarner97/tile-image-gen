@@ -52,9 +52,9 @@ def generate():
         vertical_midpoint = (width * 2 + grout_size * 2)
         horizontal_midpoint = (height * 2 + grout_size * 2) if layout_type != 'basketWeave' else (height * 3 + grout_size) if ratio == 3 else (height * 2 + grout_size)
 
-        quarter = result // 4
-        half = result // 2
-        third = result // 3
+        quarter = width // 4
+        half = width // 2
+        third = width // 3
         twothird = third * 2
 
         #Paste Images
