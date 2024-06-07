@@ -162,7 +162,84 @@ def generate():
         result.save(img_byte_arr, format='PNG')
         img_byte_arr.seek(0)
 
-        return send_file(img_byte_arr, mimetype='image/png', as_attachment=True, download_name=f'{tile_name}.png')
+        if layout_type == 'stacked':
+            layout = "Horizontal Block"
+        if layout_type == 'brickBond':
+            layout = "Horizontal Half Block"
+        if layout_type == 'third':
+            layout = "Horizontal Quarter Block"
+        if layout_type == 'vertStacked':
+            layout = "Vertical Block"
+        if layout_type == 'vertBrick':
+            layout = "Vertical Half Block"
+        if layout_type == 'vertThird':
+            layout = "Vertical Quarter Block"
+        if layout_type == 'basketWeave':
+            layout = "Basket Weave"
+        if layout_type == 'herringbone':
+            layout = "Herringbone"
+
+        if grout_colour == '#d1d1cf':	
+            grout_text = 'Gunmetal'
+        if grout_colour == '#473938':	
+            grout_text = 'Dovetail'
+        if grout_colour == '#9e9fa4':	
+            grout_text = 'Smoke'
+        if grout_colour == '#516d71':	
+            grout_text = 'Tornado Sky'
+        if grout_colour == '#817670':	
+            grout_text = 'Taupe Grey'
+        if grout_colour == '#485a68':	
+            grout_text = 'Storm Grey'
+        if grout_colour == '#414550':	
+            grout_text = 'Anthracite'
+        if grout_colour == '#211f20':	
+            grout_text = 'Ebony'
+        if grout_colour == '#ffffff':	
+            grout_text = 'White'
+        if grout_colour == '#f5eed4':	
+            grout_text = 'Jasmine'
+        if grout_colour == '#dac9b7':	
+            grout_text = 'Pebble'
+        if grout_colour == '#76480d':	
+            grout_text = 'Walnut'
+        if grout_colour == '#623d13':	
+            grout_text = 'Hazel'
+        if grout_colour == '#623619':	
+            grout_text = 'Mahogany'
+        if grout_colour == '#cadee5':	
+            grout_text = 'Cornflower White'
+        if grout_colour == '#b6d6cb':	
+            grout_text = 'Peppermint'
+        if grout_colour == '#f2c7c0':	
+            grout_text = 'Pink Champagne'
+        if grout_colour == '#fbf6cc':	
+            grout_text = 'Primrose'
+        if grout_colour == '#ece1ab':	
+            grout_text = 'Cream'
+        if grout_colour == '#e0cdbc':	
+            grout_text = 'Bahama Beige'
+        if grout_colour == '#efe3d3':	
+            grout_text = 'Jasmine'
+        if grout_colour == '#cdc9bd':	
+            grout_text = 'Limestone'
+        if grout_colour == '#5e5b54':	
+            grout_text = 'Taupe'
+        if grout_colour == '#716152':	
+            grout_text = 'Brown'
+        if grout_colour == '#afb3b4':	
+            grout_text = 'Silver Grey'
+        if grout_colour == '#a6acac':	
+            grout_text = 'Mid-Grey'
+        if grout_colour == '#8d9193':	
+            grout_text = 'Grey'
+        if grout_colour == '#4c5157':	
+            grout_text = 'Charcoal'
+        if grout_colour == '#000000':	
+            grout_text = 'Black'
+
+
+        return send_file(img_byte_arr, mimetype='image/png', as_attachment=True, download_name='{} ({}x{}) ({} Grout) ({}).png'.format(tile_name, tile_size_width, tile_size_height, grout_text, layout))
     
     except Exception as e:
         return str(e), 400
