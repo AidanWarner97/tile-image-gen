@@ -14,7 +14,7 @@ body {
 }
 
 .row img {
-    width:50% !important;
+    width:175px !important;
     margin-bottom:50px;
     filter:opacity(0.5);
     filter:saturate(0.5);
@@ -37,4 +37,10 @@ p, button {
 button:disabled {
     cursor:not-allowed;
 
+}
+
+@media screen and (max-width: 525px) {
+    .row img {
+        width:150px;
+    }
 }
