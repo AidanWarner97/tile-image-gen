@@ -44,3 +44,8 @@ button:disabled {
         width:150px;
     }
 }
+
+a {
+    height: 38px;
+    margin-bottom: 15px;
+}
