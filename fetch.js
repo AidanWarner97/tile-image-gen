@@ -2,7 +2,7 @@
 const owner = 'AidanWarner97';
 const repo = 'tileimagegen-electron';
 
-const searchTerms = ['arm64', 'Setup', 'Portable', 'rpm', 'deb'];
+const searchTerms = ['arm64', 'x64', 'Setup', 'Portable', 'rpm', 'deb'];
 
 // Function to fetch the latest release from GitHub
 async function fetchLatestRelease() {
@@ -10,6 +10,10 @@ async function fetchLatestRelease() {
     try {
         const response = await fetch(apiUrl);
         const release = await response.json();
+
+        const version = release.tag_name;
+        const versionText = document.getElementById("version")
+        versionText.textContent = version;
 
         searchTerms.forEach(term => {
             const asset = release.assets.find(asset => asset.name.includes(term));
@@ -30,10 +34,3 @@ async function fetchLatestRelease() {
 
 // Fetch the latest release on page load
 fetchLatestRelease();
-
-
-const arm64 = 'arm64';
-const installer = 'Setup';
-const portable = 'Portable';
-const rpm = 'rpm';
-const deb = 'deb';
