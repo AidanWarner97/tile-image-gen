@@ -57,6 +57,10 @@ def generate():
                 result = Image.new('RGB', (width*2 + grout_size*3, width*2 + grout_size*3), rgb)
             elif ratio == 4:
                 result = Image.new('RGB', (width*2 + grout_size*4, width*2 + grout_size*4), rgb)
+            elif ratio == 5:
+                result = Image.new('RGB', (width*2 + grout_size*5, width*2 + grout_size*5), rgb)
+            elif ratio == 6:
+                result = Image.new('RGB', (width*2 + grout_size*6, width*2 + grout_size*6), rgb)
             else:
                 result = Image.new('RGB', (width*2 + grout_size, width*2 + grout_size), rgb)
         elif layout_type in ['third', 'vertThird']:
@@ -141,6 +145,76 @@ def generate():
                 result.paste(tile[2].rotate(90, expand=True), (grout_size + height, grout_size*2 - height*2)) #3T
                 result.paste(tile[3].rotate(90, expand=True), (0, grout_size*8 + height*7)) #4B
                 result.paste(tile[3].rotate(90, expand=True), (0, grout_size*3 - height)) #4T
+            elif ratio == 5:
+                # Horizontal
+                result.paste(tile[0], (grout_size*4 + height*4, grout_size)) #1
+                result.paste(tile[1], (grout_size*3 + height*3, grout_size*2 + height)) #2
+                result.paste(tile[2], (grout_size*2 + height*2, grout_size*3 + height*2)) #3
+                result.paste(tile[3], (grout_size + height, grout_size*4 + height*3)) #4
+                result.paste(tile[0], (grout_size, grout_size*5 + height*4)) #1
+                result.paste(tile[1], (0 - height, grout_size*6 + height*5)) #2L
+                result.paste(tile[1], (grout_size*5 + height*9, grout_size*2 + height*5)) #2R
+                result.paste(tile[2], (0 - height*2, grout_size*7 + height*6)) #3L
+                result.paste(tile[2], (grout_size*4 + height*8, grout_size*3 + height*6)) #3R
+                result.paste(tile[3], (0 - height*3, grout_size*8 + height*7)) #4L
+                result.paste(tile[3], (grout_size*3 + height*7, grout_size*4 + height*7)) #4R
+                result.paste(tile[0], (0 - height*4, grout_size*9 + height*8)) #1L
+                result.paste(tile[0], (grout_size*2 + height*6, grout_size*5 + height*8)) #1R
+                result.paste(tile[1].resize((tile_size_width + grout_size*3, tile_size_height), Image.Resampling.LANCZOS), (grout_size + height*5, grout_size*6 + height*9)) #2
+
+                # Vertical
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*5 + height*9, grout_size)) #1
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*4 + height*8, grout_size*2 + height)) #2
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*3 + height*7, grout_size*3 + height*2)) #3
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*2 + height*6, grout_size*4 + height*3)) #4
+                result.paste(tile[0].rotate(90, expand=True), (grout_size + height*5, grout_size*5 + height*4)) #1
+                result.paste(tile[1].rotate(270, expand=True), (height*4, grout_size*6 + height*5)) #2
+                result.paste(tile[2].rotate(90, expand=True), (height*3 - grout_size, grout_size*7 + height*6)) #3B
+                result.paste(tile[2].rotate(90, expand=True), (height*3 + grout_size*3, grout_size - height*4)) #3T
+                result.paste(tile[3].rotate(90, expand=True), (height*2 - grout_size*2, grout_size*8 + height*7)) #4B
+                result.paste(tile[3].rotate(90, expand=True), (height*2 + grout_size*2, grout_size*2 - height*3)) #4T
+                result.paste(tile[1].rotate(90, expand=True), (grout_size, grout_size*10 + height*9)) #2B
+                result.paste(tile[1].rotate(90, expand=True), (grout_size, grout_size*4 - height)) #2T
+                result.paste(tile[0].rotate(270, expand=True), (height - grout_size*3, grout_size*9 + height*8)) #1B
+                result.paste(tile[0].rotate(270, expand=True), (height + grout_size*2, grout_size*3 - height*2)) #1T
+            elif ratio == 6:
+                # Horizontal
+                result.paste(tile[0], (grout_size*5 + height*5, grout_size)) #1
+                result.paste(tile[1], (grout_size*4 + height*4, grout_size*2 + height)) #2
+                result.paste(tile[2], (grout_size*3 + height*3, grout_size*3 + height*2)) #3
+                result.paste(tile[3], (grout_size*2 + height*2, grout_size*4 + height*3)) #4
+                result.paste(tile[0], (grout_size + height, grout_size*5 + height*4)) #1
+                result.paste(tile[1], (grout_size, grout_size*6 + height*5)) #2
+                result.paste(tile[2], (grout_size - height, grout_size*7 + height*6)) #3L
+                result.paste(tile[2], (grout_size*6 + height*11, grout_size*2 + height*6)) #3R
+                result.paste(tile[3], (grout_size - height*2, grout_size*8 + height*7)) #4L
+                result.paste(tile[3], (grout_size*5 + height*10, grout_size*3 + height*7)) #4R
+                result.paste(tile[0], (grout_size - height*3, grout_size*9 + height*8)) #1L
+                result.paste(tile[0], (grout_size*4 + height*9, grout_size*4 + height*8)) #1R
+                result.paste(tile[1], (grout_size - height*4, grout_size*10 + height*9)) #2L
+                result.paste(tile[1], (grout_size*3 + height*8, grout_size*5 + height*9)) #2R
+                result.paste(tile[2], (grout_size - height*5, grout_size*11 + height*10)) #3L
+                result.paste(tile[2], (grout_size*2 + height*7, grout_size*6 + height*10)) #3R
+                result.paste(tile[3].resize((tile_size_width + grout_size*4, tile_size_height), Image.Resampling.LANCZOS), (grout_size + height*6, grout_size*7 + height*11)) #4
+                
+                # Vertical
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*11, grout_size)) #1
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*5 + height*10, grout_size*2 + height)) #2
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*4 + height*9, grout_size*3 + height*2)) #3
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*3 + height*8, grout_size*4 + height*3)) #4
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*2 + height*7, grout_size*5 + height*4)) #1
+                result.paste(tile[1].rotate(90, expand=True), (grout_size + height*6, grout_size*6 + height*5)) #2
+                result.paste(tile[2].rotate(270, expand=True), (height*5, grout_size*7 + height*6)) #3
+                result.paste(tile[3].rotate(90, expand=True), (height*4 - grout_size, grout_size*8 + height*7)) #4B
+                result.paste(tile[3].rotate(90, expand=True), (height*4 + grout_size*4, grout_size - height*5)) #4T
+                result.paste(tile[0].rotate(90, expand=True), (height*3 - grout_size*2, grout_size*9 + height*8)) #1B
+                result.paste(tile[0].rotate(90, expand=True), (height*3 + grout_size*3, grout_size*2 - height*4)) #1T
+                result.paste(tile[1].rotate(270, expand=True), (height*2 - grout_size*3, grout_size*10 + height*9)) #2B
+                result.paste(tile[1].rotate(270, expand=True), (height*2 + grout_size*2, grout_size*3 - height*3)) #2T
+                result.paste(tile[3].rotate(90, expand=True), (grout_size, grout_size*12 + height*11)) #4B
+                result.paste(tile[3].rotate(90, expand=True), (grout_size, grout_size*5 - height)) #4T
+                result.paste(tile[2].rotate(90, expand=True), (height - grout_size*4, grout_size*11 + height*10)) #3B
+                result.paste(tile[2].rotate(90, expand=True), (height + grout_size, grout_size*4 - height*2)) #3T
                 pass
         elif layout_type == 'basketWeave':
             if ratio == 2:
@@ -200,6 +274,22 @@ def generate():
                 draw.rectangle([grout_size + height*5, grout_size*3 + height*3, grout_size*1.5 + height*5, grout_size*4 + height*7], fill=grout_colour)
                 draw.rectangle([height*3, grout_size*4 + height*5, grout_size // 2 + height*3, grout_size*6 + height*8], fill=grout_colour)
                 draw.rectangle([height*2, height*6, grout_size // 2 + height*2, grout_size*3 + height*8], fill=grout_colour)
+            elif ratio == 5:
+                draw.rectangle([height*5, grout_size*5 + height*4, grout_size // 2 + height*5, grout_size*6 + height*5], fill=grout_colour)
+                draw.rectangle([height*4 - grout_size, grout_size*5 + height*5, height*4 - grout_size // 2, grout_size*6 + height*6], fill=grout_colour)
+                draw.rectangle([height*3 - grout_size*2, grout_size*6 + height*6, height*3 - grout_size*1.5, grout_size*7 + height*7], fill=grout_colour)
+                draw.rectangle([height*2 - grout_size*3, grout_size*7 + height*7, height*2 - grout_size*2.5, grout_size*8 + height*8], fill=grout_colour)
+                draw.rectangle([height - grout_size*4, grout_size*8 + height*8, height - grout_size*3.5, grout_size*9 + height*10], fill=grout_colour)
+                draw.rectangle([height + grout_size, 0, height + grout_size*1.5, height*4 + grout_size*4], fill=grout_colour)
+                draw.rectangle([height*2 + grout_size*2, 0, height*2 + grout_size*2.5, height*3 + grout_size*3], fill=grout_colour)
+            elif ratio == 6:
+                draw.rectangle([height*6, grout_size*6 + height*5, grout_size // 2 + height*6, grout_size*6 + height*6], fill=grout_colour)
+                draw.rectangle([height*5 - grout_size, grout_size*7 + height*6, height*5 - grout_size // 2, grout_size*7 + height*7], fill=grout_colour)
+                draw.rectangle([height*4 - grout_size*2, grout_size*8 + height*7, height*4 - grout_size*1.5, grout_size*8 + height*8], fill=grout_colour)
+                draw.rectangle([height*3 - grout_size*3, grout_size*9 + height*8, height*3 - grout_size*2.5, grout_size*9 + height*9], fill=grout_colour)
+                draw.rectangle([height*2 - grout_size*4, grout_size*10 + height*9, height*2 - grout_size*3.5, grout_size*10 + height*10], fill=grout_colour)
+                draw.rectangle([height - grout_size*5, grout_size*11 + height*10, height - grout_size*4.5, grout_size*12 + height*12], fill=grout_colour)
+                draw.rectangle([height, 0, height + grout_size // 2, grout_size*5 + height*5], fill=grout_colour)
 
         if layout_type in ['vertStacked', 'vertBrick', 'vertThird']:
             result = result.rotate(90, expand=True)
