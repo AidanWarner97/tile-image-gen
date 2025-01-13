@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/AidanWarner97/tile-image-gen/blob/main/static/logo.png?raw=true" width="100" />
+  <img src="https://github.com/AidanWarner97/tile-image-gen/blob/python3/static/logo.png?raw=true" width="100" />
 </p>
 <p align="center">
     <h1 align="center">TILE-IMAGE-GEN</h1>
@@ -44,7 +44,7 @@ Create tile layouts from 1 or 4 variants using multiple layouts and various colo
 > - Only requires 1 image if only 1 variant is available, but supports 4 images if you have multiple variants.
 > - Provide the name of the tile for a more understandable file name.
 > - Select from multiple different layout options.
-> - Add a grout line (minimum 2mm) and your choice of grout colours from brands BAL and UltraTile.
+> - Add a grout line and your choice of grout colours from brands BAL and UltraTile.
 
 
 ---
@@ -58,6 +58,7 @@ Create tile layouts from 1 or 4 variants using multiple layouts and various colo
     ├── wsgi.py
     ├── tile-image-gen.service
     ├── Dockerfile
+    ├── install.sh
     ├── static
     │   ├── favicon.ico
     │   ├── robots.txt
@@ -115,7 +116,7 @@ cd tile-image-gen
 3. Install the dependencies:
 
 ```sh
-> pip install -r requirements.txt
+> sudo bash install.sh
 ```
 
 ###  Running tile-image-gen
@@ -126,8 +127,34 @@ Use the following command to run tile-image-gen:
 > python app.py
 ```
 
-Alternatively, we've created a basic systemctl service file.  You'll need to make sure to edit the Exec line to have where you've cloned the repo in order for it to work properly
+### Installation
 
+#### Automatic
+
+For simpler install, run the install.sh
+```sh
+> sudo bash install.sh
+> sudo systemctl enable --now tile-image-gen.service
+```
+
+#### Manual
+
+Make sure to install the dependencies first
+```sh
+pip install -r requirements.txt
+```
+
+Then edit the service file
+```sh
+> nano tile-image-gen.service
+```
+Change the Working directory and ExecStart line to the location you want the script to run from.
+
+```sh
+WorkingDirectory=/opt/tile-image-gen
+ExecStart=/opt/tile-image-gen/venv/bin/python /opt/tile-image-gen/wsgi.py
+```
+Then you can run the following commands:
 ```sh
 > cp tile-image-gen.service /etc/systemd/system/
 > systemctl daemon-reload
@@ -144,7 +171,7 @@ Docker support is here, with the repo being hosted [here](https://hub.docker.com
 docker run \
   -p 5000:5000 \
   -p restart=on-failure \
-  mraidanlw97/tile-image-gen:python2
+  mraidanlw97/tile-image-gen:python3
 ```
 
 
@@ -153,7 +180,7 @@ docker run \
 ```sh
 services:
   tile-image-gen:
-    image: mraidanlw97/tile-image-gen:python2
+    image: mraidanlw97/tile-image-gen:python3
     ports:
       - "5000:5000"
 ```
@@ -165,6 +192,8 @@ services:
 - [x] ` Add option for no grout-lines`
 - [x] ` Upgrade codebase to Python3`
 - [x] ` Enable docker support`
+- [] ` Upgrade ratios for more than just herringbone `
+- [] ` Update web template `
 
 ---
 
