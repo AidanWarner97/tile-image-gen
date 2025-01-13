@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta charset="UTF-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <title>Tile Image Generator</title>
+
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+    </style>
+
+</head>
+
+<body class="h-full w-screen bg-slate-200">
+    <div class="container h-10 bg-slate-400">
+        <div class="gap-x-4 gap-y-4 grid-cols-2 fixed z-50 flex items-center justify-around bg-slate-400 w-screen">
+            <div class="p-3 flex gap-x-4">
+                <img src="{{ url_for('static', filename='logo_transparent.png') }}" alt="Tile Image Generator Logo" class="h-10" />
+                <h1 class="text-3xl font-bold leading-snug">Tile Image Generator</h1>
+            </div>
+            <div class="h-fit">
+                <div class="gap-x-4 gap-y-4 grid-cols-2 h-fit flex items-center justify-center hidden">
+                    <div class="p-3"><span>Generator</span></div>
+                    <div class="p-3"><span>Updates</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section>
+    <div>
+        <div class="container mx-auto py-5">
+            <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-xl p-10 bg-slate-400 rounded-lg">
+                <form class="space-y-6" action="/generate" method="POST" enctype="multipart/form-data">
+                    <div>
+                        <label class="block text-sm font-medium leading-6">Tile Name (eg. Charlie Blue)</label>
+                        <div class="mt-2">
+                            <input
+                                class="block w-full rounded-md border-0 p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 text-grey-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 h-9" 
+                                name="tileName" id="tileName" required/>
+                        </div>
+                    </div>
+                    <div class="max-w-xl">
+                        <label class="block text-sm font-medium leading-6">Add Images</label>
+                        <label id="drop-area"
+                            class="mt-2 flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                            <span class="flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                <span id="drop-area-text" class="font-medium text-gray-600">
+                                    Drop files to Attach, or
+                                    <span class="text-blue-600 underline">browse</span>
+                                </span>
+                            </span>
+                            <input id="images" type="file" name="images" accept="image/*" class="hidden" multiple required>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 justify-items-stretch">
+                        <div>
+                            <label class="block text-sm font-medium leading-6">Tile Width (mm)</label>
+                            <div class="mt-2">
+                                <input
+                                    class="block w-full rounded-md border-0 p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 text-grey-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 h-9" 
+                                    type="number" name="tileWidth" id="tileWidth" required />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium leading-6">Tile Height (mm)</label>
+                            <div class="mt-2">
+                                <input
+                                    class="block w-full rounded-md border-0 p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 text-grey-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 h-9" 
+                                    type="number" name="tileHeight" id="tileHeight" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium leading-6">Layout Type</label>
+                        <div class="mt-2">
+                            <select
+                                class="block w-full rounded-md border-0 p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 text-grey-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 h-9"
+                                name="layoutType" id="layoutType" required>
+                                <option value="stacked">Horizontal Block</option>
+                                <option value="brickBond">Horizontal 1/2 Block</option>
+                                <option value="third">Horizontal 1/4 Block</option>
+                                <option value="vertStacked">Vertical Block</option>
+                                <option value="vertBrick">Vertical 1/2 Block</option>
+                                <option value="vertThird">Vertical 1/4 Block</option>
+                                <option value="basketWeave">Basket Weave</option>
+                                <option value="herringbone">Herringbone (2:1 - 6:1)</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 justify-items-stretch">
+                        <div>
+                            <label class="block text-sm font-medium leading-6">Grout Size (mm)</label>
+                            <div class="mt-2">
+                                <input
+                                    class="block w-full rounded-md border-0 p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 text-grey-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 h-9" 
+                                    type="number" name="groutSize" id="groutSize" required />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium leading-6">Grout Colour</label>
+                            <div class="mt-2">
+                                <select
+                                    class="block w-full rounded-md border-0 p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 text-grey-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 h-9"
+                                    name="groutColour" id="groutColour" required>
+                                    <option value="" disabled selected>Please Select A Colour</option>
+                                    <option value="" disabled>BAL Range</option>
+                                    <option value="#d1d1cf" data-value="#d1d1cf">Gunmetal</option>
+                                    <option value="#9e9fa4" data-value="#9e9fa4">Smoke</option>
+                                    <option value="#473938" data-value="#473938">Dovetail</option>
+                                    <option value="#516d71" data-value="#516d71">Tornado Sky</option>
+                                    <option value="#817670" data-value="#817670">Taupe Grey</option>
+                                    <option value="#485a68" data-value="#485a68">Storm Grey</option>
+                                    <option value="#414550" data-value="#414550">Anthracite</option>
+                                    <option value="#211f20" data-value="#211f20">Ebony</option>
+                                    <option value="#ffffff" data-value="#ffffff">White</option>
+                                    <option value="#f5eed4" data-value="#f5eed4">Jasmine</option>
+                                    <option value="#dac9b7" data-value="#dac9b7">Pebble</option>
+                                    <option value="#76480d" data-value="#76480d">Walnut</option>
+                                    <option value="#623d13" data-value="#623d13">Hazel</option>
+                                    <option value="#623619" data-value="#623619">Mahogany</option>
+                                    <option value="#cadee5" data-value="#cadee5">Cornflower White</option>
+                                    <option value="#b6d6cb" data-value="#b6d6cb">Peppermint</option>
+                                    <option value="#f2c7c0" data-value="#f2c7c0">Pink Champagne</option>
+                                    <option value="#fbf6cc" data-value="#fbf6cc">Primrose</option>
+                                    <option value="" disabled>UltraTile Range</option>
+                                    <option value="#ffffff">White</option>
+                                    <option value="#ece1ab">Cream</option>
+                                    <option value="#e0cdbc">Bahama Beige</option>
+                                    <option value="#efe3d3">Jasmine</option>
+                                    <option value="#cdc9bd">Limestone</option>
+                                    <option value="#5e5b54">Taupe</option>
+                                    <option value="#716152">Brown</option>
+                                    <option value="#afb3b4">Silver Grey</option>
+                                    <option value="#a6acac">Mid-Grey</option>
+                                    <option value="#8d9193">Grey</option>
+                                    <option value="#4c5157">Charcoal</option>
+                                    <option value="#000000">Black</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <button
+                                class="mt-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                type="submit">
+                                Generate
+                            </button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto py-5 mb-28">
+        <div class="mt-1 sm:mx-auto sm:w-full sm:max-w-xl p-10 bg-slate-400 rounded-lg">
+            <h2 class="text-xl font-bold leading-snug">Latest Update:</h2>
+            <p>New website design!  Rather just keeping it barebones, we now have a proper design and layout using modern design tools.</p>
+        </div>
+    </div>
+</section>
+    <div class="container h-10 bg-slate-400 fixed bottom-0">
+        <div
+            class="gap-x-4 gap-y-4 grid-cols-2 fixed z-50 flex items-center justify-around bg-slate-400 w-screen bottom-0">
+            <div class="h-fit p-3">
+                <p><a href="https://github.com/AidanWarner97/tile-image-gen" class="hover:text-slate-100" target="_blank">Tile Image Generator</a></p>
+                <p>By <a href="https://github.com/AidanWarner97" class="hover:text-slate-100" target="_blank">Aidan Warner</a></p>
+            </div>
+            <div class="h-fit p-3">
+                <div><span>For any queries, please email:</span></div>
+                <div><span><a href="mailto:support@tileimagegen.uk" class="hover:text-slate-100" target="_blank">support@tileimagegen.uk</a></span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('images');
+        const dropAreaText = document.getElementById('drop-area-text');
+    
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.classList.add('border-blue-600');
+        });
+    
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('border-blue-600');
+        });
+    
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.classList.remove('border-blue-600');
+            const files = event.dataTransfer.files;
+            fileInput.files = files;
+            updateDropAreaText(files.length);
+        });
+    
+        dropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+    
+        fileInput.addEventListener('change', () => {
+            const files = fileInput.files;
+            updateDropAreaText(files.length);
+        });
+    
+        function updateDropAreaText(fileCount) {
+            if (fileCount > 0) {
+                dropAreaText.innerHTML = `${fileCount} image${fileCount > 1 ? 's' : ''} added`;
+            } else {
+                dropAreaText.innerHTML = 'Drop files to Attach, or <span class="text-blue-600 underline">browse</span>';
+            }
+        }
+    </script>
+</body>
+
+
+</html>
