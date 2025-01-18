@@ -1,381 +1,316 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en-US'>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generate custom tile images easily with Tile Image Generator. Create unique patterns and designs for your projects.">
-    <link rel="canonical" href="https://tileimagegen.uk/" />
-    <meta property="og:title" content="Tile Image Generator">
-    <meta property="og:description" content="Generate custom tile images easily with Tile Image Generator. Create unique patterns and designs for your projects.">
-    <meta property="og:url" content="https://tileimagegen.uk/">
-    <meta name="keywords" content="tile images, generator, patterns, designs, customization">
-    <meta name="google-adsense-account" content="ca-pub-8424385314773719">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_transparent.png') }}">
     <title>Tile Image Generator</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
     <style>
-        .selectors {
-            width:100%;
-            display:inline-grid;
-            grid-template-columns: auto;
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #d8e0f0;
         }
 
-        .selectors .form-group {
-            display:grid;
-            margin:auto;
-            padding:0;
-            width:100%;
-        }
-        #layoutType, #groutColour {
-            width:100%;
-            height: calc(1.5em + .75rem + 2px);
-            padding: .375rem .75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height:1.5;
-            color: #495057;
-            border:1px solid #ced4da;
-            border-radius:.25rem;
-        }
-        #layoutType option:disabled {
-            font-style: italic;
-        }
-        #groutColour option:disabled {
-            font-weight:bold;
-        }
-        .alert {
-            margin-top:24px;
-        }
-        #updates {
-            max-height:300px;
-            overflow:hidden;
-        }
-        .alert span {
-            font-weight:bold;
-            margin-right:5px;
-            padding-right:5px;
-            border-right:1px solid #2e6db1;
-            color:#2e6db1;
-        }
-        p.old {
-            opacity:0.7;
-        }
-        .cookie{
-            background-color: #cce5ff;
-            position: fixed;
-            bottom: 88px;
-            border-radius: 10px;
-            left: 5%;
-            padding: 10px 20px;
-            display:none;
-            text-align:center;
+        #sidebar {
+            width: 300px;
+            background: #333;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .cookie .txt{
-            float: left;
-        }
-        .txt p{
-            color:#1D2D35;
-        }
-        .cookieNotice {
-            display:none;
-            position: absolute;
-            top: 0;
-            margin: 20px 25% 20px 25%;
-            width: 50vw;
-            padding: 10px;
+        #main-content {
+            width: 800px;
+            margin: 2em auto;
+            background-color: rgba(148, 163, 184, 1);
             border-radius: 5px;
-            z-index:99999;
+            padding: 10px;
         }
-        .cookieClose {
-            position: fixed;
-            right: 20px;
-            top: 20px;
-            font-size: xx-large;
+
+        nav {
+            display: grid;
+            grid-row-gap: 15px;
         }
-        @media (pointer:none), (pointer:coarse) {
-            .cookieNotice {
-                width:100vw !important;
-                margin:0 !important;
-            }
-            .cookieClose {
-                z-index:99999;
-            }
+
+        nav a {
+            width: 100%;
+            height: 100%;
+            padding: 5px 0;
+            display: grid;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 5px;
+            transition: 0.1s all;
         }
-        #readless {
-            display:none;
+
+        nav a span {
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
         }
-        #readmore {
-            display:block;
+
+        #sidebar a {
+            color: #fff;
+            text-decoration: none;
         }
-        #readmore, #readless {
-            position:absolute;
-            bottom: 5px;
-            right: 5px;
-            z-index:9999;
+
+        #sidebar a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
-        #bottomAlert {
-            position:absolute;
+
+        #sidebar h1, #sidebar h2, #sidebar ul, #sidebar p {
+            margin: 0 0 20px;
+        }
+
+        #footer {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: #ccc;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .form-container {
+            margin-top: 2em;
+            background-color: #94a3b8;
+            border-radius: 10px;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+        }
+
+        .form-container input, .form-container select {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            height:46px;
+            box-sizing: border-box;
+        }
+
+        .button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.75em;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
             width:100%;
-            height:150px;
-            bottom:0;
-            left:0;
-            background-image: linear-gradient(transparent,#cce5ff);
-            display:block;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #4338ca;
+        }
+
+        #drop-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 8rem;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        #drop-area:hover {
+            border-color: #4f46e5;
+        }
+
+        #drop-area-text {
+            font-size: 1rem;
+            color: #4b5563;
+        }
+
+        #drop-area .file-icon {
+            margin-right: 1em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #main-content h1 {
+            margin: 0;
+            padding: 0;
         }
     </style>
+
 </head>
+
 <body>
-    <div class="container mt-5">
-        <form action="/generate" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="tileName">Tile Name</label>
-                <input type="text" class="form-control" name="tileName" id="tileName" placeholder="Tile Name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="images">Upload Images (either 1, or 4 images)</label>
-                <input type="file" class="form-control-file" name="images" id="images" accept="image/*" multiple required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="tileWidth">Tile Width (mm)</label>
-                    <input type="number" class="form-control" name="tileWidth" id="tileWidth" placeholder="Tile Width" required>
+    <div id="sidebar">
+        <div id="header">
+            <h1>Tile Image Generator</h1>
+        </div>
+        <div id="menu">
+            <nav>
+                <a href="#"><span>Generator</span></a>
+                <a href="https://updates.tileimagegen.uk"><span>Updates</span></a>
+            </nav>
+        </div>
+        <div id="footer"><p>Created by Aidan Warner</p></div>
+    </div>
+    <div id="main-content">
+        <h1>Generator</h1>
+        <div class="form-container">
+            <form action="/generate" method="POST" enctype="multipart/form-data">
+                <div>
+                    <label for="tileName">Tile Name (eg. Charlie Blue)</label>
+                    <input type="text" name="tileName" id="tileName" required />
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="tileHeight">Tile Height (mm)</label>
-                    <input type="number" class="form-control" name="tileHeight" id="tileHeight" placeholder="Tile Height" required>
+                <div>
+                    <label for="drop-area">Add Images</label>
+                    <label id="drop-area" for="images">
+                        <span class="file-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                        </span>
+                        <span id="drop-area-text">
+                            Drop files to Attach, or <span class="text-blue-600 underline">browse</span>
+                        </span>
+                    </label>
+                    <input id="images" type="file" name="images" accept="image/*" class="hidden" multiple required>
                 </div>
+                <div class="grid">
+                    <div>
+                        <label for="tileWidth">Tile Width (mm)</label>
+                        <input type="number" name="tileWidth" id="tileWidth" required />
+                    </div>
+                    <div>
+                        <label for="tileHeight">Tile Height (mm)</label>
+                        <input type="number" name="tileHeight" id="tileHeight" required />
+                    </div>
+                </div>
+                <div>
+                    <label for="layoutType">Layout Type</label>
+                    <select name="layoutType" id="layoutType" required>
+                        <option value="stacked">Horizontal Block</option>
+                        <option value="brickBond">Horizontal 1/2 Block</option>
+                        <option value="third">Horizontal 1/4 Block</option>
+                        <option value="vertStacked">Vertical Block</option>
+                        <option value="vertBrick">Vertical 1/2 Block</option>
+                        <option value="vertThird">Vertical 1/4 Block</option>
+                        <option value="basketWeave">Basket Weave</option>
+                        <option value="herringbone">Herringbone (2:1 - 6:1)</option>
+                    </select>
+                </div>
+                <div class="grid">
+                    <div>
+                        <label for="groutSize">Grout Size (mm)</label>
+                        <input type="number" name="groutSize" id="groutSize" required />
+                    </div>
+                    <div>
+                        <label for="groutColour">Grout Colour</label>
+                        <select name="groutColour" id="groutColour" required>
+                                    <option value="" disabled selected>Please Select A Colour</option>
+                                    <option value="" disabled>BAL Range</option>
+                                    <option value="#d1d1cf" data-value="#d1d1cf">Gunmetal</option>
+                                    <option value="#9e9fa4" data-value="#9e9fa4">Smoke</option>
+                                    <option value="#473938" data-value="#473938">Dovetail</option>
+                                    <option value="#516d71" data-value="#516d71">Tornado Sky</option>
+                                    <option value="#817670" data-value="#817670">Taupe Grey</option>
+                                    <option value="#485a68" data-value="#485a68">Storm Grey</option>
+                                    <option value="#414550" data-value="#414550">Anthracite</option>
+                                    <option value="#211f20" data-value="#211f20">Ebony</option>
+                                    <option value="#ffffff" data-value="#ffffff">White</option>
+                                    <option value="#f5eed4" data-value="#f5eed4">Jasmine</option>
+                                    <option value="#dac9b7" data-value="#dac9b7">Pebble</option>
+                                    <option value="#76480d" data-value="#76480d">Walnut</option>
+                                    <option value="#623d13" data-value="#623d13">Hazel</option>
+                                    <option value="#623619" data-value="#623619">Mahogany</option>
+                                    <option value="#cadee5" data-value="#cadee5">Cornflower White</option>
+                                    <option value="#b6d6cb" data-value="#b6d6cb">Peppermint</option>
+                                    <option value="#f2c7c0" data-value="#f2c7c0">Pink Champagne</option>
+                                    <option value="#fbf6cc" data-value="#fbf6cc">Primrose</option>
+                                    <option value="" disabled>UltraTile Range</option>
+                                    <option value="#ffffff">White</option>
+                                    <option value="#ece1ab">Cream</option>
+                                    <option value="#e0cdbc">Bahama Beige</option>
+                                    <option value="#efe3d3">Jasmine</option>
+                                    <option value="#cdc9bd">Limestone</option>
+                                    <option value="#5e5b54">Taupe</option>
+                                    <option value="#716152">Brown</option>
+                                    <option value="#afb3b4">Silver Grey</option>
+                                    <option value="#a6acac">Mid-Grey</option>
+                                    <option value="#8d9193">Grey</option>
+                                    <option value="#4c5157">Charcoal</option>
+                                    <option value="#000000">Black</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <button class="button" type="submit">Generate</button>
+                        </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label for="layoutType">Layout Type</label>
-                <select id="layoutType" name="layoutType" required>
-                    <option value="stacked">Horizontal Block</option>
-                    <option value="brickBond">Horizontal 1/2 Block</option>
-                    <option value="third">Horizontal 1/4 Block</option>
-                    <option value="vertStacked">Vertical Block</option>
-                    <option value="vertBrick">Vertical 1/2 Block</option>
-                    <option value="vertThird">Vertical 1/4 Block</option>
-                    <option value="basketWeave">Basket Weave</option>
-                    <option value="herringbone">Herringbone (2:1 - 6:1)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="groutSize">Grout Size (mm)</label>
-                <input type="number" class="form-control" name="groutSize" id="groutSize" placeholder="Grout Size" required>
-            </div>
-
-            <div class="form-group">
-                <label for="groutColour">Choose Grout Colour</label>
-                <select id="groutColour" name="groutColour" required>
-                    <option value="" disabled selected>Please Select A Colour</option>
-                    <option value="" disabled>BAL Range</option>
-                    <option value="#d1d1cf" data-value="#d1d1cf">Gunmetal</option>
-                    <option value="#9e9fa4" data-value="#9e9fa4">Smoke</option>
-                    <option value="#473938" data-value="#473938">Dovetail</option>
-                    <option value="#516d71" data-value="#516d71">Tornado Sky</option>
-                    <option value="#817670" data-value="#817670">Taupe Grey</option>
-                    <option value="#485a68" data-value="#485a68">Storm Grey</option>
-                    <option value="#414550" data-value="#414550">Anthracite</option>
-                    <option value="#211f20" data-value="#211f20">Ebony</option>
-                    <option value="#ffffff" data-value="#ffffff">White</option>
-                    <option value="#f5eed4" data-value="#f5eed4">Jasmine</option>
-                    <option value="#dac9b7" data-value="#dac9b7">Pebble</option>
-                    <option value="#76480d" data-value="#76480d">Walnut</option>
-                    <option value="#623d13" data-value="#623d13">Hazel</option>
-                    <option value="#623619" data-value="#623619">Mahogany</option>
-                    <option value="#cadee5" data-value="#cadee5">Cornflower White</option>
-                    <option value="#b6d6cb" data-value="#b6d6cb">Peppermint</option>
-                    <option value="#f2c7c0" data-value="#f2c7c0">Pink Champagne</option>
-                    <option value="#fbf6cc" data-value="#fbf6cc">Primrose</option>
-                    <option value="" disabled>UltraTile Range</option>
-                    <option value="#ffffff">White</option>
-                    <option value="#ece1ab">Cream</option>
-                    <option value="#e0cdbc">Bahama Beige</option>
-                    <option value="#efe3d3">Jasmine</option>
-                    <option value="#cdc9bd">Limestone</option>
-                    <option value="#5e5b54">Taupe</option>
-                    <option value="#716152">Brown</option>
-                    <option value="#afb3b4">Silver Grey</option>
-                    <option value="#a6acac">Mid-Grey</option>
-                    <option value="#8d9193">Grey</option>
-                    <option value="#4c5157">Charcoal</option>
-                    <option value="#000000">Black</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Generate</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
-        </form>
-            <!-- Updates bar -->
-            <div class="alert alert-primary form-group" role="alert" id="updates">
-                <h4 class="alert-heading">
-                    <i>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M13 7.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-3 3.75a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v4.25h.75a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5h.75V12h-.75a.75.75 0 0 1-.75-.75Z" fill="#004085"></path>
-                            <path d="M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1ZM2.5 12a9.5 9.5 0 0 0 9.5 9.5 9.5 9.5 0 0 0 9.5-9.5A9.5 9.5 0 0 0 12 2.5 9.5 9.5 0 0 0 2.5 12Z" fill="#004085"></path>
-                        </svg>
-                    </i>Updates:</h4>
-                <hr>
-                <p><span>11/01</span>Herringbone 5:1 and 6:1 has quickly joined the team!  The new ratios will also soon be spreading to the other relevant layouts.</p>
-                <p class="old"><span>08/01</span>Herringbone 4:1 ratio support has arrived!  Plus fixed the repeating tile image.</p>
-                <p class="old"><span>07/06</span>Time for a brand new upgrade!  This introduces the ability to have 0 grout lines, and the output file is much more descriptive now.  I've also created an app to run this as well!  Currently, you still need to be connected to the internet, but a version with offline support is coming!  Click <a href="https://downloads.tileimagegen.uk" target="_blank">here</a> to download for your machine.  (No, I haven't forgotten about you Mac users!)</p>
-                <p class="old"><span>29/02</span>3:1 ratio herringbone support has arrived!  This means for small 300x100 tiles will now work without issue.</p>
-                <p class="old"><span>07/02</span>1mm Grout Lines are in!  Support has been added for 1mm grout lines.  Thank you for your continued use.</p>
-                <p class="old"><span>03/02</span>We've simplified the layout selection options.  Horizontal and Vertical each have their own options, rather than selecting a horizontal layout, and then selecting the orientation.  All Horizontal layouts, have an equivalent Vertical layout.</p>
-                <p class="old"><span>01/02</span>New layout!  Known as 'Horizontal 1/4 Block', this layout is for those using wooden planks where Horizontal Block is too much of a grid, and Horizontal 1/2 Block isn't enough variation.</p>
-                <p class="old"><span>31/01</span>We've updated our cookie policy.  If you'd like to take a look and this, please click <a href="#" onclick="showCookies()">here</a>.</p>
-                <p class="old"><span>31/01</span>We now have an email address!  Please see below for our email address.  Any issues, please get in touch.</p>
-                <p class="old"><span>31/01</span>All future updates will be provided here, so please do check here regularly for any changes big or small.</p>
-                <div id="bottomAlert"></div>
-                <button href="#" class="btn btn-primary" id="readmore">See More</button>
-                <button href="#" class="btn btn-primary" id="readless">See Less</button>
-            </div>
-            <div class="alert alert-secondary form-group" role="alert">
-                <h5>
-                    <i>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                            <path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z" fill="#383d41"></path>
-                        </svg>
-                    </i>Need Help?</h5>
-                <p>If you need any help, or if something isn't working, please get in touch via our email: <a href="mailto:support@tileimagegen.uk" target="_blank">support@tileimagegen.uk</a></p>
-            </div>
-        
+        </div>
     </div>
 
-    <section class="cookie" id="cookieBanner">
-        <div class="txt">
-            <p>
-                We use cookies, read more <a href="#" onclick="showCookies()">here</a>.
-            </p>
-        </div>
-        <div>
-            <button onclick="acceptCookies()" class="btn btn-primary accept">Okay!</button>
-        </div>
-    </section>
-
-    <section class="cookieNotice alert-primary" id="cookieNotice">
-        <div class="cookieClose">
-            <p><a href="#" onclick="hideCookies()">X</a></p>
-        </div>
-        <div class="cookieInfo">
-            <h2>Cookie Policy for Tile Image Generator</h2>
-            <h4>Last Updates: 31/01/2024</h4>
-            <p>This is the Cookie Policy for Tile Image Generator, accessible from https://tileimagegen.uk</p>
-            <hr>
-            <h3>What Are Cookies</h3>
-            <p>As is common practice with almost all professional websites, this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it, and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored; however, this may downgrade or 'break' certain elements of the site's functionality.
-            </p>
-            <p>For more general information on cookies, please read <a href="https://cookiesandyou.com" target="_blank">What Are Cookies</a>.</p>
-            <h3>How We Use Cookies</h3>
-            <p>We use cookies for a variety of reasons detailed below. Unfortunately, in most cases, there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site. It is recommended that you leave on all cookies if you are not sure whether you need them or not, in case they are used to provide a service that you use.</p>
-            <h3>Disabling Cookies</h3>
-            <p>You can prevent the setting of cookies by adjusting the settings on your browser (see your browser Help for how to do this). Be aware that disabling cookies will affect the functionality of this and many other websites that you visit. Disabling cookies will usually result in also disabling certain functionality and features of this site. Therefore, it is recommended that you do not disable cookies.</p>
-            <hr>
-            <h2>The Cookies We Set</h2>
-            <h3>Essential Cookies</h3>
-            <p>These cookies are essential for you to browse the website and use its features, such as accessing secure areas of the site. Without these cookies, certain services you have asked for cannot be provided.</p>
-            <h3>Performance and Analytics Cookies</h3>
-            <p>These cookies are used to collect information about how visitors use our website. We use the information to compile reports and to help us improve the website. The cookies collect information in an anonymous form, including the number of visitors to the website, where visitors have come to the website from, and the pages they visited.</p>
-            <h3>Third Party Cookies</h3>
-            <p>In some special cases, we also use cookies provided by trusted third parties. The following section details which third-party cookies you might encounter through this site.</p>
-            <ul>
-                <li>Cloudflare</li>
-                <li>OpenWebAnalytics</li>
-            </ul>
-            <h3>More Informaion</h3>
-            <p>If you are still looking for more information, you can contact us via our email address: <a href="mailto:support@tileimagegen.uk" target="_blank">support@tileimagegen.uk</a></a></p>
-            <h3>Changes to Our Cookie Policy</h3>
-            <p>We may update our Cookie Policy from time to time. We will notify you of any changes by posting the new Cookie Policy on this page.</p>
-        </div>
-    </section>
-
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Analytics -->
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('images');
+        const dropAreaText = document.getElementById('drop-area-text');
     
-    <!-- Start Open Web Analytics Tracker -->
-    <script type="text/javascript">
-        //<![CDATA[
-        var owa_baseUrl = 'https://a.ndts.xyz/';
-        var owa_cmds = owa_cmds || [];
-        owa_cmds.push(['setSiteId', '5404a20c9f35612c6eb29d9523166eda']);
-        owa_cmds.push(['trackPageView']);
-        owa_cmds.push(['trackClicks']);
-        owa_cmds.push(['trackDomStream']);
-        
-        (function() {
-            var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
-            owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
-            _owa.src = owa_baseUrl + 'modules/base/dist/owa.tracker.js';
-            var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
-        }());
-        //]]>
-    </script>
-    <!-- End Open Web Analytics Code -->
-        
-    <!-- Start Cookie Information -->
-    <script>
-        function setCookie(name, value, days) {
-            const expires = new Date();
-            expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
-        }
-
-        function getCookie(name) {
-            const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=([^;]+)`);
-            return cookieValue ? cookieValue.pop() : '';
-        }
-
-        function acceptCookies() {
-            setCookie('acceptedCookies', 'true', 30);
-            document.getElementById('cookieBanner').style.display = 'none';
-        }
-
-        function showCookies() {
-            document.getElementById('cookieNotice').style.display = 'block';
-        }
-
-        function hideCookies() {
-            document.getElementById('cookieNotice').style.display = 'none';
-        }
-
-        window.onload = function () {
-            const hasAcceptedCookies = getCookie('acceptedCookies');
-            const cookieBanner = document.getElementById('cookieBanner');
-
-            if (!hasAcceptedCookies) {
-                cookieBanner.style.display = 'block';
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.classList.add('border-blue-600');
+        });
+    
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('border-blue-600');
+        });
+    
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.classList.remove('border-blue-600');
+            const files = event.dataTransfer.files;
+            fileInput.files = files;
+            updateDropAreaText(files.length);
+        });
+    
+        dropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+    
+        fileInput.addEventListener('change', () => {
+            const files = fileInput.files;
+            updateDropAreaText(files.length);
+        });
+    
+        function updateDropAreaText(fileCount) {
+            if (fileCount > 0) {
+                dropAreaText.innerHTML = `${fileCount} image${fileCount > 1 ? 's' : ''} added`;
+            } else {
+                dropAreaText.innerHTML = 'Drop files to Attach, or <span class="text-blue-600 underline">browse</span>';
             }
-        };
+        }
     </script>
-    <!-- End Cookie Info -->
-    <script>
-        document.querySelector('#readmore').addEventListener('click', function() {
-            document.querySelector('#updates').style.maxHeight='fit-content';
-            document.querySelector('#readless').style.removeProperty('display');
-            document.querySelector('#readless').style.display='block';
-            document.querySelector('#bottomAlert').style.display='none';
-            this.style.display='none';
-        })
-        document.querySelector('#readless').addEventListener('click', function() {
-            document.querySelector('#updates').style.maxHeight='300px';
-            document.querySelector('#updates').style.overflow='hidden';
-            document.querySelector('#readmore').style.removeProperty('display');
-            document.querySelector('#readmore').style.display-'block';
-            document.querySelector('#bottomAlert').style.removeProperty('display');
-            this.style.display='none';
-        })
-    </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8424385314773719"
-    crossorigin="anonymous"></script>
 </body>
+
+
 </html>
