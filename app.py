@@ -52,6 +52,8 @@ def generate():
                 result = Image.new('RGB', (width * 2 + grout_size * 4, height * 6 + grout_size), rgb)
             elif ratio == 2:
                 result = Image.new('RGB', (width*2 + grout_size*3, width*2 + grout_size*3), rgb)
+            elif ratio == 4:
+                result = Image.new('RGB', (width*2 + grout_size*5, width*2 + grout_size*5), rgb)
         elif layout_type == 'herringbone':
             if ratio == 3:
                 result = Image.new('RGB', (width*2 + grout_size*3, width*2 + grout_size*3), rgb)
@@ -239,6 +241,23 @@ def generate():
                 result.paste(tile[2].rotate(90, expand=True), (height*3 + grout_size*2, height*3 + grout_size*4))
                 result.paste(tile[3].rotate(90, expand=True), (height*4 + grout_size*3, height*3 + grout_size*4))
                 result.paste(tile[1].rotate(90, expand=True), (height*5 + grout_size*4, height*3 + grout_size*4))
+            elif ratio == 4:
+                result.paste(tile[0].rotate(90, expand=True), (grout_size, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*2 + height, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*3 + height*2, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*4 + height*3, grout_size))
+                result.paste(tile[0], (grout_size*5 + height*4, grout_size))
+                result.paste(tile[1], (grout_size*5 + height*4, grout_size*2 + height))
+                result.paste(tile[2], (grout_size*5 + height*4, grout_size*3 + height*2))
+                result.paste(tile[3], (grout_size*5 + height*4, grout_size*4 + height*3))
+                result.paste(tile[0], (grout_size, grout_size*2 + width))
+                result.paste(tile[1], (grout_size, grout_size*3 + width + height))
+                result.paste(tile[2], (grout_size, grout_size*4 + width + height*2))
+                result.paste(tile[3], (grout_size, grout_size*5 + width + height*3))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*2 + height*4, grout_size*5 + height*4))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*3 + height*5, grout_size*5 + height*4))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*4 + height*6, grout_size*5 + height*4))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*5 + height*7, grout_size*5 + height*4))
                 pass
         elif layout_type in ['third', 'vertThird']:
             result.paste(tile[0], (0 - quarter, grout_size)) #1
