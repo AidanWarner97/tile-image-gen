@@ -1,180 +1,41 @@
 <!DOCTYPE html>
-<html lang='en-US'>
-
-<head>
+<html>
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_transparent.png') }}">
     <title>Tile Image Generator</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_transparent.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJ4XFG0ZS9"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-    <style>
-        body {
-            display: flex;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #d8e0f0;
-        }
+    gtag('config', 'G-SJ4XFG0ZS9');
+    </script>
 
-        #sidebar {
-            width: 300px;
-            background: #333;
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        #main-content {
-            width: 800px;
-            margin: 2em auto;
-            background-color: rgba(148, 163, 184, 1);
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        nav {
-            display: grid;
-            grid-row-gap: 15px;
-        }
-
-        nav a {
-            width: 100%;
-            height: 100%;
-            padding: 5px 0;
-            display: grid;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 5px;
-            transition: 0.1s all;
-        }
-
-        nav a span {
-            display: flex;
-            align-items: center;
-            padding: 0 5px;
-        }
-
-        #sidebar a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        #sidebar a:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        #sidebar h1, #sidebar h2, #sidebar ul, #sidebar p {
-            margin: 0 0 20px;
-        }
-
-        #footer {
-            margin-top: auto;
-            font-size: 0.8rem;
-            color: #ccc;
-            position: absolute;
-            bottom: 0;
-        }
-
-        .form-container {
-            margin-top: 2em;
-            background-color: #94a3b8;
-            border-radius: 10px;
-        }
-
-        .form-container form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5em;
-        }
-
-        .form-container input, .form-container select {
-            width: 100%;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-            height:46px;
-            box-sizing: border-box;
-        }
-
-        .button {
-            background-color: #4f46e5;
-            color: white;
-            padding: 0.75em;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.2s;
-            width:100%;
-            margin-top: 20px;
-        }
-
-        .button:hover {
-            background-color: #4338ca;
-        }
-
-        #drop-area {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 8rem;
-            border: 2px dashed #ccc;
-            border-radius: 5px;
-            background-color: white;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-
-        #drop-area:hover {
-            border-color: #4f46e5;
-        }
-
-        #drop-area-text {
-            font-size: 1rem;
-            color: #4b5563;
-        }
-
-        #drop-area .file-icon {
-            margin-right: 1em;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1em;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #main-content h1 {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
-
-</head>
-
-<body>
+  </head>
+  <body>
     <div id="sidebar">
-        <div id="header">
-            <h1>Tile Image Generator</h1>
-        </div>
-        <div id="menu">
-            <nav>
-                <a href="#"><span>Generator</span></a>
-                <a href="https://updates.tileimagegen.uk"><span>Updates</span></a>
-            </nav>
-        </div>
-        <div id="footer"><p>Created by Aidan Warner</p></div>
+        <header>Tile Image Generator</header>
+        <nav>
+            <ul>
+                <li class="active"><a href="#">Generator</a></li>
+                <li><a href="https://updates.tileimagegen.uk">Updates></a></li>
+                <li><a href="https://updates.tileimagegen.uk/feedback">Feedback</a></li>
+                <li><a href="https://updates.tileimagegen.uk/about">About</a></li>
+            </ul>
+        </nav>
     </div>
-    <div id="main-content">
-        <h1>Generator</h1>
-        <div class="form-container">
+    <div id="content">
+        <article class="form-container">
             <form action="/generate" method="POST" enctype="multipart/form-data">
                 <div>
                     <label for="tileName">Tile Name (eg. Charlie Blue)</label>
@@ -215,6 +76,7 @@
                         <option value="vertThird">Vertical 1/4 Block</option>
                         <option value="basketWeave">Basket Weave (2:1 - 6:1)</option>
                         <option value="herringbone">Herringbone (2:1 - 6:1)</option>
+                        <option value="hexagon">Hexagon</option>
                     </select>
                 </div>
                 <div class="grid">
@@ -225,50 +87,50 @@
                     <div>
                         <label for="groutColour">Grout Colour</label>
                         <select name="groutColour" id="groutColour" required>
-                                    <option value="" disabled selected>Please Select A Colour</option>
-                                    <option value="" disabled>BAL Range</option>
-                                    <option value="#d1d1cf" data-value="#d1d1cf">Gunmetal</option>
-                                    <option value="#9e9fa4" data-value="#9e9fa4">Smoke</option>
-                                    <option value="#473938" data-value="#473938">Dovetail</option>
-                                    <option value="#516d71" data-value="#516d71">Tornado Sky</option>
-                                    <option value="#817670" data-value="#817670">Taupe Grey</option>
-                                    <option value="#485a68" data-value="#485a68">Storm Grey</option>
-                                    <option value="#414550" data-value="#414550">Anthracite</option>
-                                    <option value="#211f20" data-value="#211f20">Ebony</option>
-                                    <option value="#ffffff" data-value="#ffffff">White</option>
-                                    <option value="#f5eed4" data-value="#f5eed4">Jasmine</option>
-                                    <option value="#dac9b7" data-value="#dac9b7">Pebble</option>
-                                    <option value="#76480d" data-value="#76480d">Walnut</option>
-                                    <option value="#623d13" data-value="#623d13">Hazel</option>
-                                    <option value="#623619" data-value="#623619">Mahogany</option>
-                                    <option value="#cadee5" data-value="#cadee5">Cornflower White</option>
-                                    <option value="#b6d6cb" data-value="#b6d6cb">Peppermint</option>
-                                    <option value="#f2c7c0" data-value="#f2c7c0">Pink Champagne</option>
-                                    <option value="#fbf6cc" data-value="#fbf6cc">Primrose</option>
-                                    <option value="" disabled>UltraTile Range</option>
-                                    <option value="#ffffff">White</option>
-                                    <option value="#ece1ab">Cream</option>
-                                    <option value="#e0cdbc">Bahama Beige</option>
-                                    <option value="#efe3d3">Jasmine</option>
-                                    <option value="#cdc9bd">Limestone</option>
-                                    <option value="#5e5b54">Taupe</option>
-                                    <option value="#716152">Brown</option>
-                                    <option value="#afb3b4">Silver Grey</option>
-                                    <option value="#a6acac">Mid-Grey</option>
-                                    <option value="#8d9193">Grey</option>
-                                    <option value="#4c5157">Charcoal</option>
-                                    <option value="#000000">Black</option>
-                                </select>
-                            </div>
-                        </div>
+                            <option value="" disabled selected>Please Select A Colour</option>
+                            <option value="" disabled>BAL Range</option>
+                            <option value="#d1d1cf" data-value="#d1d1cf">Gunmetal</option>
+                            <option value="#9e9fa4" data-value="#9e9fa4">Smoke</option>
+                            <option value="#473938" data-value="#473938">Dovetail</option>
+                            <option value="#516d71" data-value="#516d71">Tornado Sky</option>
+                            <option value="#817670" data-value="#817670">Taupe Grey</option>
+                            <option value="#485a68" data-value="#485a68">Storm Grey</option>
+                            <option value="#414550" data-value="#414550">Anthracite</option>
+                            <option value="#211f20" data-value="#211f20">Ebony</option>
+                            <option value="#ffffff" data-value="#ffffff">White</option>
+                            <option value="#f5eed4" data-value="#f5eed4">Jasmine</option>
+                            <option value="#dac9b7" data-value="#dac9b7">Pebble</option>
+                            <option value="#76480d" data-value="#76480d">Walnut</option>
+                            <option value="#623d13" data-value="#623d13">Hazel</option>
+                            <option value="#623619" data-value="#623619">Mahogany</option>
+                            <option value="#cadee5" data-value="#cadee5">Cornflower White</option>
+                            <option value="#b6d6cb" data-value="#b6d6cb">Peppermint</option>
+                            <option value="#f2c7c0" data-value="#f2c7c0">Pink Champagne</option>
+                            <option value="#fbf6cc" data-value="#fbf6cc">Primrose</option>
+                            <option value="" disabled>UltraTile Range</option>
+                            <option value="#ffffff">White</option>
+                            <option value="#ece1ab">Cream</option>
+                            <option value="#e0cdbc">Bahama Beige</option>
+                            <option value="#efe3d3">Jasmine</option>
+                            <option value="#cdc9bd">Limestone</option>
+                            <option value="#5e5b54">Taupe</option>
+                            <option value="#716152">Brown</option>
+                            <option value="#afb3b4">Silver Grey</option>
+                            <option value="#a6acac">Mid-Grey</option>
+                            <option value="#8d9193">Grey</option>
+                            <option value="#4c5157">Charcoal</option>
+                            <option value="#000000">Black</option>
+                        </select>
                     </div>
-                    <div>
-                        <div>
-                            <button class="button" type="submit">Generate</button>
-                        </div>
-                </form>
-            </div>
-        </div>
+                </div>
+                <button class="button" type="submit">Generate</button>
+            </form>
+        </article>
+        <article id="footer">
+            <p>&copy; <span id="year"></span> - Aidan Warner</p>
+            <p>Source code is available <a href="https://github.com/AidanWarner97/tile-image-gen" target="_blank">here</a></p>
+        </article>
+        
     </div>
 
     <script>
@@ -309,8 +171,8 @@
                 dropAreaText.innerHTML = 'Drop files to Attach, or <span class="text-blue-600 underline">browse</span>';
             }
         }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
     </script>
-</body>
-
-
+  </body>
 </html>
