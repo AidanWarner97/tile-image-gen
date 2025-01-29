@@ -89,7 +89,7 @@ def generate():
             result.paste(tile[1], (grout_size + half, grout_size)) #2
             result.paste(tile[0], (grout_size*2 + width + half, grout_size)) #1R
             result.paste(tile[2], (grout_size, grout_size*2 + height)) #3
-            result.paste(tile[3], (grout_size*2 + width, grout_size*2 + half)) #4
+            result.paste(tile[3], (grout_size*2 + width, grout_size*2 + height)) #4
         elif layout_type == 'herringbone':
             if ratio == 2:
                 # Horizontal
