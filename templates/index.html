@@ -155,10 +155,6 @@
             updateDropAreaText(files.length);
         });
     
-        dropArea.addEventListener('click', () => {
-            fileInput.click();
-        });
-    
         fileInput.addEventListener('change', () => {
             const files = fileInput.files;
             updateDropAreaText(files.length);
