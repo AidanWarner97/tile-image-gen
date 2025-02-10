@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# cd to directory
+cd /opt/tile-image-gen
+
 # Pull latest version
 git pull
 
