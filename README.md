@@ -161,6 +161,15 @@ Then you can run the following commands:
 > systemctl enable --now tile-image-gen.service
 ```
 
+#### Updating
+
+Using the update.sh script, you can call it through a crontab to automatically update.
+
+```sh
+0 1 * * * /opt/tile-image-gen/update.sh
+```
+This example will automatically update the script at 1am every day.
+
 ---
 
 ## Docker
