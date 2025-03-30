@@ -41,7 +41,7 @@ def generate():
         while len(images) < 4:
             images.append(images[0])
 
-        image_objects = [Image.open(img) for img in images[:4]]
+        image_objects = [Image.open(img).convert('RGBA') for img in images[:4]]
         tile = [img.resize((tile_size_width, tile_size_height), Image.Resampling.LANCZOS) for img in image_objects]
 
         width, height = tile[0].size
@@ -49,30 +49,32 @@ def generate():
 
         if layout_type == 'basketWeave':
             if ratio == 3:
-                result = Image.new('RGB', (width * 2 + grout_size * 4, height * 6 + grout_size), rgb)
+                result = Image.new('RGBA', (width * 2 + grout_size * 4, height * 6 + grout_size), rgb + (255,))
             elif ratio == 2:
-                result = Image.new('RGB', (width*2 + grout_size*3, width*2 + grout_size*3), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*3, width*2 + grout_size*3), rgb + (255,))
             elif ratio == 4:
-                result = Image.new('RGB', (width*2 + grout_size*5, width*2 + grout_size*5), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*5, width*2 + grout_size*5), rgb + (255,))
             elif ratio == 5:
-                result = Image.new('RGB', (width*2 + grout_size*6, width*2 + grout_size*6), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*6, width*2 + grout_size*6), rgb + (255,))
             elif ratio == 6:
-                result = Image.new('RGB', (width*2 + grout_size*7, width*2 + grout_size*7), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*7, width*2 + grout_size*7), rgb + (255,))
         elif layout_type == 'herringbone':
             if ratio == 3:
-                result = Image.new('RGB', (width*2 + grout_size*3, width*2 + grout_size*3), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*3, width*2 + grout_size*3), rgb + (255,))
             elif ratio == 4:
-                result = Image.new('RGB', (width*2 + grout_size*4, width*2 + grout_size*4), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*4, width*2 + grout_size*4), rgb + (255,))
             elif ratio == 5:
-                result = Image.new('RGB', (width*2 + grout_size*5, width*2 + grout_size*5), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*5, width*2 + grout_size*5), rgb + (255,))
             elif ratio == 6:
-                result = Image.new('RGB', (width*2 + grout_size*6, width*2 + grout_size*6), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size*6, width*2 + grout_size*6), rgb + (255,))
             else:
-                result = Image.new('RGB', (width*2 + grout_size, width*2 + grout_size), rgb)
+                result = Image.new('RGBA', (width*2 + grout_size, width*2 + grout_size), rgb + (255,))
+        elif layout_type == 'hexagon':
+            result = Image.new('RGBA', (width*3 + grout_size*3, height*3 + grout_size*3), rgb + (255,))
         elif layout_type in ['third', 'vertThird']:
-            result = Image.new('RGB', (width + grout_size, height * 3 + grout_size * 3), rgb)
+            result = Image.new('RGBA', (width + grout_size, height * 3 + grout_size * 3), rgb + (255,))
         else:
-            result = Image.new('RGB', (width*2 + grout_size*2, height*2 + grout_size*2), rgb)
+            result = Image.new('RGBA', (width*2 + grout_size*2, height*2 + grout_size*2), rgb + (255,))
 
         draw = ImageDraw.Draw(result)
         vertical_midpoint = (width * 2 + grout_size * 2)
@@ -82,6 +84,7 @@ def generate():
         half = width // 2
         third = width // 3
         twothird = third * 2
+        hexpercent = int(width * 0.26)
 
         #Paste Images
         if layout_type in ['brickBond', 'vertBrick']:
@@ -309,6 +312,24 @@ def generate():
                 result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*10, grout_size*7 + height*6))
                 result.paste(tile[1].rotate(90, expand=True), (grout_size*7 + height*11, grout_size*7 + height*6))
                 pass
+        elif layout_type == 'hexagon':
+            result.paste(tile[0], (0 - width // 2, grout_size), tile[0]) #1
+            result.paste(tile[1], (0 - width // 2, grout_size*2 + height), tile[1]) #2
+            result.paste(tile[2], (0 - width // 2, grout_size*3 + height*2), tile[2]) #3
+            result.paste(tile[3], (hexpercent + grout_size, 0 - height // 2), tile[3]) #4
+            result.paste(tile[0], (hexpercent + grout_size, height // 2 + grout_size), tile[0]) #5
+            result.paste(tile[1], (hexpercent + grout_size, height // 2 + height + grout_size*2), tile[1]) #6
+            result.paste(tile[3], (hexpercent + grout_size, height // 2 + height*2 + grout_size*3), tile[2]) #7
+            result.paste(tile[0], (width + grout_size*5, grout_size), tile[3]) #8
+            result.paste(tile[1], (width + grout_size*5, grout_size*2 + height), tile[0]) #9
+            result.paste(tile[2], (width + grout_size*5, grout_size*3 + height*2), tile[1]) #10
+            result.paste(tile[1], (width + hexpercent*3 + grout_size*4, 0 - height // 2 + grout_size), tile[1]) #11
+            result.paste(tile[2], (width + hexpercent*3 + grout_size*4, height // 2 + grout_size*2), tile[2]) #12
+            result.paste(tile[3], (width + hexpercent*3 + grout_size*4, height // 2 + height + grout_size*3), tile[3]) #13
+            result.paste(tile[1], (width + hexpercent*3 + grout_size*4, height // 2 + height*2 + grout_size*4), tile[1]) #14
+            result.paste(tile[0], (width*2 + hexpercent*2 + grout_size*8, grout_size), tile[0])
+            result.paste(tile[1], (width*2 + hexpercent*2 + grout_size*8, grout_size*2 + height), tile[1]) #15
+            result.paste(tile[2], (width*2 + hexpercent*2 + grout_size*8, grout_size*3 + height*2), tile[2]) #16
         elif layout_type in ['third', 'vertThird']:
             result.paste(tile[0], (0 - quarter, grout_size)) #1
             result.paste(tile[0], (quarter*3 + grout_size, grout_size)) #2
@@ -384,6 +405,8 @@ def generate():
             layout = "Basket Weave"
         if layout_type == 'herringbone':
             layout = "Herringbone"
+        if layout_type == 'hexagon':
+            layout = 'Hexagon'
 
         if grout_colour == '#d1d1cf':	
             grout_text = 'Gunmetal'
