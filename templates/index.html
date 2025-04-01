@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta charset="UTF-8" />
     <title>Tile Image Generator</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_transparent.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,6 +127,10 @@
                 <button class="button" type="submit">Generate</button>
             </form>
         </article>
+        <article id="updates">
+            <h2>Latest Update</h2>
+            <p id="latest-post">Loading latest post...</p>
+        </article>
         <article id="footer">
             <p>&copy; <span id="year"></span> - Aidan Warner</p>
             <p>Source code is available <a href="https://github.com/AidanWarner97/tile-image-gen" target="_blank">here</a></p>
@@ -170,6 +174,35 @@
         }
 
         document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+    <script>
+        async function fetchLatestPost() {
+            const blogUrl = "https://updates.tileimagegen.uk/wp-json/wp/v2/posts?per_page=1";
+            
+            try {
+                const response = await fetch(blogUrl);
+                const posts = await response.json();
+
+                if (posts.length > 0) {
+                    const post = posts[0];
+                    let excerpt = post.excerpt.rendered.replace(
+                        /<a /g, 
+                        '<a target="_blank" '
+                    );
+                    document.getElementById("latest-post").innerHTML = `
+                        <h2><a href="${post.link}" target="_blank">${post.title.rendered}</a></h2>
+                        <p>${excerpt}</p>
+                    `;
+                } else {
+                    document.getElementById("latest-post").innerHTML = "<p>No posts found.</p>";
+                }
+            } catch (error) {
+                document.getElementById("latest-post").innerHTML = "<p>Failed to load the latest post.</p>";
+                console.error("Error fetching latest post:", error);
+            }
+        }
+
+        fetchLatestPost();
     </script>
   </body>
 </html>

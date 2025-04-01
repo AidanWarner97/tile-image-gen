@@ -170,3 +170,25 @@ a:hover {
 .active {
     font-weight: bold;
 }
+
+#updates h2 {
+    text-decoration: underline;
+    font-size:revert;
+    font-weight:bold;
+}
+
+#latest-post h2 {
+    margin:20px 0;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+#latest-post p {
+    display:grid;
+    grid-row-gap:20px;
+}
+
+#latest-post p a {
+    color:#4f46e5;
+    text-decoration:underline;
+}
