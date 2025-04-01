@@ -192,3 +192,8 @@ a:hover {
     color:#4f46e5;
     text-decoration:underline;
 }
+
+#ads {
+    width:250px;
+    margin:0 20%;
+}
