@@ -59,11 +59,15 @@ Create tile layouts from 1 or 4 variants using multiple layouts and various colo
     ├── tile-image-gen.service
     ├── Dockerfile
     ├── install.sh
+    ├── update.sh
+    ├── requirements.txt
     ├── static
     │   ├── favicon.ico
     │   ├── robots.txt
     │   ├── info.svg
     │   ├── logo.png
+    │   ├── logo_transparent.png
+    │   ├── style.css
     │   └── sitemap.xml
     └── templates
         └── index.html
@@ -77,7 +81,8 @@ Create tile layouts from 1 or 4 variants using multiple layouts and various colo
 
 | File                                                                         | Summary                            |
 | ---                                                                          | ---                                |
-| [app.py](https://github.com/AidanWarner97/tile-image-gen/blob/master/app.py) | Backend for creating and merging uploaded files and adding grout lines |
+| [app.py](https://github.com/AidanWarner97/tile-image-gen/blob/python3/app.py) | (DEBUG) Backend for creating and merging uploaded files and adding grout lines |
+| [wsgi.py](https://github.com/AidanWarner97/tile-image-gen/blob/python3/wsgi.py) | (PROD) Backend for creating and merging uploaded files and adding grout lines |
 
 </details>
 
@@ -85,7 +90,7 @@ Create tile layouts from 1 or 4 variants using multiple layouts and various colo
 
 | File                                                                                           | Summary                                          |
 | ---                                                                                            | ---                                              |
-| [index.html](https://github.com/AidanWarner97/tile-image-gen/blob/master/templates/index.html) | Front end site for end users |
+| [index.html](https://github.com/AidanWarner97/tile-image-gen/blob/python3/templates/index.html) | Front end site for end users |
 
 </details>
 
@@ -198,11 +203,13 @@ services:
 
 ##  Project Roadmap
 
-- [x] ` Add option for no grout-lines`
-- [x] ` Upgrade codebase to Python3`
-- [x] ` Enable docker support`
-- [] ` Upgrade ratios for more than just herringbone `
-- [] ` Update web template `
+- [x] ` Add option for no grout-lines` - 65aa768
+- [x] ` Upgrade codebase to Python3` - 65aa768
+- [x] ` Enable docker support` - 1aa9864
+- [x] ` Upgrade ratios for more than just herringbone ` - cbff5e7
+- [x] ` Update web template ` - dfff3f8
+
+Will add to this list as requests/issues come in
 
 ---
 
