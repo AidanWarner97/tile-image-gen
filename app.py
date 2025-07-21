@@ -68,6 +68,14 @@ def generate():
                 result = Image.new('RGBA', (width*2 + grout_size*5, width*2 + grout_size*5), rgb + (255,))
             elif ratio == 6:
                 result = Image.new('RGBA', (width*2 + grout_size*6, width*2 + grout_size*6), rgb + (255,))
+            elif ratio == 7:
+                result = Image.new('RGBA', (width*2 + grout_size*7, width*2 + grout_size*7), rgb + (255,))
+            elif ratio == 8:
+                result = Image.new('RGBA', (width*2 + grout_size*8, width*2 + grout_size*8), rgb + (255,))
+            elif ratio == 9:
+                result = Image.new('RGBA', (width*2 + grout_size*9, width*2 + grout_size*9), rgb + (255,))
+            elif ratio == 10:
+                result = Image.new('RGBA', (width*2 + grout_size*10, width*2 + grout_size*10), rgb + (255,))
             else:
                 result = Image.new('RGBA', (width*2 + grout_size, width*2 + grout_size), rgb + (255,))
         elif layout_type == 'hexagon':
@@ -225,7 +233,220 @@ def generate():
                 result.paste(tile[3].rotate(90, expand=True), (grout_size, grout_size*5 - height)) #4T
                 result.paste(tile[2].rotate(90, expand=True), (height - grout_size*4, grout_size*11 + height*10)) #3B
                 result.paste(tile[2].rotate(90, expand=True), (height + grout_size, grout_size*4 - height*2)) #3T
-                pass
+            elif ratio == 7:
+                # Horizontal
+                result.paste(tile[0], (grout_size*6 + height*6, grout_size)) #1
+                result.paste(tile[1], (grout_size*5 + height*5, grout_size*2 + height)) #2
+                result.paste(tile[2], (grout_size*4 + height*4, grout_size*3 + height*2)) #3
+                result.paste(tile[3], (grout_size*3 + height*3, grout_size*4 + height*3)) #4
+                result.paste(tile[0], (grout_size*2 + height*2, grout_size*5 + height*4)) #5
+                result.paste(tile[1], (grout_size + height, grout_size*6 + height*5)) #6
+                result.paste(tile[2], (grout_size, grout_size*7 + height*6)) #7
+                result.paste(tile[3], (grout_size - height, grout_size*8 + height*7)) #8L
+                result.paste(tile[3], (grout_size*7 + height*13, grout_size*2 + height*7)) #8R
+                result.paste(tile[0], (grout_size - height*2, grout_size*9 + height*8)) #9L
+                result.paste(tile[0], (grout_size*6 + height*12, grout_size*3 + height*8)) #9R
+                result.paste(tile[1], (grout_size - height*3, grout_size*10 + height*9)) #10L
+                result.paste(tile[1], (grout_size*5 + height*11, grout_size*4 + height*9)) #10R
+                result.paste(tile[2], (grout_size - height*4, grout_size*11 + height*10)) #11L
+                result.paste(tile[2], (grout_size*4 + height*10, grout_size*5 + height*10)) #11R
+                result.paste(tile[3], (grout_size - height*5, grout_size*12 + height*11)) #12L
+                result.paste(tile[3], (grout_size*3 + height*9, grout_size*6 + height*11)) #12R
+                result.paste(tile[0], (grout_size - height*6, grout_size*13 + height*12)) #13L
+                result.paste(tile[0], (grout_size*2 + height*8, grout_size*7 + height*12)) #13R
+                result.paste(tile[1].resize((tile_size_width + grout_size*5, tile_size_height), Image.Resampling.LANCZOS), (grout_size + height*7, grout_size*8 + height*13)) #14
+
+                # Vertical
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*7 + height*13, grout_size)) #1
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*6 + height*12, grout_size*2 + height)) #2
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*5 + height*11, grout_size*3 + height*2)) #3
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*4 + height*10, grout_size*4 + height*3)) #4
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*3 + height*9, grout_size*5 + height*4)) #5
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*2 + height*8, grout_size*6 + height*5)) #6
+                result.paste(tile[2].rotate(270, expand=True), (grout_size + height*7, grout_size*7 + height*6)) #7
+                result.paste(tile[3].rotate(90, expand=True), (height*6, grout_size*8 + height*7)) #8
+                result.paste(tile[0].rotate(90, expand=True), (height*5 - grout_size, grout_size*9 + height*8)) #9B
+                result.paste(tile[0].rotate(90, expand=True), (height*5 + grout_size*5, grout_size - height*6)) #9T
+                result.paste(tile[1].rotate(90, expand=True), (height*4 - grout_size*2, grout_size*10 + height*9)) #10B
+                result.paste(tile[1].rotate(90, expand=True), (height*4 + grout_size*4, grout_size*2 - height*5)) #10T
+                result.paste(tile[2].rotate(270, expand=True), (height*3 - grout_size*3, grout_size*11 + height*10)) #11B
+                result.paste(tile[2].rotate(270, expand=True), (height*3 + grout_size*3, grout_size*3 - height*4)) #11T
+                result.paste(tile[3].rotate(90, expand=True), (height*2 - grout_size*4, grout_size*12 + height*11)) #12B
+                result.paste(tile[3].rotate(90, expand=True), (height*2 + grout_size*2, grout_size*4 - height*3)) #12T
+                result.paste(tile[0].rotate(90, expand=True), (height - grout_size*5, grout_size*13 + height*12)) #13B
+                result.paste(tile[0].rotate(90, expand=True), (height + grout_size, grout_size*5 - height*2)) #13T
+                result.paste(tile[1].rotate(90, expand=True), (grout_size, grout_size*14 + height*13)) #14B
+                result.paste(tile[1].rotate(90, expand=True), (grout_size, grout_size*6 - height)) #14T
+            elif ratio == 8:
+                # Horizontal
+                result.paste(tile[0], (grout_size*7 + height*7, grout_size)) #1
+                result.paste(tile[1], (grout_size*6 + height*6, grout_size*2 + height)) #2
+                result.paste(tile[2], (grout_size*5 + height*5, grout_size*3 + height*2)) #3
+                result.paste(tile[3], (grout_size*4 + height*4, grout_size*4 + height*3)) #4
+                result.paste(tile[0], (grout_size*3 + height*3, grout_size*5 + height*4)) #5
+                result.paste(tile[1], (grout_size*2 + height*2, grout_size*6 + height*5)) #6
+                result.paste(tile[2], (grout_size + height, grout_size*7 + height*6)) #7
+                result.paste(tile[3], (grout_size, grout_size*8 + height*7)) #8
+                result.paste(tile[0], (grout_size - height, grout_size*9 + height*8)) #9L
+                result.paste(tile[0], (grout_size*8 + height*15, grout_size*2 + height*8)) #9R
+                result.paste(tile[1], (grout_size - height*2, grout_size*10 + height*9)) #10L
+                result.paste(tile[1], (grout_size*7 + height*14, grout_size*3 + height*9)) #10R
+                result.paste(tile[2], (grout_size - height*3, grout_size*11 + height*10)) #11L
+                result.paste(tile[2], (grout_size*6 + height*13, grout_size*4 + height*10)) #11R
+                result.paste(tile[3], (grout_size - height*4, grout_size*12 + height*11)) #12L
+                result.paste(tile[3], (grout_size*5 + height*12, grout_size*5 + height*11)) #12R
+                result.paste(tile[0], (grout_size - height*5, grout_size*13 + height*12)) #13L
+                result.paste(tile[0], (grout_size*4 + height*11, grout_size*6 + height*12)) #13R
+                result.paste(tile[1], (grout_size - height*6, grout_size*14 + height*13)) #14L
+                result.paste(tile[1], (grout_size*3 + height*10, grout_size*7 + height*13)) #14R
+                result.paste(tile[2], (grout_size - height*7, grout_size*15 + height*14)) #15L
+                result.paste(tile[2], (grout_size*2 + height*9, grout_size*8 + height*14)) #15R
+                result.paste(tile[3].resize((tile_size_width + grout_size*6, tile_size_height), Image.Resampling.LANCZOS), (grout_size + height*8, grout_size*9 + height*15)) #16
+
+                # Vertical
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*8 + height*15, grout_size)) #1
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*7 + height*14, grout_size*2 + height)) #2
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*6 + height*13, grout_size*3 + height*2)) #3
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*5 + height*12, grout_size*4 + height*3)) #4
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*4 + height*11, grout_size*5 + height*4)) #5
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*3 + height*10, grout_size*6 + height*5)) #6
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*2 + height*9, grout_size*7 + height*6)) #7
+                result.paste(tile[3].rotate(90, expand=True), (grout_size + height*8, grout_size*8 + height*7)) #8
+                result.paste(tile[0].rotate(90, expand=True), (height*7, grout_size*9 + height*8)) #9
+                result.paste(tile[1].rotate(90, expand=True), (height*6 - grout_size, grout_size*10 + height*9)) #10B
+                result.paste(tile[1].rotate(90, expand=True), (height*6 + grout_size*6, grout_size - height*7)) #10T
+                result.paste(tile[2].rotate(270, expand=True), (height*5 - grout_size*2, grout_size*11 + height*10)) #11B
+                result.paste(tile[2].rotate(270, expand=True), (height*5 + grout_size*5, grout_size*2 - height*6)) #11T
+                result.paste(tile[3].rotate(90, expand=True), (height*4 - grout_size*3, grout_size*12 + height*11)) #12B
+                result.paste(tile[3].rotate(90, expand=True), (height*4 + grout_size*4, grout_size*3 - height*5)) #12T
+                result.paste(tile[0].rotate(90, expand=True), (height*3 - grout_size*4, grout_size*13 + height*12)) #13B
+                result.paste(tile[0].rotate(90, expand=True), (height*3 + grout_size*3, grout_size*4 - height*4)) #13T
+                result.paste(tile[1].rotate(90, expand=True), (height*2 - grout_size*5, grout_size*14 + height*13)) #14B
+                result.paste(tile[1].rotate(90, expand=True), (height*2 + grout_size*2, grout_size*5 - height*3)) #14T
+                result.paste(tile[2].rotate(270, expand=True), (height - grout_size*6, grout_size*15 + height*14)) #15B
+                result.paste(tile[2].rotate(270, expand=True), (height + grout_size, grout_size*6 - height*2)) #15T
+                result.paste(tile[3].rotate(90, expand=True), (grout_size, grout_size*16 + height*15)) #16B
+                result.paste(tile[3].rotate(90, expand=True), (grout_size, grout_size*7 - height)) #16T
+
+            elif ratio == 9:
+                # Horizontal
+                result.paste(tile[0], (grout_size*8 + height*8, grout_size)) #1
+                result.paste(tile[1], (grout_size*7 + height*7, grout_size*2 + height)) #2
+                result.paste(tile[2], (grout_size*6 + height*6, grout_size*3 + height*2)) #3
+                result.paste(tile[3], (grout_size*5 + height*5, grout_size*4 + height*3)) #4
+                result.paste(tile[0], (grout_size*4 + height*4, grout_size*5 + height*4)) #5
+                result.paste(tile[1], (grout_size*3 + height*3, grout_size*6 + height*5)) #6
+                result.paste(tile[2], (grout_size*2 + height*2, grout_size*7 + height*6)) #7
+                result.paste(tile[3], (grout_size + height, grout_size*8 + height*7)) #8
+                result.paste(tile[0], (grout_size, grout_size*9 + height*8)) #9
+                result.paste(tile[1], (grout_size - height, grout_size*10 + height*9)) #10L
+                result.paste(tile[1], (grout_size*9 + height*17, grout_size*2 + height*9)) #10R
+                result.paste(tile[2], (grout_size - height*2, grout_size*11 + height*10)) #11L
+                result.paste(tile[2], (grout_size*8 + height*16, grout_size*3 + height*10)) #11R
+                result.paste(tile[3], (grout_size - height*3, grout_size*12 + height*11)) #12L
+                result.paste(tile[3], (grout_size*7 + height*15, grout_size*4 + height*11)) #12R
+                result.paste(tile[0], (grout_size - height*4, grout_size*13 + height*12)) #13L
+                result.paste(tile[0], (grout_size*6 + height*14, grout_size*5 + height*12)) #13R
+                result.paste(tile[1], (grout_size - height*5, grout_size*14 + height*13)) #14L
+                result.paste(tile[1], (grout_size*5 + height*13, grout_size*6 + height*13)) #14R
+                result.paste(tile[2], (grout_size - height*6, grout_size*15 + height*14)) #15L
+                result.paste(tile[2], (grout_size*4 + height*12, grout_size*7 + height*14)) #15R
+                result.paste(tile[3], (grout_size - height*7, grout_size*16 + height*15)) #16L
+                result.paste(tile[3], (grout_size*3 + height*11, grout_size*8 + height*15)) #16R
+                result.paste(tile[0], (grout_size - height*8, grout_size*17 + height*16)) #17L
+                result.paste(tile[0], (grout_size*2 + height*10, grout_size*9 + height*16)) #17R
+                result.paste(tile[1].resize((tile_size_width + grout_size*7, tile_size_height), Image.Resampling.LANCZOS), (grout_size + height*9, grout_size*10 + height*17)) #18
+
+                # Vertical
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*9 + height*17, grout_size)) #1
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*8 + height*16, grout_size*2 + height)) #2
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*7 + height*15, grout_size*3 + height*2)) #3
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*6 + height*14, grout_size*4 + height*3)) #4
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*5 + height*13, grout_size*5 + height*4)) #5
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*4 + height*12, grout_size*6 + height*5)) #6
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*3 + height*11, grout_size*7 + height*6)) #7
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*2 + height*10, grout_size*8 + height*7)) #8
+                result.paste(tile[0].rotate(90, expand=True), (grout_size + height*9, grout_size*9 + height*8)) #9
+                result.paste(tile[1].rotate(90, expand=True), (height*8, grout_size*10 + height*9)) #10
+                result.paste(tile[2].rotate(270, expand=True), (height*7 - grout_size, grout_size*11 + height*10)) #11B
+                result.paste(tile[2].rotate(270, expand=True), (height*7 + grout_size*7, grout_size - height*8)) #11T
+                result.paste(tile[3].rotate(90, expand=True), (height*6 - grout_size*2, grout_size*12 + height*11)) #12B
+                result.paste(tile[3].rotate(90, expand=True), (height*6 + grout_size*6, grout_size*2 - height*7)) #12T
+                result.paste(tile[0].rotate(90, expand=True), (height*5 - grout_size*3, grout_size*13 + height*12)) #13B
+                result.paste(tile[0].rotate(90, expand=True), (height*5 + grout_size*5, grout_size*3 - height*6)) #13T
+                result.paste(tile[1].rotate(90, expand=True), (height*4 - grout_size*4, grout_size*14 + height*13)) #14B
+                result.paste(tile[1].rotate(90, expand=True), (height*4 + grout_size*4, grout_size*4 - height*5)) #14T
+                result.paste(tile[2].rotate(270, expand=True), (height*3 - grout_size*5, grout_size*15 + height*14)) #15B
+                result.paste(tile[2].rotate(270, expand=True), (height*3 + grout_size*3, grout_size*5 - height*4)) #15T
+                result.paste(tile[3].rotate(90, expand=True), (height*2 - grout_size*6, grout_size*16 + height*15)) #16B
+                result.paste(tile[3].rotate(90, expand=True), (height*2 + grout_size*2, grout_size*6 - height*3)) #16T
+                result.paste(tile[0].rotate(90, expand=True), (height - grout_size*7, grout_size*17 + height*16)) #17B
+                result.paste(tile[0].rotate(90, expand=True), (height + grout_size, grout_size*7 - height*2)) #17T
+                result.paste(tile[1].rotate(90, expand=True), (grout_size, grout_size*18 + height*17)) #18B
+                result.paste(tile[1].rotate(90, expand=True), (grout_size, grout_size*8 - height)) #18T
+
+            elif ratio == 10:
+                # Horizontal
+                result.paste(tile[0], (grout_size*9 + height*9, grout_size)) #1
+                result.paste(tile[1], (grout_size*8 + height*8, grout_size*2 + height)) #2
+                result.paste(tile[2], (grout_size*7 + height*7, grout_size*3 + height*2)) #3
+                result.paste(tile[3], (grout_size*6 + height*6, grout_size*4 + height*3)) #4
+                result.paste(tile[0], (grout_size*5 + height*5, grout_size*5 + height*4)) #5
+                result.paste(tile[1], (grout_size*4 + height*4, grout_size*6 + height*5)) #6
+                result.paste(tile[2], (grout_size*3 + height*3, grout_size*7 + height*6)) #7
+                result.paste(tile[3], (grout_size*2 + height*2, grout_size*8 + height*7)) #8
+                result.paste(tile[0], (grout_size + height, grout_size*9 + height*8)) #9
+                result.paste(tile[1], (0, grout_size*10 + height*9)) #10
+                result.paste(tile[2], (0 - grout_size - height, grout_size*11 + height*10)) #11L
+                result.paste(tile[2], (grout_size*10 + height*19, grout_size*2 + height*10)) #11R
+                result.paste(tile[3], (0 - grout_size*2 - height*2, grout_size*12 + height*11)) #12L
+                result.paste(tile[3], (grout_size*9 + height*18, grout_size*3 + height*11)) #12R
+                result.paste(tile[0], (0 - grout_size*3 - height*3, grout_size*13 + height*12)) #13L
+                result.paste(tile[0], (grout_size*8 + height*17, grout_size*4 + height*12)) #13R
+                result.paste(tile[1], (0 - grout_size*4 - height*4, grout_size*14 + height*13)) #14L
+                result.paste(tile[1], (grout_size*7 + height*16, grout_size*5 + height*13)) #14R
+                result.paste(tile[2], (0 - grout_size*5 - height*5, grout_size*15 + height*14)) #15L
+                result.paste(tile[2], (grout_size*6 + height*15, grout_size*6 + height*14)) #15R
+                result.paste(tile[3], (0 - grout_size*6 - height*6, grout_size*16 + height*15)) #16L
+                result.paste(tile[3], (grout_size*5 + height*14, grout_size*7 + height*15)) #16R
+                result.paste(tile[0], (0 - grout_size*7 - height*7, grout_size*17 + height*16)) #17L
+                result.paste(tile[0], (grout_size*4 + height*13, grout_size*8 + height*16)) #17R
+                result.paste(tile[1], (0 - grout_size*8 - height*8, grout_size*18 + height*17)) #18L
+                result.paste(tile[1], (grout_size*3 + height*12, grout_size*9 + height*17)) #18R
+                result.paste(tile[2], (0 - grout_size*9 - height*9, grout_size*19 + height*18)) #19L
+                result.paste(tile[2], (grout_size*2 + height*11, grout_size*10 + height*18)) #19R
+                result.paste(tile[3].resize((tile_size_width + grout_size*8, tile_size_height), Image.Resampling.LANCZOS), (grout_size + height*10, grout_size*11 + height*19)) #20
+
+                # Vertical
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*10 + height*19, grout_size)) #1
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*9 + height*18, grout_size*2 + height)) #2
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*8 + height*17, grout_size*3 + height*2)) #3
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*7 + height*16, grout_size*4 + height*3)) #4
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*15, grout_size*5 + height*4)) #5
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*5 + height*14, grout_size*6 + height*5)) #6
+                result.paste(tile[2].rotate(270, expand=True), (grout_size*4 + height*13, grout_size*7 + height*6)) #7
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*3 + height*12, grout_size*8 + height*7)) #8
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*2 + height*11, grout_size*9 + height*8)) #9
+                result.paste(tile[1].rotate(90, expand=True), (grout_size + height*10, grout_size*10 + height*9)) #10
+                result.paste(tile[2].rotate(270, expand=True), (height*9, grout_size*11 + height*10)) #11
+                result.paste(tile[3].rotate(90, expand=True), (height*8 - grout_size, grout_size*12 + height*11)) #12B
+                result.paste(tile[3].rotate(90, expand=True), (height*8 + grout_size*8, grout_size - height*9)) #12T
+                result.paste(tile[0].rotate(90, expand=True), (height*7 - grout_size*2, grout_size*13 + height*12)) #13B
+                result.paste(tile[0].rotate(90, expand=True), (height*7 + grout_size*7, grout_size*2 - height*8)) #13T
+                result.paste(tile[1].rotate(90, expand=True), (height*6 - grout_size*3, grout_size*14 + height*13)) #14B
+                result.paste(tile[1].rotate(90, expand=True), (height*6 + grout_size*6, grout_size*3 - height*7)) #14T
+                result.paste(tile[2].rotate(270, expand=True), (height*5 - grout_size*4, grout_size*15 + height*14)) #15B
+                result.paste(tile[2].rotate(270, expand=True), (height*5 + grout_size*5, grout_size*4 - height*6)) #15T
+                result.paste(tile[3].rotate(90, expand=True), (height*4 - grout_size*5, grout_size*16 + height*15)) #16B
+                result.paste(tile[3].rotate(90, expand=True), (height*4 + grout_size*4, grout_size*5 - height*5)) #16T
+                result.paste(tile[0].rotate(90, expand=True), (height*3 - grout_size*6, grout_size*17 + height*16)) #17B
+                result.paste(tile[0].rotate(90, expand=True), (height*3 + grout_size*3, grout_size*6 - height*4)) #17T
+                result.paste(tile[1].rotate(90, expand=True), (height*2 - grout_size*7, grout_size*18 + height*17)) #18B
+                result.paste(tile[1].rotate(90, expand=True), (height*2 + grout_size*2, grout_size*7 - height*3)) #18T
+                result.paste(tile[2].rotate(270, expand=True), (height - grout_size*8, grout_size*19 + height*18)) #19B
+                result.paste(tile[2].rotate(270, expand=True), (height + grout_size, grout_size*8 - height*2)) #19T
+                result.paste(tile[3].rotate(90, expand=True), (grout_size, grout_size*20 + height*19)) #20B
+                result.paste(tile[3].rotate(90, expand=True), (grout_size, grout_size*9 - height)) #20T
         elif layout_type == 'basketWeave':
             if ratio == 2:
                 result.paste(tile[0].rotate(90, expand=True), (grout_size, grout_size)) #1
@@ -312,7 +533,177 @@ def generate():
                 result.paste(tile[3].rotate(90, expand=True), (grout_size*5 + height*9, grout_size*7 + height*6))
                 result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*10, grout_size*7 + height*6))
                 result.paste(tile[1].rotate(90, expand=True), (grout_size*7 + height*11, grout_size*7 + height*6))
-                pass
+            elif ratio == 7:
+                # First row - vertical tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*2 + height, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*3 + height*2, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*4 + height*3, grout_size))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*5 + height*4, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*6 + height*5, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*7 + height*6, grout_size))
+                
+                # Right side - vertical stack
+                result.paste(tile[0], (grout_size*8 + height*7, grout_size))
+                result.paste(tile[1], (grout_size*8 + height*7, grout_size*2 + height))
+                result.paste(tile[2], (grout_size*8 + height*7, grout_size*3 + height*2))
+                result.paste(tile[3], (grout_size*8 + height*7, grout_size*4 + height*3))
+                result.paste(tile[0], (grout_size*8 + height*7, grout_size*5 + height*4))
+                result.paste(tile[1], (grout_size*8 + height*7, grout_size*6 + height*5))
+                result.paste(tile[2], (grout_size*8 + height*7, grout_size*7 + height*6))
+                
+                # Left side - vertical stack
+                result.paste(tile[0], (grout_size, grout_size*2 + width))
+                result.paste(tile[1], (grout_size, grout_size*3 + width + height))
+                result.paste(tile[2], (grout_size, grout_size*4 + width + height*2))
+                result.paste(tile[3], (grout_size, grout_size*5 + width + height*3))
+                result.paste(tile[0], (grout_size, grout_size*6 + width + height*4))
+                result.paste(tile[1], (grout_size, grout_size*7 + width + height*5))
+                result.paste(tile[2], (grout_size, grout_size*8 + width + height*6))
+                
+                # Bottom row - horizontal tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*2 + height*7, grout_size*8 + height*7))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*3 + height*8, grout_size*8 + height*7))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*4 + height*9, grout_size*8 + height*7))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*5 + height*10, grout_size*8 + height*7))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*11, grout_size*8 + height*7))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*7 + height*12, grout_size*8 + height*7))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*8 + height*13, grout_size*8 + height*7))
+            
+            elif ratio == 8:
+                # First row - vertical tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*2 + height, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*3 + height*2, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*4 + height*3, grout_size))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*5 + height*4, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*6 + height*5, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*7 + height*6, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*8 + height*7, grout_size))
+                
+                # Right side - vertical stack
+                result.paste(tile[0], (grout_size*9 + height*8, grout_size))
+                result.paste(tile[1], (grout_size*9 + height*8, grout_size*2 + height))
+                result.paste(tile[2], (grout_size*9 + height*8, grout_size*3 + height*2))
+                result.paste(tile[3], (grout_size*9 + height*8, grout_size*4 + height*3))
+                result.paste(tile[0], (grout_size*9 + height*8, grout_size*5 + height*4))
+                result.paste(tile[1], (grout_size*9 + height*8, grout_size*6 + height*5))
+                result.paste(tile[2], (grout_size*9 + height*8, grout_size*7 + height*6))
+                result.paste(tile[3], (grout_size*9 + height*8, grout_size*8 + height*7))
+                
+                # Left side - vertical stack
+                result.paste(tile[0], (grout_size, grout_size*2 + width))
+                result.paste(tile[1], (grout_size, grout_size*3 + width + height))
+                result.paste(tile[2], (grout_size, grout_size*4 + width + height*2))
+                result.paste(tile[3], (grout_size, grout_size*5 + width + height*3))
+                result.paste(tile[0], (grout_size, grout_size*6 + width + height*4))
+                result.paste(tile[1], (grout_size, grout_size*7 + width + height*5))
+                result.paste(tile[2], (grout_size, grout_size*8 + width + height*6))
+                result.paste(tile[3], (grout_size, grout_size*9 + width + height*7))
+                
+                # Bottom row - horizontal tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*2 + height*8, grout_size*9 + height*8))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*3 + height*9, grout_size*9 + height*8))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*4 + height*10, grout_size*9 + height*8))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*5 + height*11, grout_size*9 + height*8))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*12, grout_size*9 + height*8))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*7 + height*13, grout_size*9 + height*8))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*8 + height*14, grout_size*9 + height*8))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*9 + height*15, grout_size*9 + height*8))
+            
+            elif ratio == 9:
+                # First row - vertical tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*2 + height, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*3 + height*2, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*4 + height*3, grout_size))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*5 + height*4, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*6 + height*5, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*7 + height*6, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*8 + height*7, grout_size))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*9 + height*8, grout_size))
+                
+                # Right side - vertical stack
+                result.paste(tile[0], (grout_size*10 + height*9, grout_size))
+                result.paste(tile[1], (grout_size*10 + height*9, grout_size*2 + height))
+                result.paste(tile[2], (grout_size*10 + height*9, grout_size*3 + height*2))
+                result.paste(tile[3], (grout_size*10 + height*9, grout_size*4 + height*3))
+                result.paste(tile[0], (grout_size*10 + height*9, grout_size*5 + height*4))
+                result.paste(tile[1], (grout_size*10 + height*9, grout_size*6 + height*5))
+                result.paste(tile[2], (grout_size*10 + height*9, grout_size*7 + height*6))
+                result.paste(tile[3], (grout_size*10 + height*9, grout_size*8 + height*7))
+                result.paste(tile[0], (grout_size*10 + height*9, grout_size*9 + height*8))
+                
+                # Left side - vertical stack
+                result.paste(tile[0], (grout_size, grout_size*2 + width))
+                result.paste(tile[1], (grout_size, grout_size*3 + width + height))
+                result.paste(tile[2], (grout_size, grout_size*4 + width + height*2))
+                result.paste(tile[3], (grout_size, grout_size*5 + width + height*3))
+                result.paste(tile[0], (grout_size, grout_size*6 + width + height*4))
+                result.paste(tile[1], (grout_size, grout_size*7 + width + height*5))
+                result.paste(tile[2], (grout_size, grout_size*8 + width + height*6))
+                result.paste(tile[3], (grout_size, grout_size*9 + width + height*7))
+                result.paste(tile[0], (grout_size, grout_size*10 + width + height*8))
+                
+                # Bottom row - horizontal tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*2 + height*9, grout_size*10 + height*9))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*3 + height*10, grout_size*10 + height*9))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*4 + height*11, grout_size*10 + height*9))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*5 + height*12, grout_size*10 + height*9))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*13, grout_size*10 + height*9))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*7 + height*14, grout_size*10 + height*9))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*8 + height*15, grout_size*10 + height*9))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*9 + height*16, grout_size*10 + height*9))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*10 + height*17, grout_size*10 + height*9))
+            
+            elif ratio == 10:
+                # First row - vertical tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*2 + height, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*3 + height*2, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*4 + height*3, grout_size))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*5 + height*4, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*6 + height*5, grout_size))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*7 + height*6, grout_size))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*8 + height*7, grout_size))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*9 + height*8, grout_size))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*10 + height*9, grout_size))
+                
+                # Right side - vertical stack
+                result.paste(tile[0], (grout_size*11 + height*10, grout_size))
+                result.paste(tile[1], (grout_size*11 + height*10, grout_size*2 + height))
+                result.paste(tile[2], (grout_size*11 + height*10, grout_size*3 + height*2))
+                result.paste(tile[3], (grout_size*11 + height*10, grout_size*4 + height*3))
+                result.paste(tile[0], (grout_size*11 + height*10, grout_size*5 + height*4))
+                result.paste(tile[1], (grout_size*11 + height*10, grout_size*6 + height*5))
+                result.paste(tile[2], (grout_size*11 + height*10, grout_size*7 + height*6))
+                result.paste(tile[3], (grout_size*11 + height*10, grout_size*8 + height*7))
+                result.paste(tile[0], (grout_size*11 + height*10, grout_size*9 + height*8))
+                result.paste(tile[1], (grout_size*11 + height*10, grout_size*10 + height*9))
+                
+                # Left side - vertical stack
+                result.paste(tile[0], (grout_size, grout_size*2 + width))
+                result.paste(tile[1], (grout_size, grout_size*3 + width + height))
+                result.paste(tile[2], (grout_size, grout_size*4 + width + height*2))
+                result.paste(tile[3], (grout_size, grout_size*5 + width + height*3))
+                result.paste(tile[0], (grout_size, grout_size*6 + width + height*4))
+                result.paste(tile[1], (grout_size, grout_size*7 + width + height*5))
+                result.paste(tile[2], (grout_size, grout_size*8 + width + height*6))
+                result.paste(tile[3], (grout_size, grout_size*9 + width + height*7))
+                result.paste(tile[0], (grout_size, grout_size*10 + width + height*8))
+                result.paste(tile[1], (grout_size, grout_size*11 + width + height*9))
+                
+                # Bottom row - horizontal tiles
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*2 + height*10, grout_size*11 + height*10))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*3 + height*11, grout_size*11 + height*10))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*4 + height*12, grout_size*11 + height*10))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*5 + height*13, grout_size*11 + height*10))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*6 + height*14, grout_size*11 + height*10))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*7 + height*15, grout_size*11 + height*10))
+                result.paste(tile[2].rotate(90, expand=True), (grout_size*8 + height*16, grout_size*11 + height*10))
+                result.paste(tile[3].rotate(90, expand=True), (grout_size*9 + height*17, grout_size*11 + height*10))
+                result.paste(tile[0].rotate(90, expand=True), (grout_size*10 + height*18, grout_size*11 + height*10))
+                result.paste(tile[1].rotate(90, expand=True), (grout_size*11 + height*19, grout_size*11 + height*10))
         elif layout_type == 'hexagon':
             result.paste(tile[0], (0 - width // 2, grout_size), tile[0]) #1
             result.paste(tile[1], (0 - width // 2, grout_size*2 + height), tile[1]) #2
@@ -381,6 +772,9 @@ def generate():
                 draw.rectangle([height*2 - grout_size*4, grout_size*10 + height*9, height*2 - grout_size*3.5, grout_size*10 + height*10], fill=grout_colour)
                 draw.rectangle([height - grout_size*5, grout_size*11 + height*10, height - grout_size*4.5, grout_size*12 + height*12], fill=grout_colour)
                 draw.rectangle([height, 0, height + grout_size // 2, grout_size*5 + height*5], fill=grout_colour)
+            elif ratio == 10:
+                draw.rectangle([height*1 + grout_size*1, 0, height*1 + grout_size*1.5, height*9 + grout_size*9], fill=grout_colour)
+                draw.rectangle([height*1 - grout_size*9, height*19 + grout_size*8, height*1 - grout_size*8.5, height*20 + grout_size*8], fill=grout_colour)
 
         if layout_type in ['vertStacked', 'vertBrick', 'vertThird']:
             result = result.rotate(90, expand=True)
