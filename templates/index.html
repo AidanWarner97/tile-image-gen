@@ -1,221 +1,334 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta charset="UTF-8" />
-    <title>Tile Image Generator</title>
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Generate beautiful tile patterns from your images with customizable layouts, grout colors, and dimensions." />
+    <title>Tile Image Generator - Create Custom Tile Patterns</title>
+    
+    <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_transparent.png') }}">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
         
-    <!-- Google tag (gtag.js) -->
+    <!-- Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJ4XFG0ZS9"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-SJ4XFG0ZS9');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-SJ4XFG0ZS9');
     </script>
-
   </head>
   <body>
-    <div id="sidebar">
-        <header>Tile Image Generator</header>
-        <nav>
-            <ul>
-                <li class="active"><a href="#">Generator</a></li>
-                <li><a href="https://updates.tileimagegen.uk">Updates</a></li>
-                <li><a href="https://updates.tileimagegen.uk/feedback">Feedback</a></li>
-                <li><a href="https://updates.tileimagegen.uk/about">About</a></li>
-                <li><a href="https://updates.tileimagegen.uk/downloads">Downloads</a></li>
-            </ul>
-        </nav>
-        <div id="ads">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8424385314773719"
-                crossorigin="anonymous"></script>
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-format="fluid"
-                data-ad-layout-key="-gw-3+1f-3d+2z"
-                data-ad-client="ca-pub-8424385314773719"
-                data-ad-slot="8630400101"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </div>
-    <div id="content">
-        <article class="form-container">
-            <form action="/generate" method="POST" enctype="multipart/form-data">
-                <div>
-                    <label for="tileName">Tile Name (eg. Charlie Blue)</label>
-                    <input type="text" name="tileName" id="tileName" required />
+    <!-- Mobile Navigation Toggle -->
+    <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <header class="sidebar-header">
+        <h1>Tile Image Generator</h1>
+      </header>
+      
+      <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+        <ul>
+          <li class="active"><a href="#" aria-current="page">Generator</a></li>
+          <li><a href="https://updates.tileimagegen.uk" target="_blank" rel="noopener">Updates</a></li>
+          <li><a href="https://updates.tileimagegen.uk/feedback" target="_blank" rel="noopener">Feedback</a></li>
+          <li><a href="https://updates.tileimagegen.uk/about" target="_blank" rel="noopener">About</a></li>
+          <li><a href="https://updates.tileimagegen.uk/downloads" target="_blank" rel="noopener">Downloads</a></li>
+        </ul>
+      </nav>
+      
+      <!-- Advertisement -->
+      <div id="ads" class="sidebar-ads">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8424385314773719" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="fluid"
+             data-ad-layout-key="-gw-3+1f-3d+2z"
+             data-ad-client="ca-pub-8424385314773719"
+             data-ad-slot="8630400101"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="content" class="main-content">
+      <!-- Generator Form -->
+      <section class="generator-section">
+        <div class="form-container">
+          <h2 class="visually-hidden">Tile Pattern Generator</h2>
+          
+          <form action="/generate" method="POST" enctype="multipart/form-data" class="generator-form">
+            <!-- Tile Name -->
+            <div class="form-group">
+              <label for="tileName">Tile Name <span class="form-hint">(e.g., Charlie Blue)</span></label>
+              <input type="text" name="tileName" id="tileName" class="form-input" required 
+                     placeholder="Enter tile name" />
+            </div>
+
+            <!-- Image Upload -->
+            <div class="form-group">
+              <label for="images">Upload Images</label>
+              <div class="upload-area">
+                <label id="drop-area" for="images" class="drop-area">
+                  <span class="file-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                  </span>
+                  <span id="drop-area-text" class="drop-area-text">
+                    Drop files to attach, or <span class="browse-link">browse</span>
+                  </span>
+                </label>
+                <input id="images" type="file" name="images" accept="image/*" class="visually-hidden" multiple required>
+              </div>
+            </div>
+
+            <!-- Tile Dimensions -->
+            <div class="form-group">
+              <fieldset class="form-fieldset">
+                <legend>Tile Dimensions (mm)</legend>
+                <div class="form-grid">
+                  <div class="form-grid-item">
+                    <label for="tileWidth">Width</label>
+                    <input type="number" name="tileWidth" id="tileWidth" class="form-input" 
+                           min="1" step="1" required placeholder="e.g., 200" />
+                  </div>
+                  <div class="form-grid-item">
+                    <label for="tileHeight">Height</label>
+                    <input type="number" name="tileHeight" id="tileHeight" class="form-input" 
+                           min="1" step="1" required placeholder="e.g., 100" />
+                  </div>
                 </div>
-                <div>
-                    <label for="drop-area">Add Images</label>
-                    <label id="drop-area" for="images">
-                        <span class="file-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                        </span>
-                        <span id="drop-area-text">
-                            Drop files to Attach, or <span class="text-blue-600 underline">browse</span>
-                        </span>
-                    </label>
-                    <input id="images" type="file" name="images" accept="image/*" class="hidden" multiple required>
-                </div>
-                <div class="grid">
-                    <div>
-                        <label for="tileWidth">Tile Width (mm)</label>
-                        <input type="number" name="tileWidth" id="tileWidth" required />
-                    </div>
-                    <div>
-                        <label for="tileHeight">Tile Height (mm)</label>
-                        <input type="number" name="tileHeight" id="tileHeight" required />
-                    </div>
-                </div>
-                <div>
-                    <label for="layoutType">Layout Type</label>
-                    <select name="layoutType" id="layoutType" required>
-                        <option value="stacked">Horizontal Block</option>
-                        <option value="brickBond">Horizontal 1/2 Block</option>
-                        <option value="third">Horizontal 1/4 Block</option>
-                        <option value="vertStacked">Vertical Block</option>
-                        <option value="vertBrick">Vertical 1/2 Block</option>
-                        <option value="vertThird">Vertical 1/4 Block</option>
-                        <option value="basketWeave">Basket Weave (2:1 - 6:1)</option>
-                        <option value="herringbone">Herringbone (2:1 - 6:1)</option>
-                        <option value="hexagon">Hexagon</option>
+              </fieldset>
+            </div>
+
+            <!-- Layout Type -->
+            <div class="form-group">
+              <label for="layoutType">Layout Pattern</label>
+              <select name="layoutType" id="layoutType" class="form-select" required>
+                <option value="">Select a layout pattern</option>
+                <optgroup label="Horizontal Layouts">
+                  <option value="stacked">Horizontal Block</option>
+                  <option value="brickBond">Horizontal 1/2 Block</option>
+                  <option value="third">Horizontal 1/4 Block</option>
+                </optgroup>
+                <optgroup label="Vertical Layouts">
+                  <option value="vertStacked">Vertical Block</option>
+                  <option value="vertBrick">Vertical 1/2 Block</option>
+                  <option value="vertThird">Vertical 1/4 Block</option>
+                </optgroup>
+                <optgroup label="Special Patterns">
+                  <option value="basketWeave">Basket Weave (2:1 - 6:1)</option>
+                  <option value="herringbone">Herringbone (2:1 - 6:1)</option>
+                  <option value="hexagon">Hexagon</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <!-- Grout Settings -->
+            <div class="form-group">
+              <fieldset class="form-fieldset">
+                <legend>Grout Settings</legend>
+                <div class="form-grid">
+                  <div class="form-grid-item">
+                    <label for="groutSize">Size (mm)</label>
+                    <input type="number" name="groutSize" id="groutSize" class="form-input" 
+                           min="0" step="1" required placeholder="e.g., 3" />
+                  </div>
+                  <div class="form-grid-item">
+                    <label for="groutColour">Color</label>
+                    <select name="groutColour" id="groutColour" class="form-select" required>
+                      <option value="">Select grout color</option>
+                      <optgroup label="BAL Range">
+                        <option value="#d1d1cf">Gunmetal</option>
+                        <option value="#9e9fa4">Smoke</option>
+                        <option value="#473938">Dovetail</option>
+                        <option value="#516d71">Tornado Sky</option>
+                        <option value="#817670">Taupe Grey</option>
+                        <option value="#485a68">Storm Grey</option>
+                        <option value="#414550">Anthracite</option>
+                        <option value="#211f20">Ebony</option>
+                        <option value="#ffffff">White</option>
+                        <option value="#f5eed4">Jasmine</option>
+                        <option value="#dac9b7">Pebble</option>
+                        <option value="#76480d">Walnut</option>
+                        <option value="#623d13">Hazel</option>
+                        <option value="#623619">Mahogany</option>
+                        <option value="#cadee5">Cornflower White</option>
+                        <option value="#b6d6cb">Peppermint</option>
+                        <option value="#f2c7c0">Pink Champagne</option>
+                        <option value="#fbf6cc">Primrose</option>
+                      </optgroup>
+                      <optgroup label="UltraTile Range">
+                        <option value="#ffffff">White</option>
+                        <option value="#ece1ab">Cream</option>
+                        <option value="#e0cdbc">Bahama Beige</option>
+                        <option value="#efe3d3">Jasmine</option>
+                        <option value="#cdc9bd">Limestone</option>
+                        <option value="#5e5b54">Taupe</option>
+                        <option value="#716152">Brown</option>
+                        <option value="#afb3b4">Silver Grey</option>
+                        <option value="#a6acac">Mid-Grey</option>
+                        <option value="#8d9193">Grey</option>
+                        <option value="#4c5157">Charcoal</option>
+                        <option value="#000000">Black</option>
+                      </optgroup>
                     </select>
+                  </div>
                 </div>
-                <div class="grid">
-                    <div>
-                        <label for="groutSize">Grout Size (mm)</label>
-                        <input type="number" name="groutSize" id="groutSize" required />
-                    </div>
-                    <div>
-                        <label for="groutColour">Grout Colour</label>
-                        <select name="groutColour" id="groutColour" required>
-                            <option value="" disabled selected>Please Select A Colour</option>
-                            <option value="" disabled>BAL Range</option>
-                            <option value="#d1d1cf" data-value="#d1d1cf">Gunmetal</option>
-                            <option value="#9e9fa4" data-value="#9e9fa4">Smoke</option>
-                            <option value="#473938" data-value="#473938">Dovetail</option>
-                            <option value="#516d71" data-value="#516d71">Tornado Sky</option>
-                            <option value="#817670" data-value="#817670">Taupe Grey</option>
-                            <option value="#485a68" data-value="#485a68">Storm Grey</option>
-                            <option value="#414550" data-value="#414550">Anthracite</option>
-                            <option value="#211f20" data-value="#211f20">Ebony</option>
-                            <option value="#ffffff" data-value="#ffffff">White</option>
-                            <option value="#f5eed4" data-value="#f5eed4">Jasmine</option>
-                            <option value="#dac9b7" data-value="#dac9b7">Pebble</option>
-                            <option value="#76480d" data-value="#76480d">Walnut</option>
-                            <option value="#623d13" data-value="#623d13">Hazel</option>
-                            <option value="#623619" data-value="#623619">Mahogany</option>
-                            <option value="#cadee5" data-value="#cadee5">Cornflower White</option>
-                            <option value="#b6d6cb" data-value="#b6d6cb">Peppermint</option>
-                            <option value="#f2c7c0" data-value="#f2c7c0">Pink Champagne</option>
-                            <option value="#fbf6cc" data-value="#fbf6cc">Primrose</option>
-                            <option value="" disabled>UltraTile Range</option>
-                            <option value="#ffffff">White</option>
-                            <option value="#ece1ab">Cream</option>
-                            <option value="#e0cdbc">Bahama Beige</option>
-                            <option value="#efe3d3">Jasmine</option>
-                            <option value="#cdc9bd">Limestone</option>
-                            <option value="#5e5b54">Taupe</option>
-                            <option value="#716152">Brown</option>
-                            <option value="#afb3b4">Silver Grey</option>
-                            <option value="#a6acac">Mid-Grey</option>
-                            <option value="#8d9193">Grey</option>
-                            <option value="#4c5157">Charcoal</option>
-                            <option value="#000000">Black</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="button" type="submit">Generate</button>
-            </form>
-        </article>
-        <article id="updates">
-            <h2>Latest Update</h2>
-            <p id="latest-post">Loading latest post...</p>
-        </article>
-        <article id="footer">
-            <p>&copy; <span id="year"></span> - Aidan Warner</p>
-            <p>Source code is available <a href="https://github.com/AidanWarner97/tile-image-gen" target="_blank">here</a></p>
-        </article>
+              </fieldset>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-generate">
+                <span>Generate Tile Pattern</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Latest Updates -->
+      <section id="updates" class="updates-section">
+        <h2>Latest Update</h2>
+        <div id="latest-post" class="latest-post">Loading latest post...</div>
+      </section>
+
+      <!-- Footer -->
+      <footer id="footer" class="site-footer">
+        <p>&copy; <span id="year"></span> Aidan Warner</p>
+        <p>Source code available on <a href="https://github.com/AidanWarner97/tile-image-gen" target="_blank" rel="noopener">GitHub</a></p>
+      </footer>
+    </main>
+
+    <script>
+      // Mobile navigation toggle
+      const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+      const sidebar = document.getElementById('sidebar');
+
+      mobileNavToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('sidebar--open');
+        mobileNavToggle.classList.toggle('mobile-nav-toggle--active');
+        document.body.classList.toggle('nav-open');
+      });
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (event) => {
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(event.target) && 
+            !mobileNavToggle.contains(event.target) &&
+            sidebar.classList.contains('sidebar--open')) {
+          sidebar.classList.remove('sidebar--open');
+          mobileNavToggle.classList.remove('mobile-nav-toggle--active');
+          document.body.classList.remove('nav-open');
+        }
+      });
+
+      // File upload functionality
+      const dropArea = document.getElementById('drop-area');
+      const fileInput = document.getElementById('images');
+      const dropAreaText = document.getElementById('drop-area-text');
+    
+      // Drag and drop events
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        dropArea.classList.add('drop-area--highlight');
+      }
+
+      function unhighlight() {
+        dropArea.classList.remove('drop-area--highlight');
+      }
+
+      dropArea.addEventListener('drop', handleDrop, false);
+
+      function handleDrop(e) {
+        const files = e.dataTransfer.files;
+        fileInput.files = files;
+        updateDropAreaText(files.length);
+      }
+    
+      fileInput.addEventListener('change', () => {
+        const files = fileInput.files;
+        updateDropAreaText(files.length);
+      });
+    
+      function updateDropAreaText(fileCount) {
+        if (fileCount > 0) {
+          dropAreaText.innerHTML = `${fileCount} image${fileCount > 1 ? 's' : ''} selected`;
+        } else {
+          dropAreaText.innerHTML = 'Drop files to attach, or <span class="browse-link">browse</span>';
+        }
+      }
+
+      // Set current year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Fetch latest blog post
+      async function fetchLatestPost() {
+        const blogUrl = "https://updates.tileimagegen.uk/wp-json/wp/v2/posts?per_page=1";
         
-    </div>
+        try {
+          const response = await fetch(blogUrl);
+          const posts = await response.json();
 
-    <script>
-        const dropArea = document.getElementById('drop-area');
-        const fileInput = document.getElementById('images');
-        const dropAreaText = document.getElementById('drop-area-text');
-    
-        dropArea.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropArea.classList.add('border-blue-600');
-        });
-    
-        dropArea.addEventListener('dragleave', () => {
-            dropArea.classList.remove('border-blue-600');
-        });
-    
-        dropArea.addEventListener('drop', (event) => {
-            event.preventDefault();
-            dropArea.classList.remove('border-blue-600');
-            const files = event.dataTransfer.files;
-            fileInput.files = files;
-            updateDropAreaText(files.length);
-        });
-    
-        fileInput.addEventListener('change', () => {
-            const files = fileInput.files;
-            updateDropAreaText(files.length);
-        });
-    
-        function updateDropAreaText(fileCount) {
-            if (fileCount > 0) {
-                dropAreaText.innerHTML = `${fileCount} image${fileCount > 1 ? 's' : ''} added`;
-            } else {
-                dropAreaText.innerHTML = 'Drop files to Attach, or <span class="text-blue-600 underline">browse</span>';
-            }
-        }
-
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
-    <script>
-        async function fetchLatestPost() {
-            const blogUrl = "https://updates.tileimagegen.uk/wp-json/wp/v2/posts?per_page=1";
+          if (posts.length > 0) {
+            const post = posts[0];
+            let excerpt = post.excerpt.rendered.replace(
+              /<a /g, 
+              '<a target="_blank" rel="noopener" '
+            );
             
-            try {
-                const response = await fetch(blogUrl);
-                const posts = await response.json();
-
-                if (posts.length > 0) {
-                    const post = posts[0];
-                    let excerpt = post.excerpt.rendered.replace(
-                        /<a /g, 
-                        '<a target="_blank" '
-                    );
-                    document.getElementById("latest-post").innerHTML = `
-                        <h2><a href="${post.link}" target="_blank">${post.title.rendered}</a></h2>
-                        <p>${excerpt}</p>
-                    `;
-                } else {
-                    document.getElementById("latest-post").innerHTML = "<p>No posts found.</p>";
-                }
-            } catch (error) {
-                document.getElementById("latest-post").innerHTML = "<p>Failed to load the latest post.</p>";
-                console.error("Error fetching latest post:", error);
-            }
+            // Split "Continue reading" onto a new line
+            excerpt = excerpt.replace(
+              /(\s*Continue reading)/i,
+              '<br><br>$1'
+            );
+            
+            document.getElementById("latest-post").innerHTML = `
+              <h3><a href="${post.link}" target="_blank" rel="noopener">${post.title.rendered}</a></h3>
+              <div>${excerpt}</div>
+            `;
+          } else {
+            document.getElementById("latest-post").innerHTML = "<p>No posts found.</p>";
+          }
+        } catch (error) {
+          document.getElementById("latest-post").innerHTML = "<p>Failed to load the latest post.</p>";
+          console.error("Error fetching latest post:", error);
         }
+      }
 
-        fetchLatestPost();
+      // Initialize
+      fetchLatestPost();
     </script>
   </body>
 </html>
