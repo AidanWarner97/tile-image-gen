@@ -357,9 +357,46 @@ label {
   line-height: 1.6;
 }
 
+.latest-post div p {
+  margin-bottom: 1rem;
+}
+
+.latest-post div p:last-child {
+  margin-bottom: 0;
+}
+
 .latest-post div a {
   color: #2563eb;
   text-decoration: underline;
+}
+
+/* Ensure buttons in latest post work properly */
+.latest-post .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 3rem;
+}
+
+.latest-post .btn-primary {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.latest-post .btn-primary:hover {
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 
 /* Footer */

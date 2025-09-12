@@ -303,20 +303,33 @@
 
           if (posts.length > 0) {
             const post = posts[0];
-            let excerpt = post.excerpt.rendered.replace(
-              /<a /g, 
-              '<a target="_blank" rel="noopener" '
-            );
             
-            // Split "Continue reading" onto a new line
-            excerpt = excerpt.replace(
-              /(\s*Continue reading)/i,
-              '<br><br>$1'
-            );
+            // Clean up the excerpt
+            let excerpt = post.excerpt.rendered;
+            
+            // Remove HTML tags and get clean text
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = excerpt;
+            let cleanExcerpt = tempDiv.textContent || tempDiv.innerText || '';
+            
+            // Remove common unwanted text
+            cleanExcerpt = cleanExcerpt.replace(/\[.*?\]/g, '');
+            cleanExcerpt = cleanExcerpt.replace(/(Continue reading|Read more).*$/i, '');
+            cleanExcerpt = cleanExcerpt.replace(/\.\.\.$/g, '');
+            cleanExcerpt = cleanExcerpt.trim();
+            
+            // Limit to reasonable length (about 30 words)
+            const words = cleanExcerpt.split(' ');
+            if (words.length > 30) {
+              cleanExcerpt = words.slice(0, 30).join(' ');
+            }
             
             document.getElementById("latest-post").innerHTML = `
               <h3><a href="${post.link}" target="_blank" rel="noopener">${post.title.rendered}</a></h3>
-              <div>${excerpt}</div>
+              <div>
+                <p>${cleanExcerpt}...</p>
+                <p><a href="${post.link}" target="_blank" rel="noopener" class="btn btn-primary">Read More</a></p>
+              </div>
             `;
           } else {
             document.getElementById("latest-post").innerHTML = "<p>No posts found.</p>";
