@@ -7,6 +7,26 @@ import io
 
 app = Flask(__name__)
 
+# Enable gzip compression
+compress = Compress()
+compress.init_app(app)
+
+# Configure compression settings
+app.config['COMPRESS_MIMETYPES'] = [
+    'text/html',
+    'text/css',
+    'text/xml',
+    'text/javascript',
+    'application/json',
+    'application/javascript',
+    'application/xml',
+    'application/rss+xml',
+    'application/atom+xml',
+    'image/svg+xml'
+]
+app.config['COMPRESS_LEVEL'] = 6  # Compression level (1-9, 6 is good balance)
+app.config['COMPRESS_MIN_SIZE'] = 500  # Only compress files larger than 500 bytes
+
 console_handler = StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(logging.Formatter(
