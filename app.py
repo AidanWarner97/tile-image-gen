@@ -16,6 +16,55 @@ console_handler.setFormatter(logging.Formatter(
 app.logger.addHandler(console_handler)
 app.logger.setLevel(logging.DEBUG)
 
+@app.after_request
+def after_request(response):
+    """Add security and caching headers to all responses"""
+    
+    # Security Headers
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+    
+    # Content Security Policy
+    csp = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://pagead2.googlesyndication.com; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: https:; "
+        "connect-src 'self' https://updates.tileimagegen.uk https://www.google-analytics.com; "
+        "frame-src https://pagead2.googlesyndication.com; "
+        "object-src 'none'; "
+        "base-uri 'self'"
+    )
+    response.headers['Content-Security-Policy'] = csp
+    
+    # Caching Headers for different file types
+    if request.endpoint == 'static':
+        # Static files (CSS, JS, images) - cache for 1 year
+        expires = datetime.utcnow() + timedelta(days=365)
+        response.headers['Expires'] = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')
+        response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+    elif request.endpoint in ['static_from_root']:
+        # Robots.txt, sitemap.xml, etc. - cache for 1 day
+        expires = datetime.utcnow() + timedelta(days=1)
+        response.headers['Expires'] = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+    elif request.endpoint == 'index':
+        # Main page - cache for 1 hour
+        expires = datetime.utcnow() + timedelta(hours=1)
+        response.headers['Expires'] = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')
+        response.headers['Cache-Control'] = 'public, max-age=3600'
+    elif request.endpoint == 'generate':
+        # Generated images - no cache (always fresh)
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+    
+    return response
+
 @app.route('/favicon.ico')
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
