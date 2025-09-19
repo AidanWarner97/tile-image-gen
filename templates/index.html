@@ -149,9 +149,9 @@
                            min="0" step="1" required placeholder="e.g., 3" />
                   </div>
                   <div class="form-grid-item">
-                    <label for="groutColour">Color</label>
+                    <label for="groutColour">Colour</label>
                     <select name="groutColour" id="groutColour" class="form-select" required>
-                      <option value="">Select grout color</option>
+                      <option value="">Select grout colour</option>
                       <optgroup label="BAL Range">
                         <option value="#d1d1cf">Gunmetal</option>
                         <option value="#9e9fa4">Smoke</option>
@@ -289,6 +289,92 @@
           dropAreaText.innerHTML = 'Drop files to attach, or <span class="browse-link">browse</span>';
         }
       }
+
+      // Form submission handler for generate button
+      const generateForm = document.querySelector('.generator-form');
+      const generateButton = document.querySelector('.btn-generate');
+      const generateButtonText = generateButton.querySelector('span');
+      const originalButtonText = generateButtonText.textContent;
+      
+      function resetButton() {
+        generateButtonText.textContent = originalButtonText;
+        generateButton.disabled = false;
+        generateButton.classList.remove('btn--loading');
+      }
+      
+      generateForm.addEventListener('submit', function(e) {
+        // Check if form is valid before changing button state
+        if (!generateForm.checkValidity()) {
+          // Form validation failed, don't change button state
+          return;
+        }
+        
+        // Prevent default form submission
+        e.preventDefault();
+        
+        // Change button text and disable it
+        generateButtonText.textContent = 'Generating...';
+        generateButton.disabled = true;
+        generateButton.classList.add('btn--loading');
+        
+        // Create FormData from the form
+        const formData = new FormData(generateForm);
+        
+        // Submit via fetch to monitor the response
+        fetch('/generate', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            // Get the filename from Content-Disposition header if available
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = 'tile_pattern.png';
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+              if (filenameMatch) {
+                filename = filenameMatch[1].replace(/['"]/g, '');
+              }
+            }
+            
+            // Convert response to blob and trigger download
+            return response.blob().then(blob => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.style.display = 'none';
+              a.href = url;
+              a.download = filename;
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+              
+              // Reset button after successful download
+              resetButton();
+            });
+          } else {
+            throw new Error('Server error: ' + response.status);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error generating tile pattern. Please try again.');
+          // Reset button on error
+          resetButton();
+        });
+      });
+      
+      // Also reset button on page visibility change (if user navigates back)
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+          resetButton();
+        }
+      });
+      
+      // Reset button if there's a page error or the user navigates back
+      window.addEventListener('pageshow', function(event) {
+        resetButton();
+      });
 
       // Set current year
       document.getElementById('year').textContent = new Date().getFullYear();

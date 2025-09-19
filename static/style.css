@@ -317,6 +317,18 @@ label {
   font-weight: 600;
 }
 
+.btn--loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn--loading:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: #2563eb;
+}
+
 /* Updates Section */
 .updates-section {
   background: #ffffff;
