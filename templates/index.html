@@ -215,6 +215,24 @@
       </footer>
     </main>
 
+    <!-- Herringbone CAD Modal -->
+    <div id="herringbone-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>⚠️ Please Note</h3>
+          <button class="modal-close" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>
+            For use of herringbone in standard pattern style, you'll want to set the rotation to either 45 or -45 degrees.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary modal-ok">Got it!</button>
+        </div>
+      </div>
+    </div>
+
     <script>
       // Mobile navigation toggle
       const mobileNavToggle = document.getElementById('mobile-nav-toggle');
@@ -351,6 +369,14 @@
               
               // Reset button after successful download
               resetButton();
+              
+              // Check if herringbone pattern was generated and show modal
+              const layoutType = formData.get('layoutType');
+              if (layoutType === 'herringbone') {
+                setTimeout(() => {
+                  showHerringboneModal();
+                }, 500); // Small delay to let download start
+              }
             });
           } else {
             throw new Error('Server error: ' + response.status);
@@ -425,6 +451,49 @@
           console.error("Error fetching latest post:", error);
         }
       }
+
+      // Herringbone Modal Functions
+      function showHerringboneModal() {
+        const modal = document.getElementById('herringbone-modal');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        
+        // Focus on the modal for accessibility
+        modal.querySelector('.modal-ok').focus();
+      }
+      
+      function hideHerringboneModal() {
+        const modal = document.getElementById('herringbone-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
+      }
+      
+      // Modal event listeners
+      document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('herringbone-modal');
+        const closeBtn = modal.querySelector('.modal-close');
+        const okBtn = modal.querySelector('.modal-ok');
+        
+        // Close button
+        closeBtn.addEventListener('click', hideHerringboneModal);
+        
+        // OK button
+        okBtn.addEventListener('click', hideHerringboneModal);
+        
+        // Close on background click
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            hideHerringboneModal();
+          }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && modal.style.display === 'flex') {
+            hideHerringboneModal();
+          }
+        });
+      });
 
       // Initialize
       fetchLatestPost();
