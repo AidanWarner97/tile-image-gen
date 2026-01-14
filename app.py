@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_file, send_from_directory
 from flask_compress import Compress
+from werkzeug.middleware.proxy_fix import ProxyFix
 from PIL import Image, ImageDraw, ImageColor
 from random import randrange
 from datetime import datetime, timedelta
@@ -8,6 +9,8 @@ from logging import StreamHandler
 import io
 
 app = Flask(__name__)
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
 
 # Enable gzip compression
 compress = Compress()
