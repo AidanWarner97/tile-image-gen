@@ -155,6 +155,8 @@ def generate():
         elif layout_type == 'hexagon':
             result = Image.new('RGBA', (width*3 + grout_size*3, height*3 + grout_size*3), rgb + (255,))
         elif layout_type in ['third', 'vertThird']:
+            result = Image.new('RGBA', (width + grout_size, height * 3 + grout_size * 3), rgb + (255,))
+        elif layout_type in ['quarter', 'vertQuarter']:
             result = Image.new('RGBA', (width + grout_size, height * 4 + grout_size * 4), rgb + (255,))
         else:
             result = Image.new('RGBA', (width*2 + grout_size*2, height*2 + grout_size*2), rgb + (255,))
@@ -797,6 +799,12 @@ def generate():
             result.paste(tile[1], (width*2 + hexpercent*2 + grout_size*8, grout_size*2 + height), tile[1]) #15
             result.paste(tile[2], (width*2 + hexpercent*2 + grout_size*8, grout_size*3 + height*2), tile[2]) #16
         elif layout_type in ['third', 'vertThird']:
+            result.paste(tile[0], (0 - third - grout_size, grout_size)) #1
+            result.paste(tile[0], (twothird + grout_size, grout_size)) #2
+            result.paste(tile[1], (0 - twothird - grout_size, height + grout_size*2)) #3
+            result.paste(tile[1], (third + grout_size, height + grout_size*2)) #4
+            result.paste(tile[2], (grout_size, height*2 + grout_size*3)) #5
+        elif layout_type in ['quarter', 'vertQuarter']:
             result.paste(tile[0], (0 - quarter, grout_size)) #1
             result.paste(tile[0], (quarter*3 + grout_size, grout_size)) #2
             result.paste(tile[1], (0 - half, grout_size + height + grout_size)) #3
@@ -851,7 +859,7 @@ def generate():
                 draw.rectangle([height*1 + grout_size*1, 0, height*1 + grout_size*1.5, height*9 + grout_size*9], fill=grout_colour)
                 draw.rectangle([height*1 - grout_size*9, height*19 + grout_size*8, height*1 - grout_size*8.5, height*20 + grout_size*8], fill=grout_colour)
 
-        if layout_type in ['vertStacked', 'vertBrick', 'vertThird']:
+        if layout_type in ['vertStacked', 'vertBrick', 'vertThird', 'vertQuarter']:
             result = result.rotate(90, expand=True)
             result = result.transpose(Image.FLIP_TOP_BOTTOM)
 
@@ -864,12 +872,16 @@ def generate():
         if layout_type == 'brickBond':
             layout = "Horizontal Half Block"
         if layout_type == 'third':
+            layout = "Horizontal Third Block"
+        if layout_type == 'quarter':
             layout = "Horizontal Quarter Block"
         if layout_type == 'vertStacked':
             layout = "Vertical Block"
         if layout_type == 'vertBrick':
             layout = "Vertical Half Block"
         if layout_type == 'vertThird':
+            layout = "Vertical Third Block"
+        if layout_type == 'vertQuarter':
             layout = "Vertical Quarter Block"
         if layout_type == 'basketWeave':
             layout = "Basket Weave"
