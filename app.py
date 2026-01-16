@@ -155,7 +155,7 @@ def generate():
         elif layout_type == 'hexagon':
             result = Image.new('RGBA', (width*3 + grout_size*3, height*3 + grout_size*3), rgb + (255,))
         elif layout_type in ['third', 'vertThird']:
-            result = Image.new('RGBA', (width + grout_size, height * 3 + grout_size * 3), rgb + (255,))
+            result = Image.new('RGBA', (width + grout_size, height * 4 + grout_size * 4), rgb + (255,))
         else:
             result = Image.new('RGBA', (width*2 + grout_size*2, height*2 + grout_size*2), rgb + (255,))
 
@@ -803,6 +803,7 @@ def generate():
             result.paste(tile[1], (half + grout_size, grout_size + height + grout_size)) #4
             result.paste(tile[2], (0 - quarter*3, grout_size + height + grout_size + height + grout_size)) #5
             result.paste(tile[2], (quarter + grout_size, grout_size + height + grout_size + height + grout_size)) #6
+            result.paste(tile[3], (grout_size, grout_size + height + grout_size + height + grout_size + height + grout_size)) #7
             pass
         else:
             result.paste(tile[0], (grout_size, grout_size)) #1
