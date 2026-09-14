@@ -1,0 +1,4 @@
+.env
+feedback-data/*.json
+feedback-data/*.sqlite
+feedback-data/*.sqlite-*
