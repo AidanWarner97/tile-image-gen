@@ -1,6 +1,6 @@
 RewriteEngine On
-RewriteRule ^feedback/?$ feedback.php [L,QSA]
-RewriteRule ^feedback/([^/]+)/?$ feedback/detail.php?id=$1 [L,QSA]
+RewriteRule ^feedback/?$ feedback.php [END,QSA]
+RewriteRule ^feedback/([^/]+)/?$ feedback-detail/detail.php?id=$1 [END,QSA]
 RewriteRule ^updates/?$ updates/index.php [L,QSA]
 RewriteRule ^updates/images/([^/]+)$ updates/image.php?file=$1 [L,QSA]
 RewriteRule ^updates/post/([^/]+)/?$ updates/post/index.php?slug=$1 [L,QSA]

@@ -10,7 +10,7 @@ if (str_starts_with($path, '/feedback-data/')) {
 
 if (preg_match('#^/feedback/([^/]+)/?$#', $path, $matches) === 1) {
     $_GET['id'] = rawurldecode($matches[1]);
-    require __DIR__ . '/feedback/detail.php';
+    require __DIR__ . '/feedback-detail/detail.php';
     return true;
 }
 
