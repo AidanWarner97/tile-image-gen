@@ -24,7 +24,7 @@ if ($post === null) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= $post ? escape_html($post['title']) : 'Update Not Found' ?> | Tile Image Generator</title>
   <link rel="stylesheet" href="/static/style.css">
-  <link rel="icon" type="image/x-icon" href="/logo_transparent.png">
+  <link rel="icon" type="image/x-icon" href="/logo.png">
   <!-- Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJ4XFG0ZS9"></script>
   <script>
@@ -36,8 +36,11 @@ if ($post === null) {
 </head>
 <body>
   <header class="hero-header">
-    <h1>UPDATES</h1>
-    <p>Product notes and release updates.</p>
+    <img src="logo.png" alt="Tile Image Generator Logo" height="100" />
+    <div id="header-title">
+      <h1>TILE IMAGE GENERATOR</h1>
+      <p>Production layout tool</p>
+    </div>
   </header>
   <nav class="top-nav" aria-label="Main navigation">
     <a href="/">Generator</a>

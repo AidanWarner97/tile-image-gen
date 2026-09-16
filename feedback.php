@@ -628,7 +628,7 @@ $turnstileSiteKey = feedback_turnstile_site_key();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Send feedback and browse selected feedback for Tile Image Generator.">
   <title>Feedback | Tile Image Generator</title>
-  <link rel="icon" type="image/x-icon" href="logo_transparent.png">
+  <link rel="icon" type="image/x-icon" href="/logo.png">
   <link rel="stylesheet" href="/static/style.css">
   <!-- Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJ4XFG0ZS9"></script>
@@ -641,8 +641,11 @@ $turnstileSiteKey = feedback_turnstile_site_key();
 </head>
 <body>
   <header class="hero-header">
-    <h1>FEEDBACK | Tile Image Generator</h1>
-    <p>Help shape the next version of Tile Image Generator.</p>
+    <img src="/logo.png" alt="Tile Image Generator Logo" height="100" />
+    <div id="header-title">
+      <h1>TILE IMAGE GENERATOR</h1>
+      <p>Production layout tool</p>
+    </div>
   </header>
   <nav class="top-nav" aria-label="Main navigation">
     <a href="/">Generator</a>

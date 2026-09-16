@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Generate custom tile pattern sheets from your tile images.">
   <title>Tile Image Generator</title>
-  <link rel="icon" type="image/x-icon" href="logo_transparent.png">
+  <link rel="icon" type="image/x-icon" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,8 +21,11 @@
 </head>
 <body>
   <header class="hero-header">
-    <h1>TILE IMAGE GENERATOR</h1>
-    <p>Production layout tool</p>
+    <img src="logo.png" alt="Tile Image Generator Logo" height="100" />
+    <div id="header-title">
+      <h1>TILE IMAGE GENERATOR</h1>
+      <p>Production layout tool</p>
+    </div>
   </header>
 
   <nav class="top-nav" aria-label="Main navigation">
