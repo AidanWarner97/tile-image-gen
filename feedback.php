@@ -10,6 +10,7 @@ const FEEDBACK_MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024;
 const FEEDBACK_MAX_ATTACHMENTS = 5;
 const FEEDBACK_TABLE = 'tig_feedback';
 const FEEDBACK_ATTACHMENTS_TABLE = 'tig_feedback_attachments';
+const FEEDBACK_RESPONSES_TABLE = 'tig_feedback_responses';
 
 function feedback_status_options(): array
 {
@@ -187,6 +188,30 @@ function feedback_db(): PDO
           file_size INTEGER NOT NULL,
           created_at TEXT NOT NULL
         )');
+      }
+
+      if (feedback_is_mysql()) {
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_RESPONSES_TABLE . ' (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          feedback_id CHAR(64) NOT NULL,
+          body TEXT NOT NULL,
+          author VARCHAR(100) NOT NULL,
+          created_at DATETIME NOT NULL,
+          emailed_at DATETIME NULL,
+          email_error VARCHAR(500) NULL,
+          INDEX tig_feedback_responses_feedback_id (feedback_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+      } else {
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_RESPONSES_TABLE . ' (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          feedback_id TEXT NOT NULL,
+          body TEXT NOT NULL,
+          author TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          emailed_at TEXT NULL,
+          email_error TEXT NULL
+        )');
+        $db->exec('CREATE INDEX IF NOT EXISTS tig_feedback_responses_feedback_id ON ' . FEEDBACK_RESPONSES_TABLE . '(feedback_id)');
       }
 
     feedback_ensure_column($db, 'first_name', feedback_is_mysql() ? 'VARCHAR(80) NOT NULL DEFAULT ""' : 'TEXT NOT NULL DEFAULT ""');
@@ -579,17 +604,17 @@ sort($sortedDefaultStatuses);
 $isDefaultStatusSelection = $sortedActiveStatuses === $sortedDefaultStatuses;
 $search = trim((string)($_GET['q'] ?? ''));
 
-$listSql = 'SELECT public_id, first_name, last_name, email, subject, message, contact_allowed, status, created_at FROM ' . FEEDBACK_TABLE . ' WHERE status IN (' . implode(', ', array_map(static fn(int $i): string => ":status_$i", array_keys($activeStatuses))) . ')';
+$listSql = 'SELECT feedback.public_id, feedback.first_name, feedback.last_name, feedback.email, feedback.subject, feedback.message, feedback.contact_allowed, feedback.status, feedback.created_at, (SELECT COUNT(*) FROM ' . FEEDBACK_RESPONSES_TABLE . ' response WHERE response.feedback_id = feedback.id) AS response_count FROM ' . FEEDBACK_TABLE . ' feedback WHERE feedback.status IN (' . implode(', ', array_map(static fn(int $i): string => ":status_$i", array_keys($activeStatuses))) . ')';
 $listParams = [];
 foreach ($activeStatuses as $i => $status) {
     $listParams[":status_$i"] = $status;
 }
 if ($search !== '') {
-    $listSql .= ' AND (subject LIKE :search_subject OR message LIKE :search_message)';
+    $listSql .= ' AND (feedback.subject LIKE :search_subject OR feedback.message LIKE :search_message)';
     $listParams[':search_subject'] = '%' . $search . '%';
     $listParams[':search_message'] = '%' . $search . '%';
 }
-$listSql .= ' ORDER BY created_at DESC';
+$listSql .= ' ORDER BY feedback.created_at DESC';
 $listStmt = feedback_db()->prepare($listSql);
 $listStmt->execute($listParams);
 $feedback = $listStmt->fetchAll();
@@ -673,7 +698,7 @@ $turnstileSiteKey = feedback_turnstile_site_key();
                     <div class="feedback-issue-title"><?= feedback_escape((string)$entry['subject']) ?></div>
                     <div class="feedback-issue-meta"><?= feedback_escape(date('j M Y', strtotime((string)$entry['created_at']))) ?></div>
                   </td>
-                  <td class="feedback-comments"><span class="feedback-comment-count" title="No comments"><span aria-hidden="true">&#128172;</span> 0</span></td>
+                  <td class="feedback-comments"><span class="feedback-comment-count" title="<?= (int)$entry['response_count'] ?> public comment<?= (int)$entry['response_count'] === 1 ? '' : 's' ?>"><span aria-hidden="true">&#128172;</span> <?= (int)$entry['response_count'] ?></span></td>
                   <td><?= feedback_escape((string)$entry['first_name']) ?></td>
                   <td><span class="feedback-status feedback-status-<?= feedback_escape((string)$entry['status']) ?>"><?= feedback_escape(feedback_status_label((string)$entry['status'])) ?></span></td>
                 </tr>

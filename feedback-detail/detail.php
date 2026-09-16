@@ -5,9 +5,17 @@ define('FEEDBACK_LIBRARY_ONLY', true);
 require_once __DIR__ . '/../feedback.php';
 
 $publicId = (int)($_GET['id'] ?? 0);
-$stmt = feedback_db()->prepare('SELECT public_id, first_name, last_name, email, subject, message, created_at, status FROM ' . FEEDBACK_TABLE . ' WHERE public_id = :public_id LIMIT 1');
+$db = feedback_db();
+$stmt = $db->prepare('SELECT id, public_id, first_name, last_name, email, subject, message, created_at, status FROM ' . FEEDBACK_TABLE . ' WHERE public_id = :public_id LIMIT 1');
 $stmt->execute([':public_id' => $publicId]);
 $entry = $stmt->fetch();
+$responses = [];
+
+if (is_array($entry)) {
+  $responseStmt = $db->prepare('SELECT body, author, created_at FROM ' . FEEDBACK_RESPONSES_TABLE . ' WHERE feedback_id = :feedback_id ORDER BY created_at ASC, id ASC');
+  $responseStmt->execute([':feedback_id' => $entry['id']]);
+  $responses = $responseStmt->fetchAll();
+}
 
 if (!is_array($entry)) {
     http_response_code(404);
@@ -49,6 +57,11 @@ if (!is_array($entry)) {
           <p class="feedback-meta"><?= feedback_escape(date('j M Y', strtotime((string)$entry['created_at']))) ?> | <?= feedback_escape((string)$entry['first_name']) ?> | <span class="feedback-status feedback-status-<?= feedback_escape((string)$entry['status']) ?>"><?= feedback_escape(feedback_status_label((string)$entry['status'])) ?></span></p>
           <hr>
           <p class="feedback-detail-message"><?= nl2br(feedback_escape((string)$entry['message'])) ?></p>
+          <section class="feedback-response-thread" aria-labelledby="comments-heading">
+            <div class="feedback-response-heading"><h3 id="comments-heading">Public comments</h3><span><?= count($responses) ?></span></div>
+            <?php if (!$responses): ?><p class="feedback-response-empty">No public comments yet.</p><?php endif; ?>
+            <?php foreach ($responses as $response): ?><article class="feedback-response"><div class="feedback-response-author"><strong><?= feedback_escape((string)$response['author']) ?></strong><span>Team comment</span></div><p><?= nl2br(feedback_escape((string)$response['body'])) ?></p><time datetime="<?= feedback_escape(date('c', strtotime((string)$response['created_at']))) ?>"><?= feedback_escape(date('j M Y', strtotime((string)$response['created_at']))) ?></time></article><?php endforeach; ?>
+          </section>
         <?php else: ?>
           <h2>Feedback Not Found</h2>
           <p>This feedback entry is not public or no longer exists.</p>
