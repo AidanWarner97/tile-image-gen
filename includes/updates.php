@@ -418,7 +418,8 @@ function get_all_posts(string $postsDir = POSTS_DIR): array
 
     foreach ($files as $file) {
         $post = parse_post_file($file);
-        if ($post !== null && !empty($post['published'])) {
+        $publishAt = $post !== null ? strtotime((string)$post['date']) : false;
+        if ($post !== null && !empty($post['published']) && ($publishAt === false || $publishAt <= time())) {
             $posts[] = $post;
         }
     }
