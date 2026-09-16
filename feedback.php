@@ -8,6 +8,8 @@ const LEGACY_FEEDBACK_FILE = FEEDBACK_DIR . '/feedback.json';
 const FEEDBACK_ATTACHMENT_DIR = FEEDBACK_DIR . '/attachments';
 const FEEDBACK_MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024;
 const FEEDBACK_MAX_ATTACHMENTS = 5;
+const FEEDBACK_TABLE = 'tig_feedback';
+const FEEDBACK_ATTACHMENTS_TABLE = 'tig_feedback_attachments';
 
 function feedback_status_options(): array
 {
@@ -73,6 +75,35 @@ function feedback_db_options(): array
     ];
 }
 
+  function feedback_table_exists(PDO $db, string $table): bool
+  {
+    if (feedback_is_mysql()) {
+      $stmt = $db->prepare('SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table_name');
+      $stmt->execute([':table_name' => $table]);
+      return (int)$stmt->fetchColumn() > 0;
+    }
+
+    $stmt = $db->prepare("SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = :table_name");
+    $stmt->execute([':table_name' => $table]);
+    return (int)$stmt->fetchColumn() > 0;
+  }
+
+  function feedback_migrate_table_names(PDO $db): void
+  {
+    foreach ([
+      'feedback' => FEEDBACK_TABLE,
+      'feedback_attachments' => FEEDBACK_ATTACHMENTS_TABLE,
+    ] as $oldTable => $newTable) {
+      if (feedback_table_exists($db, $oldTable) && !feedback_table_exists($db, $newTable)) {
+        if (feedback_is_mysql()) {
+          $db->exec('RENAME TABLE ' . $oldTable . ' TO ' . $newTable);
+        } else {
+          $db->exec('ALTER TABLE ' . $oldTable . ' RENAME TO ' . $newTable);
+        }
+      }
+    }
+  }
+
 function feedback_db(): PDO
 {
     static $db = null;
@@ -101,8 +132,10 @@ function feedback_db(): PDO
         $db = new PDO('sqlite:' . FEEDBACK_DB, null, null, feedback_db_options());
     }
 
+      feedback_migrate_table_names($db);
+
     if (feedback_is_mysql()) {
-        $db->exec('CREATE TABLE IF NOT EXISTS feedback (
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_TABLE . ' (
             id CHAR(64) PRIMARY KEY,
             public_id INT NULL UNIQUE,
             name VARCHAR(255) NOT NULL DEFAULT "",
@@ -117,7 +150,7 @@ function feedback_db(): PDO
             created_at DATETIME NOT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
     } else {
-        $db->exec('CREATE TABLE IF NOT EXISTS feedback (
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_TABLE . ' (
             id TEXT PRIMARY KEY,
             public_id INTEGER,
             name TEXT NOT NULL DEFAULT "",
@@ -134,7 +167,7 @@ function feedback_db(): PDO
     }
 
       if (feedback_is_mysql()) {
-        $db->exec('CREATE TABLE IF NOT EXISTS feedback_attachments (
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_ATTACHMENTS_TABLE . ' (
           id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
           feedback_id CHAR(64) NOT NULL,
           original_name VARCHAR(255) NOT NULL,
@@ -142,10 +175,10 @@ function feedback_db(): PDO
           mime_type VARCHAR(127) NOT NULL,
           file_size INT UNSIGNED NOT NULL,
           created_at DATETIME NOT NULL,
-          INDEX feedback_attachments_feedback_id (feedback_id)
+          INDEX tig_feedback_attachments_feedback_id (feedback_id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
       } else {
-        $db->exec('CREATE TABLE IF NOT EXISTS feedback_attachments (
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_ATTACHMENTS_TABLE . ' (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           feedback_id TEXT NOT NULL,
           original_name TEXT NOT NULL,
@@ -165,12 +198,12 @@ function feedback_db(): PDO
     feedback_backfill_public_ids($db);
 
     if (feedback_is_mysql()) {
-        $indexExists = $db->query("SHOW INDEX FROM feedback WHERE Key_name = 'feedback_public_id_unique'")->fetch();
+        $indexExists = $db->query("SHOW INDEX FROM " . FEEDBACK_TABLE . " WHERE Key_name = 'tig_feedback_public_id_unique'")->fetch();
         if (!$indexExists) {
-            $db->exec('CREATE UNIQUE INDEX feedback_public_id_unique ON feedback(public_id)');
+          $db->exec('CREATE UNIQUE INDEX tig_feedback_public_id_unique ON ' . FEEDBACK_TABLE . '(public_id)');
         }
     } else {
-        $db->exec('CREATE UNIQUE INDEX IF NOT EXISTS feedback_public_id_unique ON feedback(public_id)');
+        $db->exec('CREATE UNIQUE INDEX IF NOT EXISTS tig_feedback_public_id_unique ON ' . FEEDBACK_TABLE . '(public_id)');
     }
 
     feedback_migrate_legacy_json($db);
@@ -183,29 +216,29 @@ function feedback_ensure_column(PDO $db, string $column, string $definition): vo
     if ($isMysql) {
       $sql = 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table_name AND COLUMN_NAME = :column_name';
         $stmt = $db->prepare($sql);
-      $stmt->execute([':table_name' => 'feedback', ':column_name' => $column]);
+      $stmt->execute([':table_name' => FEEDBACK_TABLE, ':column_name' => $column]);
         if ($stmt->fetch()) {
             return;
         }
 
-        $db->exec('ALTER TABLE feedback ADD COLUMN ' . $column . ' ' . $definition);
+        $db->exec('ALTER TABLE ' . FEEDBACK_TABLE . ' ADD COLUMN ' . $column . ' ' . $definition);
         return;
     }
 
-    $columns = $db->query('PRAGMA table_info(feedback)')->fetchAll();
+    $columns = $db->query('PRAGMA table_info(' . FEEDBACK_TABLE . ')')->fetchAll();
     foreach ($columns as $row) {
         if (($row['name'] ?? '') === $column) {
             return;
         }
     }
 
-    $db->exec('ALTER TABLE feedback ADD COLUMN ' . $column . ' ' . $definition);
+    $db->exec('ALTER TABLE ' . FEEDBACK_TABLE . ' ADD COLUMN ' . $column . ' ' . $definition);
 }
 
 function feedback_migrate_names(PDO $db): void
 {
-  $rows = $db->query('SELECT id, name FROM feedback WHERE first_name = "" AND name <> ""')->fetchAll();
-  $stmt = $db->prepare('UPDATE feedback SET first_name = :first_name, last_name = :last_name WHERE id = :id');
+  $rows = $db->query('SELECT id, name FROM ' . FEEDBACK_TABLE . ' WHERE first_name = "" AND name <> ""')->fetchAll();
+  $stmt = $db->prepare('UPDATE ' . FEEDBACK_TABLE . ' SET first_name = :first_name, last_name = :last_name WHERE id = :id');
   foreach ($rows as $row) {
     $parts = preg_split('/\s+/', trim((string)$row['name']), 2) ?: [];
     $stmt->execute([
@@ -219,19 +252,19 @@ function feedback_migrate_names(PDO $db): void
 function feedback_migrate_statuses(PDO $db): void
 {
     // legacy moderation flags predate the status workflow
-    $db->exec('UPDATE feedback SET status = \'new\' WHERE status = \'pending\'');
-    $db->exec('UPDATE feedback SET status = \'open\' WHERE status = \'approved\'');
+    $db->exec('UPDATE ' . FEEDBACK_TABLE . ' SET status = \'new\' WHERE status = \'pending\'');
+    $db->exec('UPDATE ' . FEEDBACK_TABLE . ' SET status = \'open\' WHERE status = \'approved\'');
 }
 
 function feedback_backfill_public_ids(PDO $db): void
 {
-  $rows = $db->query('SELECT id FROM feedback WHERE public_id IS NULL ORDER BY created_at ASC, id ASC')->fetchAll();
+  $rows = $db->query('SELECT id FROM ' . FEEDBACK_TABLE . ' WHERE public_id IS NULL ORDER BY created_at ASC, id ASC')->fetchAll();
   if (!$rows) {
     return;
   }
 
-  $nextId = (int)$db->query('SELECT COALESCE(MAX(public_id), 0) + 1 FROM feedback')->fetchColumn();
-  $stmt = $db->prepare('UPDATE feedback SET public_id = :public_id WHERE id = :id');
+  $nextId = (int)$db->query('SELECT COALESCE(MAX(public_id), 0) + 1 FROM ' . FEEDBACK_TABLE)->fetchColumn();
+  $stmt = $db->prepare('UPDATE ' . FEEDBACK_TABLE . ' SET public_id = :public_id WHERE id = :id');
   foreach ($rows as $row) {
     $stmt->execute([':public_id' => $nextId++, ':id' => (string)$row['id']]);
   }
@@ -240,11 +273,11 @@ function feedback_backfill_public_ids(PDO $db): void
 function feedback_sql_is_null(PDO $db, string $column): bool
 {
     if (feedback_is_mysql()) {
-        $stmt = $db->query('SELECT COUNT(*) FROM feedback WHERE ' . $column . ' IS NULL');
+        $stmt = $db->query('SELECT COUNT(*) FROM ' . FEEDBACK_TABLE . ' WHERE ' . $column . ' IS NULL');
         return ((int)$stmt->fetchColumn()) > 0;
     }
 
-    $stmt = $db->query('SELECT COUNT(*) FROM feedback WHERE ' . $column . ' IS NULL');
+    $stmt = $db->query('SELECT COUNT(*) FROM ' . FEEDBACK_TABLE . ' WHERE ' . $column . ' IS NULL');
     return ((int)$stmt->fetchColumn()) > 0;
 }
 
@@ -256,13 +289,13 @@ function feedback_migrate_legacy_json(PDO $db): void
         return;
     }
 
-    $count = (int)$db->query('SELECT COUNT(*) FROM feedback')->fetchColumn();
+    $count = (int)$db->query('SELECT COUNT(*) FROM ' . FEEDBACK_TABLE)->fetchColumn();
     if ($count === 0) {
         $entries = json_decode((string)file_get_contents(LEGACY_FEEDBACK_FILE), true);
         if (is_array($entries)) {
           $insertSql = feedback_is_mysql()
-            ? 'INSERT IGNORE INTO feedback (id, name, email, subject, message, contact_allowed, status, created_at) VALUES (:id, :name, :email, :subject, :message, :contact_allowed, :status, :created_at)'
-            : 'INSERT OR IGNORE INTO feedback (id, name, email, subject, message, contact_allowed, status, created_at) VALUES (:id, :name, :email, :subject, :message, :contact_allowed, :status, :created_at)';
+            ? 'INSERT IGNORE INTO ' . FEEDBACK_TABLE . ' (id, name, email, subject, message, contact_allowed, status, created_at) VALUES (:id, :name, :email, :subject, :message, :contact_allowed, :status, :created_at)'
+            : 'INSERT OR IGNORE INTO ' . FEEDBACK_TABLE . ' (id, name, email, subject, message, contact_allowed, status, created_at) VALUES (:id, :name, :email, :subject, :message, :contact_allowed, :status, :created_at)';
           $stmt = $db->prepare($insertSql);
             foreach ($entries as $entry) {
                 if (!is_array($entry)) {
@@ -484,9 +517,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 
     if (!$errors) {
       $db = feedback_db();
-      $nextPublicId = (int)$db->query('SELECT COALESCE(MAX(public_id), 0) + 1 FROM feedback')->fetchColumn();
+      $nextPublicId = (int)$db->query('SELECT COALESCE(MAX(public_id), 0) + 1 FROM ' . FEEDBACK_TABLE)->fetchColumn();
       $feedbackId = bin2hex(random_bytes(32));
-      $stmt = $db->prepare('INSERT INTO feedback (id, public_id, name, first_name, last_name, email, subject, feedback_type, message, contact_allowed, status, created_at) VALUES (:id, :public_id, :name, :first_name, :last_name, :email, :subject, :feedback_type, :message, :contact_allowed, "new", :created_at)');
+      $stmt = $db->prepare('INSERT INTO ' . FEEDBACK_TABLE . ' (id, public_id, name, first_name, last_name, email, subject, feedback_type, message, contact_allowed, status, created_at) VALUES (:id, :public_id, :name, :first_name, :last_name, :email, :subject, :feedback_type, :message, :contact_allowed, "new", :created_at)');
         $stmt->execute([
         ':id' => $feedbackId,
             ':public_id' => $nextPublicId,
@@ -504,7 +537,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             if (!is_dir(FEEDBACK_ATTACHMENT_DIR)) {
               mkdir(FEEDBACK_ATTACHMENT_DIR, 0770, true);
             }
-            $attachmentStmt = $db->prepare('INSERT INTO feedback_attachments (feedback_id, original_name, stored_name, mime_type, file_size, created_at) VALUES (:feedback_id, :original_name, :stored_name, :mime_type, :file_size, :created_at)');
+            $attachmentStmt = $db->prepare('INSERT INTO ' . FEEDBACK_ATTACHMENTS_TABLE . ' (feedback_id, original_name, stored_name, mime_type, file_size, created_at) VALUES (:feedback_id, :original_name, :stored_name, :mime_type, :file_size, :created_at)');
             foreach ($uploads as $upload) {
               $storedName = bin2hex(random_bytes(24));
               if (!move_uploaded_file($upload['tmp_name'], FEEDBACK_ATTACHMENT_DIR . '/' . $storedName)) {
@@ -522,7 +555,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             }
           }
           if ($errors) {
-            $db->prepare('DELETE FROM feedback WHERE id = :id')->execute([':id' => $feedbackId]);
+            $db->prepare('DELETE FROM ' . FEEDBACK_TABLE . ' WHERE id = :id')->execute([':id' => $feedbackId]);
           }
         }
         if (!$errors) {
@@ -546,7 +579,7 @@ sort($sortedDefaultStatuses);
 $isDefaultStatusSelection = $sortedActiveStatuses === $sortedDefaultStatuses;
 $search = trim((string)($_GET['q'] ?? ''));
 
-$listSql = 'SELECT public_id, first_name, last_name, email, subject, message, contact_allowed, status, created_at FROM feedback WHERE status IN (' . implode(', ', array_map(static fn(int $i): string => ":status_$i", array_keys($activeStatuses))) . ')';
+$listSql = 'SELECT public_id, first_name, last_name, email, subject, message, contact_allowed, status, created_at FROM ' . FEEDBACK_TABLE . ' WHERE status IN (' . implode(', ', array_map(static fn(int $i): string => ":status_$i", array_keys($activeStatuses))) . ')';
 $listParams = [];
 foreach ($activeStatuses as $i => $status) {
     $listParams[":status_$i"] = $status;

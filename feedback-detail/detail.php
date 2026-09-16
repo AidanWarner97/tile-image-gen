@@ -5,7 +5,7 @@ define('FEEDBACK_LIBRARY_ONLY', true);
 require_once __DIR__ . '/../feedback.php';
 
 $publicId = (int)($_GET['id'] ?? 0);
-$stmt = feedback_db()->prepare('SELECT public_id, first_name, last_name, email, subject, message, created_at, status FROM feedback WHERE public_id = :public_id LIMIT 1');
+$stmt = feedback_db()->prepare('SELECT public_id, first_name, last_name, email, subject, message, created_at, status FROM ' . FEEDBACK_TABLE . ' WHERE public_id = :public_id LIMIT 1');
 $stmt->execute([':public_id' => $publicId]);
 $entry = $stmt->fetch();
 
