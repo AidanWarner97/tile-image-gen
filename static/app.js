@@ -20,6 +20,7 @@ resultModal.hidden = true;
 
 let generatedUrl = "";
 let generatedFilename = "tile-pattern.png";
+let generationLogId = "";
 
 function isUnsupportedHerringboneRatio() {
   const width = Number(tileWidthInput.value);
@@ -177,6 +178,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     const contentDisposition = response.headers.get("Content-Disposition") || "";
+    generationLogId = response.headers.get("X-Generation-Log-Id") || "";
     const match = contentDisposition.match(/filename=\"?([^\"]+)\"?/i);
     const filename = match?.[1] || "tile-pattern.png";
     const blob = await response.blob();
@@ -213,6 +215,15 @@ modalDownload.addEventListener("click", () => {
   document.body.appendChild(a);
   a.click();
   a.remove();
+
+  if (generationLogId) {
+    fetch("generate-download.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ request_id: generationLogId }),
+      keepalive: true,
+    }).catch(() => {});
+  }
 });
 
 document.addEventListener("keydown", (event) => {

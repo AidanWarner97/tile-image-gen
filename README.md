@@ -46,3 +46,7 @@ Update content in Markdown format...
 Feedback is available at `/feedback.php`. The page shows approved submissions in a table and opens the submission form in a modal.
 
 Cloudflare Turnstile can be enabled for feedback submissions by setting `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in the server environment. Both values are required; when configured, the widget is shown and every submission is verified server-side.
+
+## Generation logging
+
+Generator activity is written to the MariaDB/MySQL table `tig_generate_log`. Redis is used as the fast queue/cache via the Unix socket in `REDIS_SOCKET` (default `/run/redis/redis.sock`), with `REDIS_HOST`/`REDIS_PORT` as a fallback. `REDIS_PASSWORD` and `REDIS_DATABASE` are also supported. Set `DB_*` and `REDIS_*` in the server environment; `tig_generate_log` is created automatically. A generated response is marked `generated`, validation or processing failures are marked `error`, and the browser's Download action marks `downloaded` as `1`.

@@ -1,12 +1,16 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/generate-log.php';
+
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
 function fail_request(string $message, int $code = 400): never
 {
+    $requestId = $GLOBALS['generateLogRequestId'] ?? bin2hex(random_bytes(16));
+    generate_log_write(generate_log_record($requestId, 'error', $message));
     http_response_code($code);
     header('Content-Type: text/plain; charset=utf-8');
     echo $message;
@@ -986,8 +990,11 @@ function output_svg_fallback(array $tmpFiles, string $tileName, string $layoutTy
     $layout = layout_name($layoutType);
     $groutText = grout_name($groutHex);
     $downloadName = sprintf('%s (%dx%d) (%s Grout) (%s).svg', $tileName, $tileWidth, $tileHeight, $groutText, $layout);
+    $requestId = $GLOBALS['generateLogRequestId'] ?? bin2hex(random_bytes(16));
+    generate_log_write(generate_log_record($requestId, 'generated'));
 
     header('Content-Type: image/svg+xml');
+    header('X-Generation-Log-Id: ' . $requestId);
     header('Content-Disposition: attachment; filename="' . str_replace('"', '', $downloadName) . '"');
     header('Cache-Control: no-cache, no-store, must-revalidate');
     header('Pragma: no-cache');
@@ -1001,12 +1008,24 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     fail_request('Method not allowed', 405);
 }
 
+$generateLogRequestId = bin2hex(random_bytes(16));
+$GLOBALS['generateLogRequestId'] = $generateLogRequestId;
 $tileName = safe_filename((string)($_POST['tileName'] ?? 'tile_image_result'));
 $layoutType = (string)($_POST['layoutType'] ?? 'stacked');
 $tileWidth = max(1, (int)($_POST['tileWidth'] ?? 0));
 $tileHeight = max(1, (int)($_POST['tileHeight'] ?? 0));
 $groutSize = max(0, (int)($_POST['groutSize'] ?? 0));
 $groutHex = (string)($_POST['groutColour'] ?? '#000000');
+$GLOBALS['generateLogRecord'] = [
+    'ip' => (string)($_SERVER['REMOTE_ADDR'] ?? ''),
+    'tile_name' => $tileName,
+    'image_file_count' => isset($_FILES['images']['name']) && is_array($_FILES['images']['name']) ? count(array_filter($_FILES['images']['name'])) : 0,
+    'tile_size_width' => $tileWidth,
+    'tile_size_height' => $tileHeight,
+    'layout' => layout_name($layoutType),
+    'grout_colour' => $groutHex,
+    'grout_size' => $groutSize,
+];
 
 if ($tileWidth < 1 || $tileHeight < 1) {
     fail_request('Tile width and height must be greater than 0.');
@@ -1207,8 +1226,11 @@ if (in_array($layoutType, ['vertStacked', 'vertBrick', 'vertThird', 'vertQuarter
 $layout = layout_name($layoutType);
 $groutText = grout_name($groutHex);
 $downloadName = sprintf('%s (%dx%d) (%s Grout) (%s).png', $tileName, $tileWidth, $tileHeight, $groutText, $layout);
+$requestId = $GLOBALS['generateLogRequestId'] ?? bin2hex(random_bytes(16));
+generate_log_write(generate_log_record($requestId, 'generated'));
 
 header('Content-Type: image/png');
+header('X-Generation-Log-Id: ' . $requestId);
 header('Content-Disposition: attachment; filename="' . str_replace('"', '', $downloadName) . '"');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
