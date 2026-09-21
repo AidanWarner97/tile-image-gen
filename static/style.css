@@ -634,6 +634,11 @@ button[disabled] {
   font-size: 0.875rem;
 }
 
+.sidebar-ads {
+  position: relative;
+  z-index:-999;
+}
+
 @keyframes reveal {
   from {
     opacity: 0;
