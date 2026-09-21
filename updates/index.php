@@ -24,7 +24,7 @@ $posts = get_all_posts();
 </head>
 <body>
   <header class="hero-header">
-    <img src="logo.png" alt="Tile Image Generator Logo" height="100" />
+    <img src="/logo.png" alt="Tile Image Generator Logo" height="100" />
     <div id="header-title">
       <h1>TILE IMAGE GENERATOR</h1>
       <p>Production layout tool</p>
