@@ -231,6 +231,10 @@ body {
   color: var(--text);
   cursor: pointer;
 }
+.feedback-choice-selects {
+  display: inline-flex;
+  gap: 1em;
+}
 .feedback-choice-option input {
   width: auto;
   margin: 0;

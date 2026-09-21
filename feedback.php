@@ -144,6 +144,7 @@ function feedback_db(): PDO
             last_name VARCHAR(80) NOT NULL DEFAULT "",
             email VARCHAR(255) NOT NULL,
             subject VARCHAR(180) NOT NULL,
+            feedback_category VARCHAR(20) NOT NULL DEFAULT "other",
             feedback_type VARCHAR(20) NOT NULL DEFAULT "general",
             message TEXT NOT NULL,
             contact_allowed TINYINT(1) NOT NULL DEFAULT 0,
@@ -159,6 +160,7 @@ function feedback_db(): PDO
             last_name TEXT NOT NULL DEFAULT "",
             email TEXT NOT NULL,
             subject TEXT NOT NULL,
+            feedback_category TEXT NOT NULL DEFAULT "other",
             feedback_type TEXT NOT NULL DEFAULT "general",
             message TEXT NOT NULL,
             contact_allowed INTEGER NOT NULL DEFAULT 0,
@@ -216,6 +218,7 @@ function feedback_db(): PDO
 
     feedback_ensure_column($db, 'first_name', feedback_is_mysql() ? 'VARCHAR(80) NOT NULL DEFAULT ""' : 'TEXT NOT NULL DEFAULT ""');
     feedback_ensure_column($db, 'last_name', feedback_is_mysql() ? 'VARCHAR(80) NOT NULL DEFAULT ""' : 'TEXT NOT NULL DEFAULT ""');
+    feedback_ensure_column($db, 'feedback_category', feedback_is_mysql() ? 'VARCHAR(20) NOT NULL DEFAULT "other"' : 'TEXT NOT NULL DEFAULT "other"');
     feedback_ensure_column($db, 'feedback_type', feedback_is_mysql() ? 'VARCHAR(20) NOT NULL DEFAULT "general"' : 'TEXT NOT NULL DEFAULT "general"');
     feedback_ensure_column($db, 'public_id', feedback_is_mysql() ? 'INT NULL UNIQUE' : 'INTEGER');
     feedback_migrate_names($db);
@@ -483,7 +486,7 @@ if (defined('FEEDBACK_LIBRARY_ONLY')) {
 
 $errors = [];
 $success = false;
-$old = ['first_name' => '', 'last_name' => '', 'email' => '', 'subject' => '', 'feedback_type' => '', 'message' => ''];
+$old = ['first_name' => '', 'last_name' => '', 'email' => '', 'subject' => '', 'feedback_category' => 'other', 'feedback_type' => 'general', 'message' => ''];
 $uploads = [];
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
@@ -491,6 +494,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $old['last_name'] = trim((string)($_POST['last_name'] ?? ''));
     $old['email'] = trim((string)($_POST['email'] ?? ''));
     $old['subject'] = trim((string)($_POST['subject'] ?? ''));
+    $old['feedback_category'] = trim((string)($_POST['feedback_category'] ?? ''));
     $old['feedback_type'] = trim((string)($_POST['feedback_type'] ?? ''));
     $old['message'] = trim((string)($_POST['message'] ?? ''));
     $uploads = feedback_uploaded_files();
@@ -516,8 +520,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     if ($old['subject'] === '' || strlen($old['subject']) > 180) {
       $errors[] = 'Please enter a title.';
     }
-    if (!in_array($old['feedback_type'], ['general', 'bug'], true)) {
-      $errors[] = 'Please select what your feedback is about.';
+    if (!in_array($old['feedback_category'], ['generation', 'layouts', 'grout_lines', 'other'], true)) {
+      $errors[] = 'Please select a feedback category.';
+    }
+    if (!in_array($old['feedback_type'], ['general', 'bug', 'improvement'], true)) {
+      $errors[] = 'Please select a feedback type.';
     }
     if ($old['message'] === '' || strlen($old['message']) > 10000) {
         $errors[] = 'Please enter feedback under 10,000 characters.';
@@ -544,7 +551,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
       $db = feedback_db();
       $nextPublicId = (int)$db->query('SELECT COALESCE(MAX(public_id), 0) + 1 FROM ' . FEEDBACK_TABLE)->fetchColumn();
       $feedbackId = bin2hex(random_bytes(32));
-      $stmt = $db->prepare('INSERT INTO ' . FEEDBACK_TABLE . ' (id, public_id, name, first_name, last_name, email, subject, feedback_type, message, contact_allowed, status, created_at) VALUES (:id, :public_id, :name, :first_name, :last_name, :email, :subject, :feedback_type, :message, :contact_allowed, "new", :created_at)');
+      $stmt = $db->prepare('INSERT INTO ' . FEEDBACK_TABLE . ' (id, public_id, name, first_name, last_name, email, subject, feedback_category, feedback_type, message, contact_allowed, status, created_at) VALUES (:id, :public_id, :name, :first_name, :last_name, :email, :subject, :feedback_category, :feedback_type, :message, :contact_allowed, "new", :created_at)');
         $stmt->execute([
         ':id' => $feedbackId,
             ':public_id' => $nextPublicId,
@@ -553,6 +560,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             ':last_name' => $old['last_name'],
             ':email' => $old['email'],
             ':subject' => $old['subject'],
+            ':feedback_category' => $old['feedback_category'],
             ':feedback_type' => $old['feedback_type'],
             ':message' => $old['message'],
             ':contact_allowed' => !empty($_POST['contact_allowed']) ? 1 : 0,
@@ -585,7 +593,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         }
         if (!$errors) {
         $success = true;
-        $old = ['first_name' => '', 'last_name' => '', 'email' => '', 'subject' => '', 'feedback_type' => '', 'message' => ''];
+        $old = ['first_name' => '', 'last_name' => '', 'email' => '', 'subject' => '', 'feedback_category' => 'other', 'feedback_type' => 'general', 'message' => ''];
     }
 }
 
@@ -746,14 +754,19 @@ $turnstileSiteKey = feedback_turnstile_site_key();
         </div>
         <div class="feedback-choice-group">
           <span class="feedback-choice-label">What is your feedback about?</span>
-          <label class="feedback-choice-option">
-            <input type="radio" name="feedback_type" value="general" <?= $old['feedback_type'] === 'general' ? 'checked' : '' ?> required>
-            <span>I need to report an issue</span>
-          </label>
-          <label class="feedback-choice-option">
-            <input type="radio" name="feedback_type" value="bug" <?= $old['feedback_type'] === 'bug' ? 'checked' : '' ?> required>
-            <span>I would like to suggest an improvement</span>
-          </label>
+          <div class="feedback-choice-selects">
+            <select name="feedback_category" required>
+              <option value="generation" <?= $old['feedback_category'] === 'generation' ? 'selected' : '' ?>>Image Generation</option>
+              <option value="layouts" <?= $old['feedback_category'] === 'layouts' ? 'selected' : '' ?>>Layouts</option>
+              <option value="grout_lines" <?= $old['feedback_category'] === 'grout_lines' ? 'selected' : '' ?>>Grout Lines</option>
+              <option value="other" <?= $old['feedback_category'] === 'other' ? 'selected' : '' ?>>Other</option>
+            </select>
+            <select name="feedback_type" required>
+              <option value="general" <?= $old['feedback_type'] === 'general' ? 'selected' : '' ?>>General Feedback</option>
+              <option value="bug" <?= $old['feedback_type'] === 'bug' ? 'selected' : '' ?>>Bug Report</option>
+              <option value="improvement" <?= $old['feedback_type'] === 'improvement' ? 'selected' : '' ?>>Improvement Suggestion</option>
+            </select>
+          </div>
         </div>
         <label>Your feedback <textarea name="message" rows="8" maxlength="10000" required><?= feedback_escape($old['message']) ?></textarea></label>
         <label class="feedback-attachment-field">Attachments
