@@ -256,9 +256,17 @@ body {
 .feedback-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .feedback-toolbar p { margin: 0; }
 .feedback-auth-state { margin-left: auto; color: var(--muted); font-size: 0.82rem; }
-.feedback-auth-state a, .feedback-login-button { color: var(--accent); }
-.feedback-login-button { display: inline-flex; align-items: center; justify-content: center; width: fit-content; padding: 0.55rem 0.8rem; border: 1px solid var(--accent); border-radius: 0.45rem; background: rgba(137, 180, 250, 0.1); text-decoration: none; font-weight: 700; }
-.feedback-login-button:hover { background: rgba(137, 180, 250, 0.2); }
+.feedback-auth-state a { color: var(--accent); }
+.gsi-material-button { -moz-user-select: none; -webkit-user-select: none; user-select: none; -webkit-appearance: none; display: inline-block; background-color: #131314; border: 1px solid #747775; border-radius: 4px; box-sizing: border-box; color: #e3e3e3; cursor: pointer; font-family: Roboto, Arial, sans-serif; font-size: 14px; height: 40px; letter-spacing: 0.25px; line-height: 40px; max-width: 400px; min-width: min-content; overflow: hidden; padding: 0 12px; position: relative; text-align: center; text-decoration: none; vertical-align: middle; white-space: nowrap; }
+.gsi-material-button-content-wrapper { align-items: center; display: inline-flex; flex-direction: row; flex-wrap: nowrap; height: 100%; justify-content: space-between; position: relative; width: 100%; }
+.gsi-material-button-icon { display: inline-block; height: 20px; margin-right: 10px; min-width: 20px; width: 20px; }
+.gsi-material-button-icon svg { display: block; height: 20px; width: 20px; }
+.gsi-material-button-contents { flex-grow: 1; font-family: Roboto, Arial, sans-serif; font-weight: 500; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
+.gsi-material-button-state { bottom: 0; left: 0; opacity: 0; position: absolute; right: 0; top: 0; transition: opacity .218s; }
+.gsi-material-button:hover { box-shadow: 0 1px 2px rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%); }
+.gsi-material-button:hover .gsi-material-button-state { background-color: #ffffff; opacity: 0.08; }
+.gsi-material-button:active .gsi-material-button-state, .gsi-material-button:focus-visible .gsi-material-button-state { background-color: #ffffff; opacity: 0.12; }
+.gsi-material-button:focus-visible { outline: 2px solid #8ab4f8; outline-offset: 2px; }
 .feedback-auth-prompt { margin: 0 0 1rem; }
 .feedback-submit-button,
 .feedback-toolbar .feedback-submit-button {
