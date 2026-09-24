@@ -1,43 +1,506 @@
 {
-  "brands": [
-    {
-      "id": "easy-bathrooms",
-      "name": "Easy Bathrooms",
-      "ranges": [
+    "brands": [
         {
-          "id": "charlie",
-          "name": "Charlie",
-          "versions": [
-            {
-              "id": "blue",
-              "name": "Blue",
-              "sizes": [
+            "id": "easy-bathrooms",
+            "name": "Easy Bathrooms",
+            "ranges": [
                 {
-                  "id": "1200x600",
-                  "name": "1200 x 600",
-                  "width": 1200,
-                  "height": 600,
-                  "images": []
+                    "id": "accordion",
+                    "name": "Accordion",
+                    "versions": [
+                        {
+                            "id": "aloe",
+                            "name": "Aloe",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/aloe/200-x-50/accordion-aloe-200x50-1-8e299593.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "baby-blue",
+                            "name": "Baby Blue",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/baby-blue/200-x-50/accordion-baby-blue-200x50-1-d6e2bd74.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "glacier",
+                            "name": "Glacier",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/glacier/200-x-50/accordion-glacier-200x50-1-01831c94.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "grey",
+                            "name": "Grey",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/grey/200-x-50/accordion-grey-200x50-1-0afecd55.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "lauren-green",
+                            "name": "Lauren Green",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/lauren-green/200-x-50/accordion-lauren-green-200x50-1-45bd829e.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "naval",
+                            "name": "Naval",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/naval/200-x-50/accordion-naval-200x50-1-e775f5ec.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "tansy-green",
+                            "name": "Tansy Green",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/tansy-green/200-x-50/accordion-tansy-green-200x50-1-534fdb28.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "white",
+                            "name": "White",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion/white/200-x-50/accordion-white-200x50-1-0fbed3d1.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
-                  "id": "600x600",
-                  "name": "600 x 600",
-                  "width": 600,
-                  "height": 600,
-                  "images": []
+                    "id": "accordion-ribbed",
+                    "name": "Accordion Ribbed",
+                    "versions": [
+                        {
+                            "id": "aloe",
+                            "name": "Aloe",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/aloe/200-x-50/accordion-ribbed-aloe-200x50-1-f161b51b.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "baby-blue",
+                            "name": "Baby Blue",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/baby-blue/200-x-50/accordion-ribbed-baby-blue-200x50-1-7a94e509.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "glacier",
+                            "name": "Glacier",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/glacier/200-x-50/accordion-ribbed-glacier-200x50-1-0260abef.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "grey",
+                            "name": "Grey",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/grey/200-x-50/accordion-ribbed-grey-200x50-1-e3c9d95a.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "lauren-green",
+                            "name": "Lauren Green",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/lauren-green/200-x-50/accordion-ribbed-lauren-green-200x50-1-1ff621b5.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "naval",
+                            "name": "Naval",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/naval/200-x-50/accordion-ribbed-naval-200x50-1-ad005cf6.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "tansy-green",
+                            "name": "Tansy Green",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/tansy-green/200-x-50/accordion-ribbed-tansy-green-200x50-1-01349260.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        },
+                        {
+                            "id": "white",
+                            "name": "White",
+                            "sizes": [
+                                {
+                                    "id": "200-x-50",
+                                    "name": "200 x 50",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/accordion-ribbed/white/200-x-50/accordion-ribbed-white-200x50-1-d314c38b.png"
+                                    ],
+                                    "width": 200,
+                                    "height": 50
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
-                  "id": "600x300",
-                  "name": "600 x 300",
-                  "width": 600,
-                  "height": 300,
-                  "images": []
+                    "id": "acropolis",
+                    "name": "Acropolis",
+                    "versions": [
+                        {
+                            "id": "green",
+                            "name": "Green",
+                            "sizes": [
+                                {
+                                    "id": "223-x-223",
+                                    "name": "223 x 223",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/acropolis/green/223-x-223/acropolis-green-223x223-1-b2ffcf79.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/green/223-x-223/acropolis-green-223x223-2-52995eb4.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/green/223-x-223/acropolis-green-223x223-3-7ddd0ccd.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/green/223-x-223/acropolis-green-223x223-4-6ed6ab3f.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/green/223-x-223/acropolis-green-223x223-5-8e4a3b65.png"
+                                    ],
+                                    "width": 223,
+                                    "height": 223
+                                }
+                            ]
+                        },
+                        {
+                            "id": "taupe",
+                            "name": "Taupe",
+                            "sizes": [
+                                {
+                                    "id": "223-x-223",
+                                    "name": "223 x 223",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/acropolis/taupe/223-x-223/acropolis-taupe-223x223-1-9d3bd2cd.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/taupe/223-x-223/acropolis-taupe-223x223-2-4a69e20c.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/taupe/223-x-223/acropolis-taupe-223x223-3-0b92fe55.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/taupe/223-x-223/acropolis-taupe-223x223-4-b2d50966.png",
+                                        "catalogue/images/easy-bathrooms/acropolis/taupe/223-x-223/acropolis-taupe-223x223-5-77248544.png"
+                                    ],
+                                    "width": 223,
+                                    "height": 223
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "adelfia",
+                    "name": "Adelfia",
+                    "versions": [
+                        {
+                            "id": "coto",
+                            "name": "Coto",
+                            "sizes": [
+                                {
+                                    "id": "600-x-400",
+                                    "name": "600 x 400",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/adelfia/coto/600-x-400/adelfia-coto-600x400-1-a151d602.png"
+                                    ],
+                                    "width": 600,
+                                    "height": 400
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "charlie",
+                    "name": "Charlie",
+                    "versions": [
+                        {
+                            "id": "beige",
+                            "name": "Beige",
+                            "sizes": [
+                                {
+                                    "id": "600-x-300",
+                                    "name": "600 x 300",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/beige/600-x-300/charlie-beige-600x300-1200x600-1800x900-1-2b8487df.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/600-x-300/charlie-beige-600x300-1200x600-1800x900-2-1cc4b42b.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/600-x-300/charlie-beige-600x300-1200x600-1800x900-3-c337148f.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/600-x-300/charlie-beige-600x300-1200x600-1800x900-4-7f15fff1.png"
+                                    ],
+                                    "width": 600,
+                                    "height": 300
+                                },
+                                {
+                                    "id": "600-x-600",
+                                    "name": "600 x 600",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/beige/600-x-600/charlie-beige-600x600-1200x1200-2-d08d6741.png"
+                                    ],
+                                    "width": 600,
+                                    "height": 600
+                                },
+                                {
+                                    "id": "1200-x-600",
+                                    "name": "1200 x 600",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/beige/1200-x-600/charlie-beige-600x300-1200x600-1800x900-1-4535f45e.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/1200-x-600/charlie-beige-600x300-1200x600-1800x900-2-520af742.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/1200-x-600/charlie-beige-600x300-1200x600-1800x900-3-2fcbd4cf.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/1200-x-600/charlie-beige-600x300-1200x600-1800x900-4-af4c2d8a.png"
+                                    ],
+                                    "width": 1200,
+                                    "height": 600
+                                },
+                                {
+                                    "id": "hex",
+                                    "name": "Hex",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/beige/hex/charlie-beige-hex-3-1d856408.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/hex/charlie-beige-hex-4-3e6178b0.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/hex/charlie-beige-hex-5-bd81cae4.png",
+                                        "catalogue/images/easy-bathrooms/charlie/beige/hex/charlie-beige-hex-9-35b04abe.png"
+                                    ],
+                                    "width": 290,
+                                    "height": 258
+                                }
+                            ]
+                        },
+                        {
+                            "id": "blanco",
+                            "name": "Blanco",
+                            "sizes": [
+                                {
+                                    "id": "600-x-300",
+                                    "name": "600 x 300",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/600-x-300/charlie-blanco-600x300-1200x600-1280x600-3-16be69e4.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/600-x-300/charlie-blanco-600x300-1200x600-1280x600-4-bb2fe5c2.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/600-x-300/charlie-blanco-600x300-1200x600-1280x600-5-1afdc415.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/600-x-300/charlie-blanco-600x300-1200x600-1280x600-6-21acdff0.png"
+                                    ],
+                                    "width": 600,
+                                    "height": 300
+                                },
+                                {
+                                    "id": "600-x-600",
+                                    "name": "600 x 600",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/600-x-600/charlie-blanco-600x600-1200x1200-1-73195eb3.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/600-x-600/charlie-blanco-600x600-1200x1200-2-37414edd.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/600-x-600/charlie-blanco-600x600-1200x1200-3-b9226e05.png"
+                                    ],
+                                    "width": 600,
+                                    "height": 600
+                                },
+                                {
+                                    "id": "1200-x-600",
+                                    "name": "1200 x 600",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/1200-x-600/charlie-blanco-600x300-1200x600-1280x600-1-97eb8b72.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/1200-x-600/charlie-blanco-600x300-1200x600-1280x600-2-0b42a0d2.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/1200-x-600/charlie-blanco-600x300-1200x600-1280x600-3-19bcf32f.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/1200-x-600/charlie-blanco-600x300-1200x600-1280x600-4-ba4b10a6.png"
+                                    ],
+                                    "width": 1200,
+                                    "height": 600
+                                },
+                                {
+                                    "id": "hex",
+                                    "name": "Hex",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-1-1399d7ab.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-2-2926f8b0.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-3-a4952217.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-4-58f6bc3b.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-5-0454ee1b.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-7-8c8c7d58.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-8-4d3ee509.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-9-47978a12.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-10-02d28ef0.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-11-5976b4ab.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blanco/hex/charlie-blanco-hex-6-022a7346.png"
+                                    ],
+                                    "width": 290,
+                                    "height": 258
+                                }
+                            ]
+                        },
+                        {
+                            "id": "blue",
+                            "name": "Blue",
+                            "sizes": [
+                                {
+                                    "id": "600x300",
+                                    "name": "600 x 300",
+                                    "width": 600,
+                                    "height": 300,
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-1-c2d0b4a3.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-2-1b4387dc.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-3-5bd271f5.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-4-58015229.png"
+                                    ]
+                                },
+                                {
+                                    "id": "600-x-600",
+                                    "name": "600 x 600",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blue/600-x-600/charlie-blue-600x600-900x900-1200x1200-1-fd92575f.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/600-x-600/charlie-blue-600x600-900x900-1200x1200-2-092a4754.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/600-x-600/charlie-blue-600x600-900x900-1200x1200-3-cc4e447a.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/600-x-600/charlie-blue-600x600-900x900-1200x1200-4-d573cb79.png"
+                                    ],
+                                    "width": 600,
+                                    "height": 600
+                                },
+                                {
+                                    "id": "1200-x-600",
+                                    "name": "1200 x 600",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-1-c2d0b4a3.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-2-1b4387dc.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-3-5bd271f5.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/1200-x-600/charlie-blue-600x300-1200x600-1800x900-4-58015229.png"
+                                    ],
+                                    "width": 1200,
+                                    "height": 600
+                                },
+                                {
+                                    "id": "hex",
+                                    "name": "Hex",
+                                    "images": [
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-1-cab53239.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-2-cc3735bb.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-3-b8797194.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-4-ed2e6f93.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-7-52f9b1be.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-8-045e83a1.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-5-d88cf099.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-6-2cb7d269.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-9-655ccc0f.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-10-c64b5e76.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-11-34f204e2.png",
+                                        "catalogue/images/easy-bathrooms/charlie/blue/hex/charlie-blue-hex-12-1066b208.png"
+                                    ],
+                                    "width": 290,
+                                    "height": 258
+                                }
+                            ]
+                        }
+                    ]
                 }
-              ]
-            }
-          ]
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
