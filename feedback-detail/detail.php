@@ -69,7 +69,7 @@ if (!is_array($entry)) {
   </header>
   <nav class="top-nav" aria-label="Main navigation">
     <a href="/#generator">Generator</a>
-    <a href="/updates/">Updates</a>
+    <a href="/updates/">All Updates</a>
     <a href="/feedback.php">Feedback</a>
   </nav>
   <main class="sections-wrap">
