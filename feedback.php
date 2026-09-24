@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/auth.php';
+
 const FEEDBACK_DIR = __DIR__ . '/feedback-data';
 const FEEDBACK_DB = FEEDBACK_DIR . '/feedback.sqlite';
 const LEGACY_FEEDBACK_FILE = FEEDBACK_DIR . '/feedback.json';
@@ -11,6 +13,7 @@ const FEEDBACK_MAX_ATTACHMENTS = 5;
 const FEEDBACK_TABLE = 'tig_feedback';
 const FEEDBACK_ATTACHMENTS_TABLE = 'tig_feedback_attachments';
 const FEEDBACK_RESPONSES_TABLE = 'tig_feedback_responses';
+const FEEDBACK_USERS_TABLE = 'tig_feedback_users';
 
 function feedback_status_options(): array
 {
@@ -146,6 +149,7 @@ function feedback_db(): PDO
             subject VARCHAR(180) NOT NULL,
             feedback_category VARCHAR(20) NOT NULL DEFAULT "other",
             feedback_type VARCHAR(20) NOT NULL DEFAULT "general",
+            user_id VARCHAR(255) NULL,
             message TEXT NOT NULL,
             contact_allowed TINYINT(1) NOT NULL DEFAULT 0,
             status VARCHAR(20) NOT NULL DEFAULT "pending",
@@ -162,12 +166,39 @@ function feedback_db(): PDO
             subject TEXT NOT NULL,
             feedback_category TEXT NOT NULL DEFAULT "other",
             feedback_type TEXT NOT NULL DEFAULT "general",
+            user_id TEXT NULL,
             message TEXT NOT NULL,
             contact_allowed INTEGER NOT NULL DEFAULT 0,
             status TEXT NOT NULL DEFAULT "pending",
             created_at TEXT NOT NULL
         )');
     }
+
+      if (feedback_is_mysql()) {
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_USERS_TABLE . ' (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          google_sub VARCHAR(255) NOT NULL UNIQUE,
+          email VARCHAR(255) NOT NULL,
+          display_name VARCHAR(255) NOT NULL,
+          first_name VARCHAR(80) NOT NULL DEFAULT "",
+          last_name VARCHAR(80) NOT NULL DEFAULT "",
+          picture VARCHAR(500) NOT NULL DEFAULT "",
+          created_at DATETIME NOT NULL,
+          updated_at DATETIME NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+      } else {
+        $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_USERS_TABLE . ' (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          google_sub TEXT NOT NULL UNIQUE,
+          email TEXT NOT NULL,
+          display_name TEXT NOT NULL,
+          first_name TEXT NOT NULL DEFAULT "",
+          last_name TEXT NOT NULL DEFAULT "",
+          picture TEXT NOT NULL DEFAULT "",
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )');
+      }
 
       if (feedback_is_mysql()) {
         $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_ATTACHMENTS_TABLE . ' (
@@ -196,6 +227,7 @@ function feedback_db(): PDO
         $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_RESPONSES_TABLE . ' (
           id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
           feedback_id CHAR(64) NOT NULL,
+          user_id VARCHAR(255) NULL,
           body TEXT NOT NULL,
           author VARCHAR(100) NOT NULL,
           created_at DATETIME NOT NULL,
@@ -207,6 +239,7 @@ function feedback_db(): PDO
         $db->exec('CREATE TABLE IF NOT EXISTS ' . FEEDBACK_RESPONSES_TABLE . ' (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           feedback_id TEXT NOT NULL,
+          user_id TEXT NULL,
           body TEXT NOT NULL,
           author TEXT NOT NULL,
           created_at TEXT NOT NULL,
@@ -216,10 +249,31 @@ function feedback_db(): PDO
         $db->exec('CREATE INDEX IF NOT EXISTS tig_feedback_responses_feedback_id ON ' . FEEDBACK_RESPONSES_TABLE . '(feedback_id)');
       }
 
+      if (feedback_is_mysql()) {
+        $responseUserColumn = $db->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table_name AND COLUMN_NAME = :column_name');
+        $responseUserColumn->execute([':table_name' => FEEDBACK_RESPONSES_TABLE, ':column_name' => 'user_id']);
+        if (!$responseUserColumn->fetch()) {
+          $db->exec('ALTER TABLE ' . FEEDBACK_RESPONSES_TABLE . ' ADD COLUMN user_id VARCHAR(255) NULL');
+        }
+      } else {
+        $responseColumns = $db->query('PRAGMA table_info(' . FEEDBACK_RESPONSES_TABLE . ')')->fetchAll();
+        $hasResponseUser = false;
+        foreach ($responseColumns as $responseColumn) {
+          if (($responseColumn['name'] ?? '') === 'user_id') {
+            $hasResponseUser = true;
+            break;
+          }
+        }
+        if (!$hasResponseUser) {
+          $db->exec('ALTER TABLE ' . FEEDBACK_RESPONSES_TABLE . ' ADD COLUMN user_id TEXT');
+        }
+      }
+
     feedback_ensure_column($db, 'first_name', feedback_is_mysql() ? 'VARCHAR(80) NOT NULL DEFAULT ""' : 'TEXT NOT NULL DEFAULT ""');
     feedback_ensure_column($db, 'last_name', feedback_is_mysql() ? 'VARCHAR(80) NOT NULL DEFAULT ""' : 'TEXT NOT NULL DEFAULT ""');
     feedback_ensure_column($db, 'feedback_category', feedback_is_mysql() ? 'VARCHAR(20) NOT NULL DEFAULT "other"' : 'TEXT NOT NULL DEFAULT "other"');
     feedback_ensure_column($db, 'feedback_type', feedback_is_mysql() ? 'VARCHAR(20) NOT NULL DEFAULT "general"' : 'TEXT NOT NULL DEFAULT "general"');
+    feedback_ensure_column($db, 'user_id', feedback_is_mysql() ? 'VARCHAR(255) NULL' : 'TEXT');
     feedback_ensure_column($db, 'public_id', feedback_is_mysql() ? 'INT NULL UNIQUE' : 'INTEGER');
     feedback_migrate_names($db);
     feedback_migrate_statuses($db);
@@ -395,6 +449,24 @@ function feedback_timestamp(?string $value = null): string
   }
 }
 
+function feedback_sync_user(PDO $db, array $user): void
+{
+  $sql = feedback_is_mysql()
+    ? 'INSERT INTO ' . FEEDBACK_USERS_TABLE . ' (google_sub, email, display_name, first_name, last_name, picture, created_at, updated_at) VALUES (:google_sub, :email, :display_name, :first_name, :last_name, :picture, :created_at, :updated_at) ON DUPLICATE KEY UPDATE email = VALUES(email), display_name = VALUES(display_name), first_name = VALUES(first_name), last_name = VALUES(last_name), picture = VALUES(picture), updated_at = VALUES(updated_at)'
+    : 'INSERT INTO ' . FEEDBACK_USERS_TABLE . ' (google_sub, email, display_name, first_name, last_name, picture, created_at, updated_at) VALUES (:google_sub, :email, :display_name, :first_name, :last_name, :picture, :created_at, :updated_at) ON CONFLICT(google_sub) DO UPDATE SET email = excluded.email, display_name = excluded.display_name, first_name = excluded.first_name, last_name = excluded.last_name, picture = excluded.picture, updated_at = excluded.updated_at';
+  $now = feedback_timestamp();
+  $db->prepare($sql)->execute([
+    ':google_sub' => (string)$user['sub'],
+    ':email' => (string)$user['email'],
+    ':display_name' => (string)$user['name'],
+    ':first_name' => (string)$user['first_name'],
+    ':last_name' => (string)$user['last_name'],
+    ':picture' => (string)$user['picture'],
+    ':created_at' => $now,
+    ':updated_at' => $now,
+  ]);
+}
+
 function feedback_uploaded_files(): array
 {
   $files = $_FILES['attachments'] ?? [];
@@ -486,8 +558,14 @@ if (defined('FEEDBACK_LIBRARY_ONLY')) {
 
 $errors = [];
 $success = false;
+$currentUser = auth_user();
 $old = ['first_name' => '', 'last_name' => '', 'email' => '', 'subject' => '', 'feedback_category' => 'other', 'feedback_type' => 'general', 'message' => ''];
 $uploads = [];
+if ($currentUser) {
+  $old['first_name'] = (string)$currentUser['first_name'];
+  $old['last_name'] = (string)$currentUser['last_name'];
+  $old['email'] = (string)$currentUser['email'];
+}
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $old['first_name'] = trim((string)($_POST['first_name'] ?? ''));
@@ -499,6 +577,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $old['message'] = trim((string)($_POST['message'] ?? ''));
     $uploads = feedback_uploaded_files();
 
+    if ($currentUser) {
+      $old['first_name'] = (string)$currentUser['first_name'];
+      $old['last_name'] = (string)$currentUser['last_name'];
+      $old['email'] = (string)$currentUser['email'];
+    }
+
+    if (!$currentUser) {
+      $errors[] = 'Please sign in with Google before submitting feedback.';
+    }
     if (!hash_equals(feedback_token(), (string)($_POST['csrf_token'] ?? ''))) {
         $errors[] = 'This form session has expired. Please try again.';
     }
@@ -549,9 +636,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 
     if (!$errors) {
       $db = feedback_db();
+      feedback_sync_user($db, $currentUser);
       $nextPublicId = (int)$db->query('SELECT COALESCE(MAX(public_id), 0) + 1 FROM ' . FEEDBACK_TABLE)->fetchColumn();
       $feedbackId = bin2hex(random_bytes(32));
-      $stmt = $db->prepare('INSERT INTO ' . FEEDBACK_TABLE . ' (id, public_id, name, first_name, last_name, email, subject, feedback_category, feedback_type, message, contact_allowed, status, created_at) VALUES (:id, :public_id, :name, :first_name, :last_name, :email, :subject, :feedback_category, :feedback_type, :message, :contact_allowed, "new", :created_at)');
+      $stmt = $db->prepare('INSERT INTO ' . FEEDBACK_TABLE . ' (id, public_id, name, first_name, last_name, email, subject, feedback_category, feedback_type, user_id, message, contact_allowed, status, created_at) VALUES (:id, :public_id, :name, :first_name, :last_name, :email, :subject, :feedback_category, :feedback_type, :user_id, :message, :contact_allowed, "new", :created_at)');
         $stmt->execute([
         ':id' => $feedbackId,
             ':public_id' => $nextPublicId,
@@ -562,6 +650,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             ':subject' => $old['subject'],
             ':feedback_category' => $old['feedback_category'],
             ':feedback_type' => $old['feedback_type'],
+            ':user_id' => (string)$currentUser['sub'],
             ':message' => $old['message'],
             ':contact_allowed' => !empty($_POST['contact_allowed']) ? 1 : 0,
             ':created_at' => feedback_timestamp(),
@@ -628,6 +717,7 @@ $listStmt->execute($listParams);
 $feedback = $listStmt->fetchAll();
 $csrfToken = feedback_token();
 $turnstileSiteKey = feedback_turnstile_site_key();
+$googleLoginUrl = auth_google_configured() ? auth_login_url('/feedback') : '#';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -667,6 +757,11 @@ $turnstileSiteKey = feedback_turnstile_site_key();
       <div class="section-content">
         <div class="feedback-toolbar">
           <p>Browse feedback from the community.</p>
+          <?php if ($currentUser): ?>
+            <span class="feedback-auth-state">Signed in as <?= feedback_escape((string)$currentUser['name']) ?> · <a href="/auth/logout">Sign out</a></span>
+          <?php elseif (auth_google_configured()): ?>
+            <a class="feedback-login-button" href="<?= feedback_escape($googleLoginUrl) ?>">Sign in with Google to contribute</a>
+          <?php endif; ?>
           <button type="button" id="open-feedback-modal" class="feedback-submit-button">Submit Feedback</button>
         </div>
         <form method="get" action="/feedback" class="feedback-filter-form">
@@ -741,9 +836,11 @@ $turnstileSiteKey = feedback_turnstile_site_key();
       <button type="button" id="close-feedback-modal" class="feedback-modal-close" aria-label="Close feedback form">&times;</button>
       <h2 id="feedback-modal-title">Submit Feedback</h2>
       <p>Feedback is reviewed before it appears publicly.</p>
+      <?php if (!$currentUser && auth_google_configured()): ?><p class="feedback-auth-prompt"><a class="feedback-login-button" href="<?= feedback_escape($googleLoginUrl) ?>">Sign in with Google to submit feedback</a></p><?php endif; ?>
+      <?php if (!$currentUser && !auth_google_configured()): ?><p class="feedback-auth-prompt">Google sign-in is not configured yet.</p><?php endif; ?>
       <?php if ($success): ?><div class="feedback-success">Thanks. Your feedback has been received for review.</div><?php endif; ?>
       <?php if ($errors): ?><div class="feedback-error"><ul><?php foreach ($errors as $error): ?><li><?= feedback_escape($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
-      <form method="post" enctype="multipart/form-data" class="feedback-form">
+      <form method="post" enctype="multipart/form-data" class="feedback-form" <?= !$currentUser ? 'aria-disabled="true"' : '' ?>>
         <input type="hidden" name="csrf_token" value="<?= feedback_escape($csrfToken) ?>">
         <label class="feedback-trap" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
         <div class="grid two">

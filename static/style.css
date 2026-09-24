@@ -255,6 +255,11 @@ body {
 .feedback-meta { color: var(--muted); font-size: 0.86rem; }
 .feedback-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .feedback-toolbar p { margin: 0; }
+.feedback-auth-state { margin-left: auto; color: var(--muted); font-size: 0.82rem; }
+.feedback-auth-state a, .feedback-login-button { color: var(--accent); }
+.feedback-login-button { display: inline-flex; align-items: center; justify-content: center; width: fit-content; padding: 0.55rem 0.8rem; border: 1px solid var(--accent); border-radius: 0.45rem; background: rgba(137, 180, 250, 0.1); text-decoration: none; font-weight: 700; }
+.feedback-login-button:hover { background: rgba(137, 180, 250, 0.2); }
+.feedback-auth-prompt { margin: 0 0 1rem; }
 .feedback-submit-button,
 .feedback-toolbar .feedback-submit-button {
   display: inline-flex;
@@ -353,6 +358,8 @@ body {
 .feedback-response-author span { padding: 0.2rem 0.4rem; border: 1px solid rgba(137, 180, 250, 0.4); border-radius: 999px; color: var(--accent); font-size: 0.68rem; font-weight: 700; }
 .feedback-response p { margin: 0.8rem 0; line-height: 1.65; }
 .feedback-response time, .feedback-response-empty { color: var(--muted); font-size: 0.78rem; }
+.feedback-comment-form { display: grid; gap: 0.8rem; margin-top: 1rem; }
+.feedback-comment-form textarea { min-height: 7rem; resize: vertical; background: var(--panel-dark); color: var(--text); }
 
 .grid.two {
   grid-template-columns: 1fr 1fr;

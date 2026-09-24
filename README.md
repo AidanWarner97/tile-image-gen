@@ -47,6 +47,16 @@ Feedback is available at `/feedback.php`. The page shows approved submissions in
 
 Cloudflare Turnstile can be enabled for feedback submissions by setting `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in the server environment. Both values are required; when configured, the widget is shown and every submission is verified server-side.
 
+Google sign-in can be enabled for feedback submissions and public comments with:
+
+```env
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_REDIRECT_URI=https://your-domain.example/auth/google/callback
+```
+
+Register the exact redirect URI in Google Cloud Console. Public feedback remains readable without signing in; Google authentication is required to submit feedback or post comments.
+
 ## Generation logging
 
 Generator activity is written to the MariaDB/MySQL table `tig_generate_log`. Redis is used as the fast queue/cache via the Unix socket in `REDIS_SOCKET` (default `/run/redis/redis.sock`), with `REDIS_HOST`/`REDIS_PORT` as a fallback. `REDIS_PASSWORD` and `REDIS_DATABASE` are also supported. Set `DB_*` and `REDIS_*` in the server environment; `tig_generate_log` is created automatically. A generated response is marked `generated`, validation or processing failures are marked `error`, and the browser's Download action marks `downloaded` as `1`.

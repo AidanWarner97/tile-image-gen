@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
+if ($path === '/auth/google' || $path === '/auth/google/callback' || $path === '/auth/logout') {
+    $_GET['action'] = $path === '/auth/google' ? 'login' : ($path === '/auth/google/callback' ? 'callback' : 'logout');
+    require __DIR__ . '/auth-handler.php';
+    return true;
+}
+
 if (str_starts_with($path, '/feedback-data/')) {
     http_response_code(404);
     exit;

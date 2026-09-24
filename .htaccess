@@ -1,4 +1,7 @@
 RewriteEngine On
+RewriteRule ^auth/google/?$ auth-handler.php?action=login [END,QSA]
+RewriteRule ^auth/google/callback/?$ auth-handler.php?action=callback [END,QSA]
+RewriteRule ^auth/logout/?$ auth-handler.php?action=logout [END,QSA]
 RewriteRule ^feedback/?$ feedback.php [END,QSA]
 RewriteRule ^feedback/([^/]+)/?$ feedback-detail/detail.php?id=$1 [END,QSA]
 RewriteRule ^updates/?$ updates/index.php [L,QSA]
