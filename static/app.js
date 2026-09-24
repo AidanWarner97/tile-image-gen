@@ -15,12 +15,61 @@ const layoutSelect = document.getElementById("layoutType");
 const ratioWarning = document.getElementById("ratio-warning");
 const tileWidthInput = form.elements.tileWidth;
 const tileHeightInput = form.elements.tileHeight;
+const imageSourceInputs = form.elements.imageSource;
+const tileNameBlock = document.getElementById("tile-name-block");
+const uploadSourceBlock = document.getElementById("upload-source-block");
+const predefinedSourceBlock = document.getElementById("predefined-source-block");
+const tileSizeFields = document.getElementById("tile-size-fields");
+const predefinedBrand = document.getElementById("predefined-brand");
+const predefinedRange = document.getElementById("predefined-range");
+const predefinedVersion = document.getElementById("predefined-version");
+const predefinedSize = document.getElementById("predefined-size");
 
 resultModal.hidden = true;
 
 let generatedUrl = "";
 let generatedFilename = "tile-pattern.png";
 let generationLogId = "";
+
+function selectedImageSource() {
+  return Array.from(imageSourceInputs).find((input) => input.checked)?.value || "upload";
+}
+
+function updatePredefinedNameAndSize() {
+  const parts = [predefinedBrand, predefinedRange, predefinedVersion]
+    .map((select) => select.selectedOptions[0]?.textContent.trim())
+    .filter((value) => value && !value.startsWith("Choose"));
+  const size = predefinedSize.selectedOptions[0];
+  const dimensions = size?.dataset.width && size?.dataset.height ? `${size.dataset.width}x${size.dataset.height}` : "";
+  form.elements.tileName.value = [...parts, dimensions].filter(Boolean).join(" ");
+  if (dimensions) {
+    tileWidthInput.value = size.dataset.width;
+    tileHeightInput.value = size.dataset.height;
+  }
+}
+
+function updateImageSourceFields() {
+  const predefined = selectedImageSource() === "predefined";
+  uploadSourceBlock.hidden = predefined;
+  predefinedSourceBlock.hidden = !predefined;
+  tileNameBlock.hidden = predefined;
+  tileSizeFields.hidden = predefined;
+  images.required = !predefined;
+  tileWidthInput.required = !predefined;
+  tileHeightInput.required = !predefined;
+  [predefinedBrand, predefinedRange, predefinedVersion, predefinedSize].forEach((select) => {
+    select.disabled = !predefined;
+    select.required = predefined && select !== predefinedSize;
+  });
+  if (predefined) {
+    updatePredefinedNameAndSize();
+  } else {
+    images.required = true;
+    tileWidthInput.required = true;
+    tileHeightInput.required = true;
+  }
+  updateRatioWarning();
+}
 
 function isUnsupportedHerringboneRatio() {
   const width = Number(tileWidthInput.value);
@@ -163,6 +212,12 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  if (selectedImageSource() === "predefined") {
+    event.preventDefault();
+    alert("Predefined tile generation is not available yet.");
+    return;
+  }
+
   setLoading(true);
   const data = new FormData(form);
 
@@ -193,6 +248,10 @@ form.addEventListener("submit", async (event) => {
 layoutSelect.addEventListener("change", updateRatioWarning);
 tileWidthInput.addEventListener("input", updateRatioWarning);
 tileHeightInput.addEventListener("input", updateRatioWarning);
+Array.from(imageSourceInputs).forEach((input) => input.addEventListener("change", updateImageSourceFields));
+[predefinedBrand, predefinedRange, predefinedVersion, predefinedSize].forEach((select) => {
+  select.addEventListener("change", updatePredefinedNameAndSize);
+});
 
 modalClose.addEventListener("click", () => {
   closeResultModal();
@@ -235,4 +294,5 @@ document.addEventListener("keydown", (event) => {
 document.getElementById("year").textContent = String(new Date().getFullYear());
 updateUploadText(0);
 updateRatioWarning();
+updateImageSourceFields();
 fetchLatestPost();

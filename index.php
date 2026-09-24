@@ -52,21 +52,20 @@
                 </label>
                 <label>
                   <span class="image-source-option-text">Select A Tile</span>
-                  <span class="coming-soon">(Coming Soon)</span>
-                  <input type="radio" name="imageSource" value="predefined" required disabled>
+                  <input type="radio" name="imageSource" value="predefined" required>
                 </label>
               </div>
             </div>
           </div>
-          <div class="form-block">
+          <div class="form-block" id="tile-name-block">
             <h3>Tile Name</h3>
             <label>
               Tile name
-              <input type="text" name="tileName" required placeholder="e.g. Charlie Blue">
+              <input type="text" name="tileName" id="tile-name" required placeholder="e.g. Charlie Blue">
             </label>
           </div>
 
-          <div class="form-block">
+          <div class="form-block" id="upload-source-block">
             <h3>Upload Files</h3>
             <div class="upload-panel">
               <label id="drop-area" for="images" class="drop-area">
@@ -78,18 +77,55 @@
             </div>
           </div>
 
-          <div class="form-block">
-            <h3>Settings</h3>
-            <div class="settings-subhead">Tile Sizes</div>
+          <div class="form-block" id="predefined-source-block" hidden>
+            <h3>Select A Tile</h3>
             <div class="grid two">
               <label>
+                Select a Brand
+                <select name="predefinedBrand" id="predefined-brand" disabled>
+                  <option value="">Choose a brand</option>
+                  <option value="easy-bathrooms">Easy Bathrooms</option>
+                </select>
+              </label>
+              <label>
+                Select your range
+                <select name="predefinedRange" id="predefined-range" disabled>
+                  <option value="">Choose a range</option>
+                  <option value="charlie">Charlie</option>
+                </select>
+              </label>
+              <label>
+                Select your version
+                <select name="predefinedVersion" id="predefined-version" disabled>
+                  <option value="">Choose a version</option>
+                  <option value="blue">Blue</option>
+                </select>
+              </label>
+              <label>
+                Select a size
+                <select name="predefinedSize" id="predefined-size" disabled>
+                  <option value="">Choose a size</option>
+                  <option value="1200x600" data-width="1200" data-height="600">1200 x 600</option>
+                </select>
+              </label>
+            </div>
+            <p class="form-warning">Predefined tile generation will be available when the tile catalogue is connected.</p>
+          </div>
+
+          <div class="form-block">
+            <h3>Settings</h3>
+            <div id="tile-size-fields">
+              <div class="settings-subhead">Tile Sizes</div>
+              <div class="grid two">
+              <label>
                 Width
-                <input type="number" name="tileWidth" min="1" step="1" required placeholder="200">
+                <input type="number" name="tileWidth" id="tile-width" min="1" step="1" required placeholder="200">
               </label>
               <label>
                 Height
-                <input type="number" name="tileHeight" min="1" step="1" required placeholder="100">
+                <input type="number" name="tileHeight" id="tile-height" min="1" step="1" required placeholder="100">
               </label>
+              </div>
             </div>
             <p id="ratio-warning" class="form-warning" hidden>Herringbone currently supports ratios up to 6:1. Higher ratios are temporarily disabled.</p>
 

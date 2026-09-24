@@ -1016,6 +1016,7 @@ $tileWidth = max(1, (int)($_POST['tileWidth'] ?? 0));
 $tileHeight = max(1, (int)($_POST['tileHeight'] ?? 0));
 $groutSize = max(0, (int)($_POST['groutSize'] ?? 0));
 $groutHex = (string)($_POST['groutColour'] ?? '#000000');
+$imageSource = (string)($_POST['imageSource'] ?? 'upload');
 $GLOBALS['generateLogRecord'] = [
     'ip' => (string)($_SERVER['REMOTE_ADDR'] ?? ''),
     'tile_name' => $tileName,
@@ -1026,6 +1027,10 @@ $GLOBALS['generateLogRecord'] = [
     'grout_colour' => $groutHex,
     'grout_size' => $groutSize,
 ];
+
+if ($imageSource === 'predefined') {
+    fail_request('Predefined tile generation is not available yet.', 501);
+}
 
 if ($tileWidth < 1 || $tileHeight < 1) {
     fail_request('Tile width and height must be greater than 0.');
