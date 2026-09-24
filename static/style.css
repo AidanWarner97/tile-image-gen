@@ -355,7 +355,9 @@ body {
 .feedback-response { margin-top: 0.8rem; padding: 1rem; border-left: 3px solid var(--accent); border-radius: 0.35rem; background: var(--panel-dark); }
 .feedback-response-author { display: flex; align-items: center; gap: 0.6rem; }
 .feedback-response-author strong { font-size: 0.9rem; }
-.feedback-response-author span { padding: 0.2rem 0.4rem; border: 1px solid rgba(137, 180, 250, 0.4); border-radius: 999px; color: var(--accent); font-size: 0.68rem; font-weight: 700; }
+.feedback-response-author .feedback-author-role { padding: 0.2rem 0.4rem; border: 1px solid rgba(137, 180, 250, 0.4); border-radius: 999px; color: var(--accent); font-size: 0.68rem; font-weight: 700; }
+.feedback-response-author .feedback-author-admin { border-color: rgba(166, 227, 161, 0.55); color: var(--success); background: rgba(166, 227, 161, 0.09); }
+.feedback-response-author .feedback-author-end-user { border-color: rgba(137, 180, 250, 0.4); color: var(--accent); }
 .feedback-response p { margin: 0.8rem 0; line-height: 1.65; }
 .feedback-response time, .feedback-response-empty { color: var(--muted); font-size: 0.78rem; }
 .feedback-comment-form { display: grid; gap: 0.8rem; margin-top: 1rem; }

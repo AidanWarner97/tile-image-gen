@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && is_array($entry)) {
     $commentError = 'Please enter a comment under 5,000 characters.';
   } else {
     feedback_sync_user($db, $currentUser);
-    $responseStmt = $db->prepare('INSERT INTO ' . FEEDBACK_RESPONSES_TABLE . ' (feedback_id, user_id, body, author, created_at) VALUES (:feedback_id, :user_id, :body, :author, :created_at)');
+    $responseStmt = $db->prepare('INSERT INTO ' . FEEDBACK_RESPONSES_TABLE . ' (feedback_id, user_id, body, author, author_role, created_at) VALUES (:feedback_id, :user_id, :body, :author, "end_user", :created_at)');
     $responseStmt->execute([
       ':feedback_id' => (string)$entry['id'],
       ':user_id' => (string)$currentUser['sub'],
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && is_array($entry)) {
 }
 
 if (is_array($entry)) {
-  $responseStmt = $db->prepare('SELECT body, author, created_at FROM ' . FEEDBACK_RESPONSES_TABLE . ' WHERE feedback_id = :feedback_id ORDER BY created_at ASC, id ASC');
+  $responseStmt = $db->prepare('SELECT body, author, author_role, created_at FROM ' . FEEDBACK_RESPONSES_TABLE . ' WHERE feedback_id = :feedback_id ORDER BY created_at ASC, id ASC');
   $responseStmt->execute([':feedback_id' => $entry['id']]);
   $responses = $responseStmt->fetchAll();
 }
@@ -88,7 +88,7 @@ if (!is_array($entry)) {
           <section class="feedback-response-thread" aria-labelledby="comments-heading">
             <div class="feedback-response-heading"><h3 id="comments-heading">Public comments</h3><span><?= count($responses) ?></span></div>
             <?php if (!$responses): ?><p class="feedback-response-empty">No public comments yet.</p><?php endif; ?>
-            <?php foreach ($responses as $response): ?><article class="feedback-response"><div class="feedback-response-author"><strong><?= feedback_escape((string)$response['author']) ?></strong><span>End-User</span></div><p><?= nl2br(feedback_escape((string)$response['body'])) ?></p><time datetime="<?= feedback_escape(date('c', strtotime((string)$response['created_at']))) ?>"><?= feedback_escape(date('j M Y', strtotime((string)$response['created_at']))) ?></time></article><?php endforeach; ?>
+            <?php foreach ($responses as $response): ?><?php $isAdmin = ($response['author_role'] ?? 'end_user') === 'admin'; ?><article class="feedback-response"><div class="feedback-response-author"><strong><?= feedback_escape((string)$response['author']) ?></strong><span class="feedback-author-role <?= $isAdmin ? 'feedback-author-admin' : 'feedback-author-end-user' ?>"><?= $isAdmin ? 'Admin' : 'End-User' ?></span></div><p><?= nl2br(feedback_escape((string)$response['body'])) ?></p><time datetime="<?= feedback_escape(date('c', strtotime((string)$response['created_at']))) ?>"><?= feedback_escape(date('j M Y', strtotime((string)$response['created_at']))) ?></time></article><?php endforeach; ?>
             <?php if ($commentError): ?><p class="feedback-error"><?= feedback_escape($commentError) ?></p><?php endif; ?>
             <?php if ($currentUser): ?>
               <form method="post" class="feedback-comment-form">

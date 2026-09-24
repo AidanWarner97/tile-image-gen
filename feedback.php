@@ -230,6 +230,7 @@ function feedback_db(): PDO
           user_id VARCHAR(255) NULL,
           body TEXT NOT NULL,
           author VARCHAR(100) NOT NULL,
+          author_role VARCHAR(20) NOT NULL DEFAULT "end_user",
           created_at DATETIME NOT NULL,
           emailed_at DATETIME NULL,
           email_error VARCHAR(500) NULL,
@@ -242,6 +243,7 @@ function feedback_db(): PDO
           user_id TEXT NULL,
           body TEXT NOT NULL,
           author TEXT NOT NULL,
+          author_role TEXT NOT NULL DEFAULT "end_user",
           created_at TEXT NOT NULL,
           emailed_at TEXT NULL,
           email_error TEXT NULL
@@ -255,6 +257,12 @@ function feedback_db(): PDO
         if (!$responseUserColumn->fetch()) {
           $db->exec('ALTER TABLE ' . FEEDBACK_RESPONSES_TABLE . ' ADD COLUMN user_id VARCHAR(255) NULL');
         }
+        $responseRoleColumn = $db->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table_name AND COLUMN_NAME = :column_name');
+        $responseRoleColumn->execute([':table_name' => FEEDBACK_RESPONSES_TABLE, ':column_name' => 'author_role']);
+        if (!$responseRoleColumn->fetch()) {
+          $db->exec('ALTER TABLE ' . FEEDBACK_RESPONSES_TABLE . ' ADD COLUMN author_role VARCHAR(20) NOT NULL DEFAULT "end_user" AFTER author');
+          $db->exec('UPDATE ' . FEEDBACK_RESPONSES_TABLE . ' SET author_role = "admin" WHERE user_id IS NULL');
+        }
       } else {
         $responseColumns = $db->query('PRAGMA table_info(' . FEEDBACK_RESPONSES_TABLE . ')')->fetchAll();
         $hasResponseUser = false;
@@ -266,6 +274,18 @@ function feedback_db(): PDO
         }
         if (!$hasResponseUser) {
           $db->exec('ALTER TABLE ' . FEEDBACK_RESPONSES_TABLE . ' ADD COLUMN user_id TEXT');
+        }
+        $responseColumns = $db->query('PRAGMA table_info(' . FEEDBACK_RESPONSES_TABLE . ')')->fetchAll();
+        $hasResponseRole = false;
+        foreach ($responseColumns as $responseColumn) {
+          if (($responseColumn['name'] ?? '') === 'author_role') {
+            $hasResponseRole = true;
+            break;
+          }
+        }
+        if (!$hasResponseRole) {
+          $db->exec('ALTER TABLE ' . FEEDBACK_RESPONSES_TABLE . ' ADD COLUMN author_role TEXT NOT NULL DEFAULT "end_user"');
+          $db->exec('UPDATE ' . FEEDBACK_RESPONSES_TABLE . ' SET author_role = "admin" WHERE user_id IS NULL');
         }
       }
 
