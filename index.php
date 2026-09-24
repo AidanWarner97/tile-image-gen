@@ -52,8 +52,7 @@
                 </label>
                 <label>
                   <span class="image-source-option-text">Select A Tile</span>
-                  <span class="coming-soon">(Coming Soon)</span>
-                  <input type="radio" name="imageSource" value="predefined" required disabled>
+                  <input type="radio" name="imageSource" value="predefined" required>
                 </label>
               </div>
             </div>
@@ -106,7 +105,6 @@
                 </select>
               </label>
             </div>
-            <p class="form-warning">Predefined tile generation will be available when the tile catalogue is connected.</p>
           </div>
 
           <div class="form-block">
@@ -246,6 +244,6 @@
     <p>&copy; <span id="year"></span> Aidan Warner. All rights reserved.</p>
   </footer>
 
-  <script src="static/app.js"></script>
+  <script src="static/app.js?v=2"></script>
 </body>
 </html>

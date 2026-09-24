@@ -254,12 +254,6 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  if (selectedImageSource() === "predefined") {
-    event.preventDefault();
-    alert("Predefined tile generation is not available yet.");
-    return;
-  }
-
   setLoading(true);
   const data = new FormData(form);
 

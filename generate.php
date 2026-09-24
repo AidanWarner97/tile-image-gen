@@ -17,6 +17,72 @@ function fail_request(string $message, int $code = 400): never
     exit;
 }
 
+function predefined_tile_files(string $brandId, string $rangeId, string $versionId, string $sizeId): array
+{
+    $cataloguePath = __DIR__ . '/catalogue/tiles.json';
+    $catalogue = is_file($cataloguePath) ? json_decode((string)file_get_contents($cataloguePath), true) : null;
+    if (!is_array($catalogue) || !is_array($catalogue['brands'] ?? null)) {
+        fail_request('The predefined tile catalogue is unavailable.', 503);
+    }
+
+    $brand = null;
+    foreach ($catalogue['brands'] as $candidate) {
+        if (is_array($candidate) && ($candidate['id'] ?? '') === $brandId) {
+            $brand = $candidate;
+            break;
+        }
+    }
+    $range = null;
+    foreach (($brand['ranges'] ?? []) as $candidate) {
+        if (is_array($candidate) && ($candidate['id'] ?? '') === $rangeId) {
+            $range = $candidate;
+            break;
+        }
+    }
+    $version = null;
+    foreach (($range['versions'] ?? []) as $candidate) {
+        if (is_array($candidate) && ($candidate['id'] ?? '') === $versionId) {
+            $version = $candidate;
+            break;
+        }
+    }
+    $size = null;
+    foreach (($version['sizes'] ?? []) as $candidate) {
+        if (is_array($candidate) && ($candidate['id'] ?? '') === $sizeId) {
+            $size = $candidate;
+            break;
+        }
+    }
+
+    if (!is_array($brand) || !is_array($range) || !is_array($version) || !is_array($size)) {
+        fail_request('The selected predefined tile is not available.', 400);
+    }
+
+    $catalogueRoot = realpath(__DIR__ . '/catalogue');
+    $files = [];
+    foreach (($size['images'] ?? []) as $relativePath) {
+        if (!is_string($relativePath) || $catalogueRoot === false) {
+            continue;
+        }
+        $absolutePath = realpath(__DIR__ . '/' . ltrim($relativePath, '/\\'));
+        if ($absolutePath === false || !str_starts_with($absolutePath, $catalogueRoot . DIRECTORY_SEPARATOR) || !is_file($absolutePath)) {
+            continue;
+        }
+        $files[] = $absolutePath;
+    }
+
+    if (!$files) {
+        fail_request('No images are configured for the selected predefined tile.', 503);
+    }
+
+    return [
+        'files' => $files,
+        'width' => max(1, (int)($size['width'] ?? 0)),
+        'height' => max(1, (int)($size['height'] ?? 0)),
+        'name' => safe_filename(implode(' ', [(string)$brand['name'], (string)$range['name'], (string)$version['name'], (string)$size['name']])),
+    ];
+}
+
 function hex_to_rgb(string $hex): array
 {
     $clean = ltrim(trim($hex), '#');
@@ -874,7 +940,7 @@ function output_svg_fallback(array $tmpFiles, string $tileName, string $layoutTy
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $images = [];
     foreach ($tmpFiles as $tmp) {
-        if (!is_string($tmp) || $tmp === '' || !is_uploaded_file($tmp)) {
+        if (!is_string($tmp) || $tmp === '' || !is_file($tmp)) {
             continue;
         }
 
@@ -1029,7 +1095,25 @@ $GLOBALS['generateLogRecord'] = [
 ];
 
 if ($imageSource === 'predefined') {
-    fail_request('Predefined tile generation is not available yet.', 501);
+    $predefined = predefined_tile_files(
+        (string)($_POST['predefinedBrand'] ?? ''),
+        (string)($_POST['predefinedRange'] ?? ''),
+        (string)($_POST['predefinedVersion'] ?? ''),
+        (string)($_POST['predefinedSize'] ?? '')
+    );
+    $tmpFiles = $predefined['files'];
+    $tileWidth = $predefined['width'];
+    $tileHeight = $predefined['height'];
+    $tileName = $predefined['name'];
+    $GLOBALS['generateLogRecord']['tile_name'] = $tileName;
+    $GLOBALS['generateLogRecord']['tile_size_width'] = $tileWidth;
+    $GLOBALS['generateLogRecord']['tile_size_height'] = $tileHeight;
+    $GLOBALS['generateLogRecord']['image_file_count'] = count($tmpFiles);
+} else {
+    $tmpFiles = $_FILES['images']['tmp_name'] ?? [];
+    if (!is_array($tmpFiles)) {
+        $tmpFiles = [$tmpFiles];
+    }
 }
 
 if ($tileWidth < 1 || $tileHeight < 1) {
@@ -1040,12 +1124,7 @@ if ($layoutType === 'herringbone' && ($tileWidth / $tileHeight) > 6) {
     fail_request('Herringbone currently supports ratios up to 6:1. Higher ratios are temporarily disabled.');
 }
 
-$tmpFiles = $_FILES['images']['tmp_name'] ?? [];
-if (!is_array($tmpFiles)) {
-    $tmpFiles = [$tmpFiles];
-}
-
-if (!isset($_FILES['images'])) {
+if ($imageSource !== 'predefined' && !isset($_FILES['images'])) {
     fail_request('At least one image is required.');
 }
 
@@ -1055,7 +1134,7 @@ if (!extension_loaded('gd')) {
 
 $images = [];
 foreach ($tmpFiles as $tmp) {
-    if (!is_string($tmp) || $tmp === '' || !is_uploaded_file($tmp)) {
+    if (!is_string($tmp) || $tmp === '' || !is_file($tmp)) {
         continue;
     }
 
