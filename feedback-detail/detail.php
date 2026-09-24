@@ -85,7 +85,7 @@ if (!is_array($entry)) {
           <section class="feedback-response-thread" aria-labelledby="comments-heading">
             <div class="feedback-response-heading"><h3 id="comments-heading">Public comments</h3><span><?= count($responses) ?></span></div>
             <?php if (!$responses): ?><p class="feedback-response-empty">No public comments yet.</p><?php endif; ?>
-            <?php foreach ($responses as $response): ?><article class="feedback-response"><div class="feedback-response-author"><strong><?= feedback_escape((string)$response['author']) ?></strong><span>Community comment</span></div><p><?= nl2br(feedback_escape((string)$response['body'])) ?></p><time datetime="<?= feedback_escape(date('c', strtotime((string)$response['created_at']))) ?>"><?= feedback_escape(date('j M Y', strtotime((string)$response['created_at']))) ?></time></article><?php endforeach; ?>
+            <?php foreach ($responses as $response): ?><article class="feedback-response"><div class="feedback-response-author"><strong><?= feedback_escape((string)$response['author']) ?></strong><span>End-User</span></div><p><?= nl2br(feedback_escape((string)$response['body'])) ?></p><time datetime="<?= feedback_escape(date('c', strtotime((string)$response['created_at']))) ?>"><?= feedback_escape(date('j M Y', strtotime((string)$response['created_at']))) ?></time></article><?php endforeach; ?>
             <?php if ($commentError): ?><p class="feedback-error"><?= feedback_escape($commentError) ?></p><?php endif; ?>
             <?php if ($currentUser): ?>
               <form method="post" class="feedback-comment-form">
