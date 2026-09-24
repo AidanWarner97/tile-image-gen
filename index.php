@@ -42,6 +42,23 @@
       <div class="section-content">
         <form id="generator-form" action="generate.php" method="POST" enctype="multipart/form-data">
           <div class="form-block">
+            <h3>Image Source</h3>
+            <div class="image-source-field">
+              <span class="image-source-label">Image Source</span>
+              <div id="image-source">
+                <label>
+                  <span class="image-source-option-text">Upload Your Own</span>
+                  <input type="radio" name="imageSource" value="upload" required checked>
+                </label>
+                <label>
+                  <span class="image-source-option-text">Select A Tile</span>
+                  <span class="coming-soon">(Coming Soon)</span>
+                  <input type="radio" name="imageSource" value="predefined" required disabled>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-block">
             <h3>Tile Name</h3>
             <label>
               Tile name
