@@ -60,3 +60,17 @@ Register the exact redirect URI in Google Cloud Console. Public feedback remains
 ## Generation logging
 
 Generator activity is written to the MariaDB/MySQL table `tig_generate_log`. Redis is used as the fast queue/cache via the Unix socket in `REDIS_SOCKET` (default `/run/redis/redis.sock`), with `REDIS_HOST`/`REDIS_PORT` as a fallback. `REDIS_PASSWORD` and `REDIS_DATABASE` are also supported. Set `DB_*` and `REDIS_*` in the server environment; `tig_generate_log` is created automatically. A generated response is marked `generated`, validation or processing failures are marked `error`, and the browser's Download action marks `downloaded` as `1`.
+
+## Predefined tile catalogue
+
+Predefined tile choices are loaded in the background from `catalogue/tiles.json`. The catalogue is structured as `brands`, containing `ranges`, then `versions`, then `sizes`. Each size includes `width`, `height`, and an `images` array for the server-side tile assets. Add image paths relative to the project root, for example:
+
+```json
+{
+  "id": "1200x600",
+  "name": "1200 x 600",
+  "width": 1200,
+  "height": 600,
+  "images": ["catalogue/images/easy-bathrooms/charlie/blue/1200x600-1.jpg"]
+}
+```

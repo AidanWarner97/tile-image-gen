@@ -1,0 +1,43 @@
+{
+  "brands": [
+    {
+      "id": "easy-bathrooms",
+      "name": "Easy Bathrooms",
+      "ranges": [
+        {
+          "id": "charlie",
+          "name": "Charlie",
+          "versions": [
+            {
+              "id": "blue",
+              "name": "Blue",
+              "sizes": [
+                {
+                  "id": "1200x600",
+                  "name": "1200 x 600",
+                  "width": 1200,
+                  "height": 600,
+                  "images": []
+                },
+                {
+                  "id": "600x600",
+                  "name": "600 x 600",
+                  "width": 600,
+                  "height": 600,
+                  "images": []
+                },
+                {
+                  "id": "600x300",
+                  "name": "600 x 300",
+                  "width": 600,
+                  "height": 300,
+                  "images": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

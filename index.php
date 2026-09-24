@@ -84,28 +84,24 @@
                 Select a Brand
                 <select name="predefinedBrand" id="predefined-brand" disabled>
                   <option value="">Choose a brand</option>
-                  <option value="easy-bathrooms">Easy Bathrooms</option>
                 </select>
               </label>
               <label>
                 Select your range
                 <select name="predefinedRange" id="predefined-range" disabled>
                   <option value="">Choose a range</option>
-                  <option value="charlie">Charlie</option>
                 </select>
               </label>
               <label>
                 Select your version
                 <select name="predefinedVersion" id="predefined-version" disabled>
                   <option value="">Choose a version</option>
-                  <option value="blue">Blue</option>
                 </select>
               </label>
               <label>
                 Select a size
                 <select name="predefinedSize" id="predefined-size" disabled>
                   <option value="">Choose a size</option>
-                  <option value="1200x600" data-width="1200" data-height="600">1200 x 600</option>
                 </select>
               </label>
             </div>

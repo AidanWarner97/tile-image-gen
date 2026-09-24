@@ -24,6 +24,7 @@ const predefinedBrand = document.getElementById("predefined-brand");
 const predefinedRange = document.getElementById("predefined-range");
 const predefinedVersion = document.getElementById("predefined-version");
 const predefinedSize = document.getElementById("predefined-size");
+let tileCatalogue = null;
 
 resultModal.hidden = true;
 
@@ -46,6 +47,47 @@ function updatePredefinedNameAndSize() {
     tileWidthInput.value = size.dataset.width;
     tileHeightInput.value = size.dataset.height;
   }
+}
+
+function resetSelect(select, placeholder) {
+  select.replaceChildren(new Option(placeholder, ""));
+  select.value = "";
+}
+
+function populateSelect(select, items, placeholder) {
+  select.replaceChildren(new Option(placeholder, ""));
+  items.forEach((item) => select.add(new Option(item.name, item.id)));
+  select.disabled = false;
+}
+
+function selectedCatalogueItem(items, id) {
+  return items?.find((item) => item.id === id) || null;
+}
+
+function populateCatalogueBrands() {
+  populateSelect(predefinedBrand, tileCatalogue.brands || [], "Choose a brand");
+  resetSelect(predefinedRange, "Choose a range");
+  resetSelect(predefinedVersion, "Choose a version");
+  resetSelect(predefinedSize, "Choose a size");
+  predefinedRange.disabled = true;
+  predefinedVersion.disabled = true;
+  predefinedSize.disabled = true;
+}
+
+function loadTileCatalogue() {
+  fetch("catalogue/tiles.json", { cache: "force-cache" })
+    .then((response) => {
+      if (!response.ok) throw new Error("Catalogue unavailable");
+      return response.json();
+    })
+    .then((catalogue) => {
+      tileCatalogue = catalogue;
+      populateCatalogueBrands();
+    })
+    .catch(() => {
+      tileCatalogue = null;
+      predefinedSourceBlock.querySelector(".form-warning").textContent = "The tile catalogue could not be loaded.";
+    });
 }
 
 function updateImageSourceFields() {
@@ -252,6 +294,38 @@ Array.from(imageSourceInputs).forEach((input) => input.addEventListener("change"
 [predefinedBrand, predefinedRange, predefinedVersion, predefinedSize].forEach((select) => {
   select.addEventListener("change", updatePredefinedNameAndSize);
 });
+predefinedBrand.addEventListener("change", () => {
+  const brand = selectedCatalogueItem(tileCatalogue?.brands, predefinedBrand.value);
+  populateSelect(predefinedRange, brand?.ranges || [], "Choose a range");
+  resetSelect(predefinedVersion, "Choose a version");
+  resetSelect(predefinedSize, "Choose a size");
+  predefinedVersion.disabled = true;
+  predefinedSize.disabled = true;
+  updatePredefinedNameAndSize();
+});
+predefinedRange.addEventListener("change", () => {
+  const brand = selectedCatalogueItem(tileCatalogue?.brands, predefinedBrand.value);
+  const range = selectedCatalogueItem(brand?.ranges, predefinedRange.value);
+  populateSelect(predefinedVersion, range?.versions || [], "Choose a version");
+  resetSelect(predefinedSize, "Choose a size");
+  predefinedSize.disabled = true;
+  updatePredefinedNameAndSize();
+});
+predefinedVersion.addEventListener("change", () => {
+  const brand = selectedCatalogueItem(tileCatalogue?.brands, predefinedBrand.value);
+  const range = selectedCatalogueItem(brand?.ranges, predefinedRange.value);
+  const version = selectedCatalogueItem(range?.versions, predefinedVersion.value);
+  const sizes = version?.sizes || [];
+  predefinedSize.replaceChildren(new Option("Choose a size", ""));
+  sizes.forEach((size) => {
+    const option = new Option(size.name, size.id);
+    option.dataset.width = String(size.width || "");
+    option.dataset.height = String(size.height || "");
+    predefinedSize.add(option);
+  });
+  predefinedSize.disabled = sizes.length === 0;
+  updatePredefinedNameAndSize();
+});
 
 modalClose.addEventListener("click", () => {
   closeResultModal();
@@ -295,4 +369,5 @@ document.getElementById("year").textContent = String(new Date().getFullYear());
 updateUploadText(0);
 updateRatioWarning();
 updateImageSourceFields();
+loadTileCatalogue();
 fetchLatestPost();
