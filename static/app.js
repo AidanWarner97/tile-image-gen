@@ -54,9 +54,13 @@ function resetSelect(select, placeholder) {
   select.value = "";
 }
 
+function sortedCatalogueItems(items) {
+  return [...items].sort((left, right) => String(left.name || "").localeCompare(String(right.name || ""), undefined, { numeric: true, sensitivity: "base" }));
+}
+
 function populateSelect(select, items, placeholder) {
   select.replaceChildren(new Option(placeholder, ""));
-  items.forEach((item) => select.add(new Option(item.name, item.id)));
+  sortedCatalogueItems(items).forEach((item) => select.add(new Option(item.name, item.id)));
   select.disabled = false;
 }
 
@@ -309,7 +313,7 @@ predefinedVersion.addEventListener("change", () => {
   const brand = selectedCatalogueItem(tileCatalogue?.brands, predefinedBrand.value);
   const range = selectedCatalogueItem(brand?.ranges, predefinedRange.value);
   const version = selectedCatalogueItem(range?.versions, predefinedVersion.value);
-  const sizes = version?.sizes || [];
+  const sizes = sortedCatalogueItems(version?.sizes || []);
   predefinedSize.replaceChildren(new Option("Choose a size", ""));
   sizes.forEach((size) => {
     const option = new Option(size.name, size.id);
