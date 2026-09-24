@@ -52,7 +52,8 @@
                 </label>
                 <label>
                   <span class="image-source-option-text">Select A Tile</span>
-                  <input type="radio" name="imageSource" value="predefined" required>
+                  <span class="coming-soon">(Coming Soon)</span>
+                  <input type="radio" name="imageSource" value="predefined" required disabled>
                 </label>
               </div>
             </div>
