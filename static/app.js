@@ -37,7 +37,7 @@ function selectedImageSource() {
 }
 
 function updatePredefinedNameAndSize() {
-  const parts = [predefinedBrand, predefinedRange, predefinedVersion]
+  const parts = [predefinedRange, predefinedVersion]
     .map((select) => select.selectedOptions[0]?.textContent.trim())
     .filter((value) => value && !value.startsWith("Choose"));
   const size = predefinedSize.selectedOptions[0];

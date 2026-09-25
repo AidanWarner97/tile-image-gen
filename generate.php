@@ -79,7 +79,7 @@ function predefined_tile_files(string $brandId, string $rangeId, string $version
         'files' => $files,
         'width' => max(1, (int)($size['width'] ?? 0)),
         'height' => max(1, (int)($size['height'] ?? 0)),
-        'name' => safe_filename(implode(' ', [(string)$brand['name'], (string)$range['name'], (string)$version['name'], (string)$size['name']])),
+        'name' => safe_filename(implode(' ', [(string)$range['name'], (string)$version['name'], (string)$size['name']])),
     ];
 }
 
