@@ -162,10 +162,7 @@ body {
 .form-warning {
   margin: 0.75rem 0 0;
   padding: 0.75rem 0.85rem;
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  border-radius: 0.45rem;
-  background: rgba(245, 158, 11, 0.12);
-  color: #f8d77c;
+  color: var(--line);
   font-size: 0.9rem;
 }
 

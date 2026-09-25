@@ -105,6 +105,7 @@
                 </select>
               </label>
             </div>
+            <p class="form-warning">All images are owned by the respective brands and are used here for demonstration purposes only.</p>
           </div>
 
           <div class="form-block">
