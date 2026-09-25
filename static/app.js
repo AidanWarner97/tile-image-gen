@@ -79,7 +79,7 @@ function populateCatalogueBrands() {
 }
 
 function loadTileCatalogue() {
-  fetch("catalogue/tiles.json", { cache: "force-cache" })
+  fetch("catalogue.php", { cache: "no-cache" })
     .then((response) => {
       if (!response.ok) throw new Error("Catalogue unavailable");
       return response.json();

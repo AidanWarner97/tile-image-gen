@@ -63,7 +63,7 @@ Generator activity is written to the MariaDB/MySQL table `tig_generate_log`. Red
 
 ## Predefined tile catalogue
 
-Predefined tile choices are loaded in the background from `catalogue/tiles.json`. The catalogue is structured as `brands`, containing `ranges`, then `versions`, then `sizes`. Each size includes `width`, `height`, and an `images` array for the server-side tile assets. The generator resolves the selected IDs server-side and verifies every image remains inside `catalogue/` before rendering. Add image paths relative to the project root, for example:
+Predefined tile choices are loaded in the background from `catalogue.php`, which serves `catalogue/tiles.json` as JSON. The catalogue is structured as `brands`, containing `ranges`, then `versions`, then `sizes`. Each size includes `width`, `height`, and an `images` array for the server-side tile assets. The generator resolves the selected IDs server-side and verifies every image remains inside `catalogue/` before rendering. Add image paths relative to the project root, for example:
 
 ```json
 {
