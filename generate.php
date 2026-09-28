@@ -266,10 +266,11 @@ function build_placements(string $layoutType, int $w, int $h, int $gs): array
         case 'brickBond':
         case 'vertBrick':
             $half = (int)floor($w / 2);
+            $secondColumnX = $w - $half + $gs;
             return [
                 [0, -$half, $gs, 0],
-                [1, $gs + $half, $gs, 0],
-                [0, ($gs * 2) + $w + $half, $gs, 0],
+                [1, $secondColumnX, $gs, 0],
+                [0, $secondColumnX + $w + $gs, $gs, 0],
                 [2, $gs, ($gs * 2) + $h, 0],
                 [3, ($gs * 2) + $w, ($gs * 2) + $h, 0],
             ];
@@ -279,9 +280,9 @@ function build_placements(string $layoutType, int $w, int $h, int $gs): array
             $twothird = $third * 2;
             return [
                 [0, -$third - $gs, $gs, 0],
-                [0, $twothird, $gs, 0],
+                [0, $w - $third, $gs, 0],
                 [1, -$twothird - $gs, $h + ($gs * 2), 0],
-                [1, $third, $h + ($gs * 2), 0],
+                [1, $w - $twothird, $h + ($gs * 2), 0],
                 [2, $gs, ($h * 2) + ($gs * 3), 0],
             ];
         case 'quarter':
@@ -290,11 +291,11 @@ function build_placements(string $layoutType, int $w, int $h, int $gs): array
             $half = (int)floor($w / 2);
             return [
                 [0, -$quarter, $gs, 0],
-                [0, ($quarter * 3) + $gs, $gs, 0],
+                [0, $w - $quarter + $gs, $gs, 0],
                 [1, -$half, ($h + $gs) + $gs, 0],
-                [1, $half + $gs, ($h + $gs) + $gs, 0],
+                [1, $w - $half + $gs, ($h + $gs) + $gs, 0],
                 [2, -($quarter * 3), (($h + $gs) * 2) + $gs, 0],
-                [2, $quarter + $gs, (($h + $gs) * 2) + $gs, 0],
+                [2, $w - ($quarter * 3) + $gs, (($h + $gs) * 2) + $gs, 0],
                 [3, $gs, (($h + $gs) * 3) + $gs, 0],
             ];
         case 'basketWeave':
