@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/generate-log.php';
+require_once __DIR__ . '/includes/catalogue-storage.php';
 
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
@@ -19,9 +20,9 @@ function fail_request(string $message, int $code = 400): never
 
 function predefined_tile_files(string $brandId, string $rangeId, string $versionId, string $sizeId): array
 {
-    $cataloguePath = __DIR__ . '/catalogue/tiles.json';
-    $catalogue = is_file($cataloguePath) ? json_decode((string)file_get_contents($cataloguePath), true) : null;
-    if (!is_array($catalogue) || !is_array($catalogue['brands'] ?? null)) {
+    try {
+        $catalogue = catalogue_storage_load();
+    } catch (Throwable) {
         fail_request('The predefined tile catalogue is unavailable.', 503);
     }
 
@@ -58,17 +59,16 @@ function predefined_tile_files(string $brandId, string $rangeId, string $version
         fail_request('The selected predefined tile is not available.', 400);
     }
 
-    $catalogueRoot = realpath(__DIR__ . '/catalogue');
     $files = [];
     foreach (($size['images'] ?? []) as $relativePath) {
-        if (!is_string($relativePath) || $catalogueRoot === false) {
+        if (!is_string($relativePath)) {
             continue;
         }
-        $absolutePath = realpath(__DIR__ . '/' . ltrim($relativePath, '/\\'));
-        if ($absolutePath === false || !str_starts_with($absolutePath, $catalogueRoot . DIRECTORY_SEPARATOR) || !is_file($absolutePath)) {
+        try {
+            $files[] = catalogue_storage_cached_file($relativePath);
+        } catch (Throwable) {
             continue;
         }
-        $files[] = $absolutePath;
     }
 
     if (!$files) {

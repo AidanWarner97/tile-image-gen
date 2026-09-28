@@ -14,6 +14,11 @@ if (str_starts_with($path, '/feedback-data/')) {
     exit;
 }
 
+if (str_starts_with($path, '/catalogue/images/')) {
+    require __DIR__ . '/catalogue-image.php';
+    return true;
+}
+
 if (preg_match('#^/feedback/([^/]+)/?$#', $path, $matches) === 1) {
     $_GET['id'] = rawurldecode($matches[1]);
     require __DIR__ . '/feedback-detail/detail.php';
