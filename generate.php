@@ -59,15 +59,24 @@ function predefined_tile_files(string $brandId, string $rangeId, string $version
         fail_request('The selected predefined tile is not available.', 400);
     }
 
+    $imagePaths = array_values(array_filter($size['images'] ?? [], 'is_string'));
+    if (!$imagePaths) {
+        fail_request('No images are configured for the selected predefined tile.', 503);
+    }
+    shuffle($imagePaths);
+
     $files = [];
-    foreach (($size['images'] ?? []) as $relativePath) {
-        if (!is_string($relativePath)) {
-            continue;
-        }
+    foreach ($imagePaths as $relativePath) {
         try {
-            $files[] = catalogue_storage_cached_file($relativePath);
+            $imageFile = catalogue_storage_cached_file($relativePath);
+            if (@getimagesize($imageFile) !== false) {
+                $files[] = $imageFile;
+            }
         } catch (Throwable) {
             continue;
+        }
+        if (count($files) === 4) {
+            break;
         }
     }
 
@@ -77,6 +86,7 @@ function predefined_tile_files(string $brandId, string $rangeId, string $version
 
     return [
         'files' => $files,
+        'image_count' => count($imagePaths),
         'width' => max(1, (int)($size['width'] ?? 0)),
         'height' => max(1, (int)($size['height'] ?? 0)),
         'name' => safe_filename(implode(' ', [(string)$range['name'], (string)$version['name'], (string)$size['name']])),
@@ -939,6 +949,9 @@ function output_svg_fallback(array $tmpFiles, string $tileName, string $layoutTy
 {
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $images = [];
+    if (count($tmpFiles) > 4) {
+        shuffle($tmpFiles);
+    }
     foreach ($tmpFiles as $tmp) {
         if (!is_string($tmp) || $tmp === '' || !is_file($tmp)) {
             continue;
@@ -955,6 +968,9 @@ function output_svg_fallback(array $tmpFiles, string $tileName, string $layoutTy
         }
 
         $images[] = 'data:' . $mime . ';base64,' . base64_encode($content);
+        if (count($images) === 4) {
+            break;
+        }
     }
 
     if (count($images) === 0) {
@@ -1108,7 +1124,7 @@ if ($imageSource === 'predefined') {
     $GLOBALS['generateLogRecord']['tile_name'] = $tileName;
     $GLOBALS['generateLogRecord']['tile_size_width'] = $tileWidth;
     $GLOBALS['generateLogRecord']['tile_size_height'] = $tileHeight;
-    $GLOBALS['generateLogRecord']['image_file_count'] = count($tmpFiles);
+    $GLOBALS['generateLogRecord']['image_file_count'] = $predefined['image_count'];
 } else {
     $tmpFiles = $_FILES['images']['tmp_name'] ?? [];
     if (!is_array($tmpFiles)) {
@@ -1133,6 +1149,9 @@ if (!extension_loaded('gd')) {
 }
 
 $images = [];
+if (count($tmpFiles) > 4) {
+    shuffle($tmpFiles);
+}
 foreach ($tmpFiles as $tmp) {
     if (!is_string($tmp) || $tmp === '' || !is_file($tmp)) {
         continue;
@@ -1148,6 +1167,9 @@ foreach ($tmpFiles as $tmp) {
         imagealphablending($img, true);
         imagesavealpha($img, true);
         $images[] = $img;
+        if (count($images) === 4) {
+            break;
+        }
     }
 }
 
