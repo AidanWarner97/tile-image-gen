@@ -73,11 +73,32 @@ function catalogue_storage_local_file(string $objectKey): ?string
 
 function catalogue_storage_cache_directory(): string
 {
-    $directory = catalogue_storage_env('CATALOGUE_CACHE_DIR', sys_get_temp_dir() . '/tile-image-gen-catalogue-cache');
-    if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
-        throw new RuntimeException('The catalogue image cache directory could not be created.');
+    static $resolvedDirectory = null;
+    if (is_string($resolvedDirectory)) {
+        return $resolvedDirectory;
     }
-    return rtrim($directory, DIRECTORY_SEPARATOR);
+
+    $fallbackDirectory = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR)
+        . '/tile-image-gen-' . substr(hash('sha256', __DIR__), 0, 12) . '/catalogue';
+    $candidates = array_unique([
+        catalogue_storage_env('CATALOGUE_CACHE_DIR'),
+        $fallbackDirectory,
+    ]);
+
+    foreach ($candidates as $directory) {
+        if ($directory === '') {
+            continue;
+        }
+        if (!is_dir($directory) && !@mkdir($directory, 0700, true) && !is_dir($directory)) {
+            continue;
+        }
+        if (is_dir($directory) && is_writable($directory)) {
+            $resolvedDirectory = rtrim($directory, DIRECTORY_SEPARATOR);
+            return $resolvedDirectory;
+        }
+    }
+
+    throw new RuntimeException('No writable catalogue image cache directory is available.');
 }
 
 function catalogue_storage_cached_file(string $objectKey): string
