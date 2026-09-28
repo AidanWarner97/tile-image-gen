@@ -37,7 +37,7 @@ function selectedImageSource() {
 }
 
 function updatePredefinedNameAndSize() {
-  const parts = [predefinedRange, predefinedVersion]
+  const parts = [predefinedBrand, predefinedRange, predefinedVersion]
     .map((select) => select.selectedOptions[0]?.textContent.trim())
     .filter((value) => value && !value.startsWith("Choose"));
   const size = predefinedSize.selectedOptions[0];
@@ -79,7 +79,7 @@ function populateCatalogueBrands() {
 }
 
 function loadTileCatalogue() {
-  fetch("catalogue.php", { cache: "no-cache" })
+  fetch("catalogue/tiles.json", { cache: "force-cache" })
     .then((response) => {
       if (!response.ok) throw new Error("Catalogue unavailable");
       return response.json();
