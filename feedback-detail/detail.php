@@ -74,6 +74,7 @@ if (!is_array($entry)) {
     <a href="/#generator">Generator</a>
     <a href="/updates/">All Updates</a>
     <a href="/feedback.php">Feedback</a>
+    <a href="/profile">Profile</a>
   </nav>
   <main class="sections-wrap">
     <section class="content-section">

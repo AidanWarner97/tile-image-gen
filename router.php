@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
+if ($path === '/profile' || $path === '/profile/') {
+    require __DIR__ . '/profile.php';
+    return true;
+}
+
 if ($path === '/auth/google' || $path === '/auth/google/callback' || $path === '/auth/logout') {
     $_GET['action'] = $path === '/auth/google' ? 'login' : ($path === '/auth/google/callback' ? 'callback' : 'logout');
     require __DIR__ . '/auth-handler.php';

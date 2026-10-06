@@ -1,4 +1,5 @@
 RewriteEngine On
+RewriteRule ^profile/?$ profile.php [END,QSA]
 RewriteRule ^catalogue/images/.+$ catalogue-image.php [END]
 RewriteRule ^auth/google/?$ auth-handler.php?action=login [END,QSA]
 RewriteRule ^auth/google/callback/?$ auth-handler.php?action=callback [END,QSA]

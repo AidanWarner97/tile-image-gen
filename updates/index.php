@@ -37,6 +37,7 @@ $posts = get_all_posts();
     <a href="/">Generator</a>
     <a href="/updates/">All Updates</a>
     <a href="/feedback">Feedback</a>
+    <a href="/profile">Profile</a>
   </nav>
   <main class="sections-wrap">
     <section class="content-section">

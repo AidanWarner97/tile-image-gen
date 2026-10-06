@@ -265,6 +265,20 @@ body {
 .gsi-material-button:active .gsi-material-button-state, .gsi-material-button:focus-visible .gsi-material-button-state { background-color: #ffffff; opacity: 0.12; }
 .gsi-material-button:focus-visible { outline: 2px solid #8ab4f8; outline-offset: 2px; }
 .feedback-auth-prompt { margin: 0 0 1rem; }
+.newsletter-form { display: flex; flex-wrap: wrap; align-items: end; gap: 0.9rem; }
+.newsletter-form > label:not(.feedback-trap) { flex: 1 1 15rem; min-width: 0; }
+.newsletter-form .newsletter-consent { flex-basis: 100%; margin: 0; }
+.newsletter-consent { color: var(--muted); font-size: 0.85rem; }
+.profile-identity { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+.profile-identity > div:not(.profile-avatar) { min-width: 0; flex: 1 1 12rem; }
+.profile-identity h2 { margin: 0; font-size: 1.3rem; overflow-wrap: anywhere; }
+.profile-identity p { margin: 0.4rem 0; overflow-wrap: anywhere; }
+.profile-identity a, .profile-preferences + p a { color: var(--accent); }
+.profile-avatar { width: auto; height: auto; flex: 0 0 80px; border-radius: 0.55rem; object-fit: cover; border: 1px solid var(--line); }
+.profile-avatar-fallback { display: grid; place-items: center; background: var(--panel-dark); color: var(--muted); font-size: 1.5rem; }
+.profile-preferences { display: grid; gap: 0.9rem; padding-top: 1.5rem; }
+.profile-preferences h3 { margin: 0; font-size: 1rem; }
+.profile-preferences .feedback-submit-button { justify-self: start; }
 .feedback-submit-button,
 .feedback-toolbar .feedback-submit-button {
   display: inline-flex;

@@ -772,6 +772,7 @@ $googleLoginUrl = auth_google_configured() ? auth_login_url('/feedback') : '#';
     <a href="/">Generator</a>
     <a href="/updates/">All Updates</a>
     <a href="/feedback">Feedback</a>
+    <a href="/profile">Profile</a>
   </nav>
 
   <main class="sections-wrap">

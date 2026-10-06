@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . '/auth.php';
+auth_start_session();
+if (empty($_SESSION['feedback_token'])) {
+  $_SESSION['feedback_token'] = bin2hex(random_bytes(32));
+}
+$newsletterToken = htmlspecialchars((string)$_SESSION['feedback_token'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$newsletterResult = $_SESSION['newsletter_signup_result'] ?? null;
+unset($_SESSION['newsletter_signup_result']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +42,7 @@
     <a href="/">Generator</a>
     <a href="/updates">All Updates</a>
     <a href="/feedback">Feedback</a>
+    <a href="/profile">Profile</a>
   </nav>
 
   <main class="sections-wrap">
@@ -224,6 +235,20 @@
       </script>
     </div>
 
+    <section class="content-section" id="newsletter">
+      <div class="section-title"><h2>NEWSLETTER</h2></div>
+      <div class="section-content">
+        <?php if (is_array($newsletterResult)): ?><p class="<?= $newsletterResult['error'] ? 'feedback-error' : 'feedback-success' ?>" role="status"><?= htmlspecialchars((string)$newsletterResult['message'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p><?php endif; ?>
+        <form method="post" action="/newsletter.php" class="newsletter-form">
+          <input type="hidden" name="csrf_token" value="<?= $newsletterToken ?>">
+          <input type="hidden" name="action" value="subscribe">
+          <label class="feedback-trap" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          <label>Email address<input type="email" name="email" autocomplete="email" maxlength="254" required></label>
+          <button type="submit" class="feedback-submit-button">Subscribe</button>
+          <p class="newsletter-consent">By subscribing, you agree to receive marketing emails from Tile Image Generator. Manage your preferences in your profile after signing in with the same email address.</p>
+        </form>
+      </div>
+    </section>
   </main>
 
   <div id="result-modal" class="modal" hidden>
